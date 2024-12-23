@@ -1,4 +1,4 @@
-# Getting Started with Local LLMs
+# Getting Started with Local LLMs Workshop Notebooks
 
 This repository contains supporting resources for the workshop **"Getting Started with Local LLMs"**, presented by **Nishad Thalhath** (ORCID: [0000-0001-9845-9714](https://orcid.org/0000-0001-9845-9714)). The workshop introduces participants to the setup and usage of local large language models (LLMs) using open-source tools.
 
