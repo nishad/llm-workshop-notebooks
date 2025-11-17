@@ -1,0 +1,32 @@
+# Local LLM Workshop - Required Python Packages
+# Install with: pip install -r requirements.txt
+#
+# Python Version: Requires Python 3.8 or higher
+#
+# Last tested with (as of 2025-11-17):
+#   ollama==0.6.1
+#   chromadb==1.3.4
+#   Jinja2==3.1.6
+#   psutil==7.1.3
+#   tqdm==4.67.1
+#   jupyter==1.1.1
+#   ipython==9.7.0
+
+# Core LLM interaction
+ollama
+
+# Vector database for RAG
+chromadb
+
+# Template engine for dynamic prompts
+Jinja2
+
+# System information utilities
+psutil
+
+# Progress bars for better UX
+tqdm
+
+# Jupyter notebook environment
+jupyter
+ipython
