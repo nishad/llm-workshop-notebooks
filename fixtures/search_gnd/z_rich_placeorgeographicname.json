@@ -1,0 +1,30 @@
+[
+ {
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Zuerich%20Fraumuenster%20St%20Peter.jpg?width=100",
+  "label": "Zürich",
+  "id": "https://d-nb.info/gnd/4068038-1",
+  "category": "Gebietskörperschaft oder Verwaltungseinheit"
+ },
+ {
+  "label": "Zürich / Technopark Zürich",
+  "id": "https://d-nb.info/gnd/4638164-8",
+  "category": "Gebietskörperschaft oder Verwaltungseinheit"
+ },
+ {
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Rathaus%20-%20W%C3%BChre%202012-09-26%2016-10-01%20ShiftN.jpg?width=100",
+  "label": "Rathaus Zürich (Zürich) | 1694-1698",
+  "id": "https://d-nb.info/gnd/4520803-7",
+  "category": "Bauwerk oder Denkmal"
+ },
+ {
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Ehemalige%20Kattundruckerei.jpg?width=100",
+  "label": "Textilfachschule Zürich (Zürich)",
+  "id": "https://d-nb.info/gnd/1053626088",
+  "category": "Bauwerk oder Denkmal"
+ },
+ {
+  "label": "Bahnhofplatz Zürich (Zürich)",
+  "id": "https://d-nb.info/gnd/1064280560",
+  "category": "Bauwerk oder Denkmal"
+ }
+]

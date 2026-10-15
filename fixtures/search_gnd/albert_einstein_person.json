@@ -1,0 +1,28 @@
+[
+ {
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Albert%20Einstein%201947.jpg?width=100",
+  "label": "Einstein, Albert | 1879–1955 | Physiker; Pazifist; Wissenschaftler",
+  "id": "https://d-nb.info/gnd/118529579",
+  "category": "Individualisierte Person"
+ },
+ {
+  "label": "Einstein, Pauline | 1858–1920 | Hausfrau",
+  "id": "https://d-nb.info/gnd/1380301998",
+  "category": "Individualisierte Person"
+ },
+ {
+  "label": "Einstein, Eduard | 1910–1965 | Student",
+  "id": "https://d-nb.info/gnd/118810928",
+  "category": "Individualisierte Person"
+ },
+ {
+  "label": "Muritiba, Albert Einstein Fernandes | Mathematiker",
+  "id": "https://d-nb.info/gnd/1156944902",
+  "category": "Individualisierte Person"
+ },
+ {
+  "label": "Einstein, Robert | 1884–1945",
+  "id": "https://d-nb.info/gnd/1378992377",
+  "category": "Individualisierte Person"
+ }
+]

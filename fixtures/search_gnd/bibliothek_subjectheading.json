@@ -1,0 +1,27 @@
+[
+ {
+  "label": "Bibliothek",
+  "id": "https://d-nb.info/gnd/4006439-6",
+  "category": "Schlagwort sensu stricto"
+ },
+ {
+  "label": "Theologische Bibliothek",
+  "id": "https://d-nb.info/gnd/4185081-6",
+  "category": "Schlagwort sensu stricto"
+ },
+ {
+  "label": "Kommunale Bibliothek",
+  "id": "https://d-nb.info/gnd/4164785-3",
+  "category": "Schlagwort sensu stricto"
+ },
+ {
+  "label": "Grüne Bibliothek",
+  "id": "https://d-nb.info/gnd/1391364333",
+  "category": "Schlagwort sensu stricto"
+ },
+ {
+  "label": "Magazin <Bibliothek>",
+  "id": "https://d-nb.info/gnd/4200636-3",
+  "category": "Schlagwort sensu stricto"
+ }
+]

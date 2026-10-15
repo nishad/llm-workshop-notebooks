@@ -1,0 +1,28 @@
+[
+ {
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/DNB.svg?width=100",
+  "label": "Deutsche Nationalbibliothek | Frankfurt am Main; Leipzig",
+  "id": "https://d-nb.info/gnd/10140798-1",
+  "category": "Körperschaft"
+ },
+ {
+  "label": "Deutsche Nationalbibliothek. Reichsbibliothek von 1848 | Leipzig",
+  "id": "https://d-nb.info/gnd/4562247-4",
+  "category": "Körperschaft"
+ },
+ {
+  "label": "Schweizerische Nationalbibliothek | Bern",
+  "id": "https://d-nb.info/gnd/10171799-4",
+  "category": "Körperschaft"
+ },
+ {
+  "label": "Nationalbibliothek Reykjavik | Reykjavik",
+  "id": "https://d-nb.info/gnd/7533008-8",
+  "category": "Körperschaft"
+ },
+ {
+  "label": "Nationalbibliothek (Wien) | Wien",
+  "id": "https://d-nb.info/gnd/19913-8",
+  "category": "Körperschaft"
+ }
+]

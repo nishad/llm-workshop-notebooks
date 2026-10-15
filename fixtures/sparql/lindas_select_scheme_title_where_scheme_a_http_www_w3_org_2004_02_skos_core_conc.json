@@ -1,0 +1,169 @@
+[
+ {
+  "scheme": "https://www.ica.org/standards/RiC/vocabularies/documentaryFormTypes"
+ },
+ {
+  "scheme": "https://www.ica.org/standards/RiC/vocabularies/recordSetTypes"
+ },
+ {
+  "scheme": "https://energy.ld.admin.ch/elcom/electricityprice/category/conceptscheme"
+ },
+ {
+  "scheme": "https://energy.ld.admin.ch/elcom/electricityprice/product/conceptscheme"
+ },
+ {
+  "scheme": "http://publications.europa.eu/resource/authority/country",
+  "title": "Countries and territories"
+ },
+ {
+  "scheme": "http://publications.europa.eu/resource/authority/continent",
+  "title": "Continent"
+ },
+ {
+  "scheme": "http://publications.europa.eu/resource/authority/data-theme",
+  "title": "Data theme"
+ },
+ {
+  "scheme": "http://publications.europa.eu/resource/authority/frequency",
+  "title": "Frequency"
+ },
+ {
+  "scheme": "http://publications.europa.eu/resource/authority/planned-availability",
+  "title": "Planned availability"
+ },
+ {
+  "scheme": "https://culture.ld.admin.ch/ais/vocabularies/activityTypes"
+ },
+ {
+  "scheme": "https://culture.ld.admin.ch/ais/vocabularies/subjects"
+ },
+ {
+  "scheme": "https://culture.ld.admin.ch/ais/vocabularies/recordSetTypes"
+ },
+ {
+  "scheme": "https://culture.ld.admin.ch/ais/vocabularies/accessTypes"
+ },
+ {
+  "scheme": "https://www.iana.org/assignments/media-types/examples",
+  "title": "example"
+ },
+ {
+  "scheme": "https://www.iana.org/assignments/media-types",
+  "title": "Media Types"
+ },
+ {
+  "scheme": "https://www.iana.org/assignments/media-types/application",
+  "title": "application"
+ },
+ {
+  "scheme": "https://www.iana.org/assignments/media-types/audio",
+  "title": "audio"
+ },
+ {
+  "scheme": "https://www.iana.org/assignments/media-types/font",
+  "title": "font"
+ },
+ {
+  "scheme": "https://www.iana.org/assignments/media-types/image",
+  "title": "image"
+ },
+ {
+  "scheme": "https://www.iana.org/assignments/media-types/message",
+  "title": "message"
+ },
+ {
+  "scheme": "https://www.iana.org/assignments/media-types/model",
+  "title": "model"
+ },
+ {
+  "scheme": "https://www.iana.org/assignments/media-types/multipart",
+  "title": "multipart"
+ },
+ {
+  "scheme": "https://www.iana.org/assignments/media-types/text",
+  "title": "text"
+ },
+ {
+  "scheme": "https://www.iana.org/assignments/media-types/video",
+  "title": "video"
+ },
+ {
+  "scheme": "http://publications.europa.eu/resource/authority/file-type",
+  "title": "File type"
+ },
+ {
+  "scheme": "https://energy.ld.admin.ch/elcom/electricityprice/networkLevel/conceptscheme"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/BEWOHNERTYP"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/BEWOHNERTYP/version/1.0.0"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/DV_AUSWEISTYP"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/DV_AUSWEISTYP/version/1.0.0"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/DV_SEXE"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/DV_SEXE/version/2.0.0"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/ETAT_CIVIL"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/ETAT_CIVIL/version/1.0.0"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/UMZUG"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/UMZUG/version/1.0.0"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/VOCAB_I14Y_ATTRIBUTION_ROLE"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/VOCAB_I14Y_ATTRIBUTION_ROLE/version/1.0.0"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/legalForm"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/legalForm/version/1.1.0"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/VOCAB_EU_DATA_THEME"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/VOCAB_EU_DATA_THEME/version/20220715.0.0"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/VOCAB_EU_FREQUENCY"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/VOCAB_EU_FREQUENCY/version/20230614.0.0"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/VOCAB_EU_PLANNED_AVAILABILITY"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/VOCAB_EU_PLANNED_AVAILABILITY/version/20220715.0.0"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/VOCAB_I14Y_MEDIA_TYPE"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/VOCAB_I14Y_MEDIA_TYPE/version/20240116.0.0"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/VOCAB_I14Y_PACKAGING_FORMAT"
+ },
+ {
+  "scheme": "https://register.ld.admin.ch/i14y/concept/VOCAB_I14Y_PACKAGING_FORMAT/version/20231213.0.0"
+ }
+]

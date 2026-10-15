@@ -1,0 +1,29 @@
+[
+ {
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Goethe%20%28Stieler%201828%29.jpg?width=100",
+  "label": "Goethe, Johann Wolfgang von | 1749–1832 | Schriftsteller; Publizist; Politiker; Jurist; Naturwissenschaftler; Theaterintendant; Maler; Zeichner",
+  "id": "https://d-nb.info/gnd/118540238",
+  "category": "Individualisierte Person"
+ },
+ {
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Walther%20von%20Goethe.jpg?width=100",
+  "label": "Goethe, Walther Wolfgang von | 1818–1885 | Komponist; Kämmerer; Komponist",
+  "id": "https://d-nb.info/gnd/118695959",
+  "category": "Individualisierte Person"
+ },
+ {
+  "label": "Goethe, Johann Wolfgang | 1913– | Geophysiker",
+  "id": "https://d-nb.info/gnd/121488624",
+  "category": "Individualisierte Person"
+ },
+ {
+  "label": "Goethe, Cornelia | 1668–1754",
+  "id": "https://d-nb.info/gnd/1063291208",
+  "category": "Individualisierte Person"
+ },
+ {
+  "label": "Goethe, Friedrich | 1657–1730 | Schneider; Gastwirt",
+  "id": "https://d-nb.info/gnd/117749346",
+  "category": "Individualisierte Person"
+ }
+]

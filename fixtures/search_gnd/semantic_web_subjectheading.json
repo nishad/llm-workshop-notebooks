@@ -1,0 +1,27 @@
+[
+ {
+  "label": "Semantic Web",
+  "id": "https://d-nb.info/gnd/4688372-1",
+  "category": "Schlagwort sensu stricto"
+ },
+ {
+  "label": "World Wide Web 3.0",
+  "id": "https://d-nb.info/gnd/1031634185",
+  "category": "Schlagwort sensu stricto"
+ },
+ {
+  "label": "World Wide Web 2.0",
+  "id": "https://d-nb.info/gnd/7548364-6",
+  "category": "Schlagwort sensu stricto"
+ },
+ {
+  "label": "OWL <Informatik>",
+  "id": "https://d-nb.info/gnd/4396527-1",
+  "category": "Schlagwort sensu stricto"
+ },
+ {
+  "label": "VIVO <Softwareplattform>",
+  "id": "https://d-nb.info/gnd/1032630825",
+  "category": "Softwareprodukt"
+ }
+]
