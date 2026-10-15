@@ -46,7 +46,13 @@ for example `{"name": "Annemarie Schwarzenbach", "type": "Person"}`."""),
 show_markdown(out[-1]["content"])"""),
     ("md", """## 05.05 Two tools in a row: GND → Wikidata → the Historical Dictionary of Switzerland
 
-Wikidata links authority files: property P227 holds the GND identifier, P902 the HLS article id. One question, two tool rounds. The loop runs one call per turn, so the second call can only be made after the first result is in."""),
+Wikidata links authority files: property P227 holds the GND identifier, P902 the HLS article id. One question, two tool rounds.
+The loop runs one call per turn, so the second call can only be made after the first result is in.
+
+Two-step chains are where an 8B model at this quantization gets unreliable. In the October 2026 runs it looked up the GND
+record correctly every time and then stopped: it pasted the URL form of the id, or announced the second call without making
+it, or answered with an empty code block. Nothing was invented, which is the point of the gate. Run the cell and see what
+you get; the next cell shows how you finish the chain yourself when the model stops."""),
     ("code", """chain = [messages[0], {"role": "user", "content":
     "Find the GND identifier of Annemarie Schwarzenbach with search_gnd, then use the sparql tool on wikidata to find the item with that "
     "GND id (property wdt:P227, the bare id as a string literal) and return its HLS id (property wdt:P902). "
@@ -54,12 +60,24 @@ Wikidata links authority files: property P227 holds the GND identifier, P902 the
 out = run_tool_loop(chain, TOOLS, model=MODEL, max_turns=4)
 for m in out[len(chain):]:
     print(m["role"].upper(), "→", (m.get("content") or "")[:300], m.get("tool_calls", ""))"""),
+    ("md", """### When the model stops, you finish
+
+The tool result is in the conversation. Take the identifier the tool returned, not one the model wrote, and run the second
+step yourself. This is the same query the model was asked to write."""),
+    ("code", """first = next((json.loads(m["content"]) for m in out if m["role"] == "tool"), None)
+if first and first.get("results"):
+    gnd = first["results"][0]["gnd"]
+    print("GND from the tool result:", gnd)
+    hls = json.loads(sparql(f"SELECT ?hls WHERE {{ ?item wdt:P227 '{gnd}' . ?item wdt:P902 ?hls }}", "wikidata"))
+    print("HLS id:", [row["hls"] for row in hls["results"]], "(fixture)" if hls["fixture"] else "(live)")
+else:
+    print("No tool result in the conversation: run the 05.05 cell first.")"""),
     ("md", """## 05.06 Failure modes the loop catches
 
 - An identifier in the answer that no tool result contained is marked `[UNVERIFIED ...]`, whether the model skipped the tools or made the number up after calling them.
 - A tool call written as text (the pattern of the community Ollama tag) stops the loop with an explanation.
 - A declined call becomes an error result the model sees, so it can ask you instead of guessing.
-- A reply that only announces a tool call gets one reminder to make the call.
+- A reply that only announces a tool call, or says nothing, gets one reminder.
 
 Try to provoke the first one."""),
     ("code", """try:
