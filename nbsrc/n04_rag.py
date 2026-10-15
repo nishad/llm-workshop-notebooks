@@ -65,11 +65,17 @@ for n, c in enumerate(used, 1):
 A grounded system must refuse. Ask something the corpus cannot know."""),
     ("code", """text, used = answer("Who won the 2026 Nobel Prize in Literature?", index, by_id, k=K, model=MODEL)
 show_markdown(text)"""),
+    ("md", """On the 8 GB tier the 4B did not refuse this question in the October 2026 run: it answered `[2]`, a bare citation of a passage
+from the library standards, which say nothing about the prize. A smaller model follows the refusal instruction less reliably.
+When no cited passage supports an answer, do not trust it."""),
     ("md", """## 04.07 The context budget
 
 On the 8 GB tier the window is 4,096 tokens (8,192 on the 8B shown here): system text, retrieved chunks, question and answer must all fit. The helper
 estimates the size and refuses to build an oversized prompt; Ollama itself returns an HTTP 400 when a request exceeds the
-window. Here is what both look like."""),
+window. Here is what both look like.
+
+On the 4B in the October 2026 run Ollama accepted the oversized prompt and truncated silently (its server log recorded the
+5,076-token prompt cut to 2,051 tokens); the helper's refusal is the only guard you can rely on."""),
     ("code", """from workshop.rag import PromptTooLong
 import ollama
 many = [by_id[cid] for cid, _, _ in search(question, index, k=40)]

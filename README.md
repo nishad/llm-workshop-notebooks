@@ -71,7 +71,7 @@ You need about 20 GB of free disk space and a stable connection for the download
 | `04_rag.ipynb` | 20 min | Chunk documents, retrieve, answer with numbered citations, hit the context limit on purpose |
 | `05_tool_use.ipynb` | 15 min | Let the model propose GND, Wikidata and SPARQL calls; approve, correct or refuse each one |
 
-The six notebooks are committed with outputs from the 16 GB tier (`nishad/apertus:8b`). `tier-8gb/` holds notebooks 04 and 05 as executed on the 8 GB tier (`nishad/apertus:4b`), so a reader on a smaller machine can see what to expect.
+The six notebooks are committed with outputs from the 16 GB tier (`nishad/apertus:8b`). `tier-8gb/` holds notebooks 04 and 05 as executed on the 8 GB tier (`nishad/apertus:4b`), so a reader on a smaller machine can see what to expect. In that run (15 October 2026, Ollama 0.35.1) the 4B behaved differently in three places. In 04.06 it did not refuse the Nobel Prize question but answered with a bare citation, `[2]`, where the 8B said "The documents do not answer the question". In 04.07 the cell printed "Ollama accepted the long prompt" instead of the 8B's HTTP 400; Ollama's server log shows the prompt cut silently from 5,076 to 2,051 tokens. In 05.06, asked to answer from memory, it invented "100000000000000000000000 Arendt, Hannah", which the loop marked `[UNVERIFIED: 100000000000000000000000 did not come from any tool result.]`.
 
 Tiers. A machine with 8 GB runs the same notebooks with the 4B model: set `WORKSHOP_TIER=8gb` before starting JupyterLab. RAG then retrieves fewer chunks (the 4B window is 4,096 tokens), and tool use needs the `nishad/apertus:4b` tag, which carries a wrapper template for tools.
 
