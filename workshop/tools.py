@@ -101,6 +101,14 @@ def _is_label_service(term, prefixes: dict[str, str]) -> bool:
     return str(term) == WIKIBASE + "label"
 
 
+def _top_level_limit(body) -> int | None:
+    """The LIMIT of the outer query from the parse tree, or None when there is none."""
+    clauses = body.get("limitoffset")
+    if isinstance(clauses, CompValue) and "limit" in clauses:
+        return int(clauses["limit"].toPython())
+    return None
+
+
 def validate_sparql(query: str, *, max_limit: int = 50) -> str:
     """Parse the query and allow only what the workshop endpoints should see.
 
@@ -116,14 +124,17 @@ def validate_sparql(query: str, *, max_limit: int = 50) -> str:
             raise ToolError("SERVICE is only allowed for wikibase:label; federated queries to other endpoints are not allowed.")
     if body.name == "AskQuery":
         return q
-    clauses = body.get("limitoffset")
-    limit = int(clauses["limit"].toPython()) if isinstance(clauses, CompValue) and "limit" in clauses else None
+    limit = _top_level_limit(body)
     if limit is None:
         return f"{q}\nLIMIT {max_limit}"
     if limit <= max_limit:
         return q
     if _LIMIT.search(q):
-        return _LIMIT.sub(f"LIMIT {max_limit}", q)
+        capped = _LIMIT.sub(f"LIMIT {max_limit}", q)
+        _, (_, capped_body) = _parse(capped)
+        capped_limit = _top_level_limit(capped_body)
+        if capped_limit is not None and capped_limit <= max_limit:
+            return capped
     raise ToolError(f"LIMIT must be at most {max_limit}.")
 
 

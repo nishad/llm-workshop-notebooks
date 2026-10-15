@@ -193,6 +193,11 @@ def test_validate_sparql_limit_with_offset():
         tools.validate_sparql("SELECT ?s WHERE { ?s ?p ?o } LIMIT 5000 OFFSET 5")
 
 
+def test_validate_sparql_rejects_limit_hidden_behind_comment():
+    with pytest.raises(tools.ToolError, match="LIMIT"):
+        tools.validate_sparql("SELECT ?s WHERE { ?s ?p ?o } LIMIT 5000\n# LIMIT 7")
+
+
 def test_validate_sparql_ask_passes_through():
     out = tools.validate_sparql("ASK { <http://www.wikidata.org/entity/Q42> ?p ?o }")
     assert out.startswith("ASK") and "LIMIT" not in out
