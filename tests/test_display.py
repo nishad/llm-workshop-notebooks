@@ -50,3 +50,10 @@ def test_render_markdown_is_not_fooled_by_fence_tricks():
 def test_render_markdown_renders_tables():
     out = display.render_markdown("| a | b |\n|---|---|\n| <b>x</b> | 1 < 2 |")
     assert "<table>" in out and "<td>&lt;b&gt;x&lt;/b&gt;</td>" in out
+
+
+def test_show_table_escapes_cells(monkeypatch):
+    shown = []
+    monkeypatch.setattr(display, "display", lambda obj: shown.append(obj.data))
+    display.show_table([{"label": "<b>Bibliothek</b> & co"}])
+    assert "&lt;b&gt;Bibliothek&lt;/b&gt; &amp; co" in shown[0] and "<b>" not in shown[0]

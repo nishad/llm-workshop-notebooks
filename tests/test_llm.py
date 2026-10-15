@@ -70,3 +70,41 @@ def test_log_run_appends_jsonl(tmp_path):
     llm.log_run({"b": 2}, path=str(path))
     lines = path.read_text(encoding="utf-8").splitlines()
     assert [json.loads(l) for l in lines] == [{"a": 1}, {"b": 2}]
+
+
+LOG_KEYS = {"captured_at", "model", "digest", "options", "prompt", "answer", "tool_calls", "format"}
+
+
+def test_chat_logs_one_line_per_call(tmp_path, monkeypatch):
+    path = tmp_path / "log.jsonl"
+    monkeypatch.setenv("WORKSHOP_LOG", str(path))
+    llm.chat([{"role": "user", "content": "x" * 400}], model="nishad/apertus:8b", format={"type": "object"}, client=FakeClient())
+    lines = path.read_text(encoding="utf-8").splitlines()
+    assert len(lines) == 1
+    record = json.loads(lines[0])
+    assert set(record) == LOG_KEYS
+    assert record["digest"] == "abc123" and record["answer"] == "ok" and record["tool_calls"] == 0
+    assert len(record["prompt"]) == 300 and record["format"] == "schema" and record["options"]["num_ctx"] == 8192
+
+
+def test_chat_logs_streams_without_answer(tmp_path, monkeypatch):
+    path = tmp_path / "log.jsonl"
+    monkeypatch.setenv("WORKSHOP_LOG", str(path))
+    llm.chat([{"role": "user", "content": "hi"}], model="nishad/apertus:8b", stream=True, client=FakeClient())
+    record = json.loads(path.read_text(encoding="utf-8"))
+    assert record["answer"] is None and record["stream"] is True and record["format"] is None
+
+
+def test_chat_with_log_false_writes_nothing(tmp_path, monkeypatch):
+    path = tmp_path / "log.jsonl"
+    monkeypatch.setenv("WORKSHOP_LOG", str(path))
+    llm.chat([{"role": "user", "content": "hi"}], model="nishad/apertus:8b", client=FakeClient(), log=False)
+    assert not path.exists()
+
+
+def test_chat_survives_an_unwritable_log(tmp_path, monkeypatch):
+    blocker = tmp_path / "a-file"
+    blocker.write_text("not a folder", encoding="utf-8")
+    monkeypatch.setenv("WORKSHOP_LOG", str(blocker / "log.jsonl"))
+    response = llm.chat([{"role": "user", "content": "hi"}], model="nishad/apertus:8b", client=FakeClient())
+    assert response.message.content == "ok"

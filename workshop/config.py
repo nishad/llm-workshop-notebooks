@@ -24,13 +24,20 @@ class Settings:
     tier: str  # "8gb" or "16gb"
 
 
+def _normalise_host(host: str) -> str:
+    """Ollama accepts OLLAMA_HOST without a scheme (127.0.0.1:11435); requests does not, so add http://."""
+    if "://" not in host:
+        host = "http://" + host
+    return host.rstrip("/")
+
+
 def load_settings() -> Settings:
     tier = os.environ.get("WORKSHOP_TIER", "16gb").lower()
     default_model = SMALL_MODEL if tier == "8gb" else DEFAULT_MODEL
     return Settings(
         model=os.environ.get("WORKSHOP_MODEL", default_model),
         embed_model=os.environ.get("WORKSHOP_EMBED_MODEL", DEFAULT_EMBED_MODEL),
-        host=os.environ.get("OLLAMA_HOST", DEFAULT_HOST),
+        host=_normalise_host(os.environ.get("OLLAMA_HOST", DEFAULT_HOST)),
         tier=tier,
     )
 

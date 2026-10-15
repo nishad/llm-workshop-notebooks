@@ -59,3 +59,9 @@ def test_run_all_continues_past_an_old_version(monkeypatch):
     checks = check.run_all(Settings(model="m", embed_model="e", host="http://localhost:1", tier="16gb"))
     assert len(checks) == 9
     assert checks[3][1] is False and all(ok for _, ok, _ in checks[4:])
+
+
+def test_check_ollama_survives_a_non_numeric_version(monkeypatch):
+    monkeypatch.setattr(check, "_server_version", lambda host: "dev-build")
+    name, ok, msg = check.check_ollama("http://localhost:11434")
+    assert ok is False and "dev-build" in msg

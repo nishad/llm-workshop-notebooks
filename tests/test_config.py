@@ -12,6 +12,13 @@ def test_defaults_when_env_unset(monkeypatch):
     assert s.tier == "16gb"
 
 
+def test_host_without_scheme_gets_http(monkeypatch):
+    monkeypatch.setenv("OLLAMA_HOST", "127.0.0.1:11435")
+    assert config.load_settings().host == "http://127.0.0.1:11435"
+    monkeypatch.setenv("OLLAMA_HOST", "http://localhost:11434/")
+    assert config.load_settings().host == "http://localhost:11434"
+
+
 def test_tier_8gb_switches_model(monkeypatch):
     monkeypatch.delenv("WORKSHOP_MODEL", raising=False)
     monkeypatch.setenv("WORKSHOP_TIER", "8gb")

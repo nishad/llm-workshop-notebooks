@@ -84,7 +84,7 @@ Prebuilt vocabulary indexes. Notebook 03 builds two label indexes (`runs/stw-de-
 
 ## Afterwards
 
-Every notebook is committed with its outputs, so you can read it without running anything. Each model call you make is logged to `runs/log.jsonl` with the model digest, options and prompt, so you can trace any result.
+Every notebook is committed with its outputs, so you can read it without running anything. Each `workshop.llm.chat` call (the model calls in notebooks 01 and 02) appends a line to `runs/log.jsonl` with the time, the model, its digest, the options and the first 300 characters of the prompt and of the answer, so you can trace those results to the exact model.
 
 ## Helpers (`workshop/`)
 

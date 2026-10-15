@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import sys
 
@@ -70,8 +71,10 @@ def check_ollama(host: str) -> Check:
     version = _server_version(host)
     if version is None:
         return ("Ollama reachable", False, f"no answer from {host}/api/version. Is the Ollama app running?")
-    major, minor = (int(x) for x in version.split(".")[:2])
-    ok = (major, minor) >= (0, 40)
+    release = re.match(r"(\d+)\.(\d+)", version)
+    if release is None:
+        return ("Ollama 0.40 or newer", False, f"could not read a version number from {version!r} at {host}")
+    ok = (int(release[1]), int(release[2])) >= (0, 40)
     return ("Ollama 0.40 or newer", ok, f"version {version} at {host}")
 
 
