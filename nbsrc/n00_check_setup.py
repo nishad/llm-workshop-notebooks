@@ -35,6 +35,7 @@ print(json.dumps(provenance(settings.model), indent=2))"""),
     ("md", """## 00.04 If something is red
 
 - **Ollama reachable: ❌** Start the Ollama app (or `ollama serve` on Linux). The checks need `http://localhost:11434`.
+- **Ollama 0.40 or newer: ❌** Update the Ollama app (menu bar icon → Restart to update, or download it again from ollama.com), then run the checks again.
 - **Model not found:** run `ollama pull nishad/apertus:8b` (16 GB) or `ollama pull nishad/apertus:4b` (8 GB) in a terminal, then re-run.
 - **Chat template unexpected:** you have a different Apertus build. Pull the tag above; tool calls only work with it.
 - **Embedding model missing:** `ollama pull bge-m3`.
@@ -44,7 +45,8 @@ When asking for help in the shared document, paste the output of the next cell."
     ("code", """import platform, sys
 print("Python", sys.version.split()[0], "on", platform.platform())
 print("Tier", settings.tier, "model", settings.model)
-ok and print("All checks passed.")"""),
+if ok:
+    print("All checks passed.")"""),
     ("md", """## ✅ Checkpoint
 
 You have a working Python environment, Ollama answers on your machine, the workshop model and the embedding model are
