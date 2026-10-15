@@ -47,6 +47,22 @@ def test_fixture_fallback_when_network_fails(tmp_path, monkeypatch):
     assert out["results"][0]["id"].endswith("118540238")
 
 
+def test_search_gnd_adds_bare_identifier(tmp_path, monkeypatch):
+    fixtures = tmp_path / "fixtures"
+    (fixtures / "search_gnd").mkdir(parents=True)
+    (fixtures / "search_gnd" / "arendt_person.json").write_text(
+        json.dumps([{"label": "Arendt, Hannah", "id": "https://d-nb.info/gnd/11850391X"}]), encoding="utf-8"
+    )
+    tools.set_fixture_dir(str(fixtures))
+
+    def boom(*a, **k):
+        raise tools.requests.ConnectionError("offline")
+
+    monkeypatch.setattr(tools.requests, "get", boom)
+    out = json.loads(tools.search_gnd("Arendt", "Person"))
+    assert out["results"][0]["gnd"] == "11850391X"
+
+
 def test_approve_auto_mode(monkeypatch):
     monkeypatch.setenv("WORKSHOP_AUTO_APPROVE", "1")
     assert tools.approve("search_gnd", {"name": "Arendt"}) == {"name": "Arendt"}

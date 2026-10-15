@@ -138,8 +138,13 @@ def validate_sparql(query: str, *, max_limit: int = 50) -> str:
     raise ToolError(f"LIMIT must be at most {max_limit}.")
 
 
+def _with_gnd(results: list) -> list:
+    """Add the bare GND number next to lobid's URL id, so a model can pass it on as a string literal."""
+    return [{**item, "gnd": str(item.get("id", "")).rsplit("/", 1)[-1]} if isinstance(item, dict) else item for item in results]
+
+
 def search_gnd(name: str, type: str = "Person") -> str:
-    """Look up a name in the GND authority file via lobid-gnd.
+    """Look up a name in the GND authority file via lobid-gnd. Each result carries the bare GND number in `gnd`.
 
     Args:
         name: the person, organization or subject to search for
@@ -154,12 +159,12 @@ def search_gnd(name: str, type: str = "Person") -> str:
             timeout=TIMEOUT,
         )
         r.raise_for_status()
-        return _result(r.json(), False)
+        return _result(_with_gnd(r.json()), False)
     except (requests.RequestException, ValueError):
         fx = _fixture("search_gnd", slug)
         if fx is None:
             raise ToolError(f"lobid-gnd unreachable and no fixture for {slug}")
-        return _result(fx, True)
+        return _result(_with_gnd(fx), True)
 
 
 def wikidata_lookup(label: str, lang: str = "en") -> str:
