@@ -30,6 +30,18 @@ Harness run (`scripts/tool_harness.py --only tools,controls,mt,so`, one run per 
 
 Notes on the structured-output cases: the 8B returns `isbn: null` correctly for the biblio record; the 4B fills `isbn` with `"2 Bände"` (valid JSON, wrong value). The unsatisfiable `minimum 10 / maximum 5` schema yields a number from both models rather than an error. Raw per-request results are in the research results directory (`results/tags-2026-10-15/`).
 
+## Embedding model
+
+Default `bge-m3`, measured on 2026-10-15 with `03_vocabulary_search.ipynb` (50-query gold set, Ollama 0.35.1). Overall recall@1 is 0.34 and recall@5 is 0.48.
+
+| Kind | recall@1 | recall@5 | n |
+| --- | --- | --- | --- |
+| `A_stw_de_alt_to_concept` | 3 | 4 | 12 |
+| `B_stw_en_to_de` (cross-lingual) | 5 | 7 | 12 |
+| `C_unesco_fr_to_en` (cross-lingual) | 5 | 6 | 10 |
+| `D_unesco_en_to_fr` (cross-lingual) | 4 | 6 | 10 |
+| `E_unesco_scopenote_to_concept` | 0 | 1 | 6 |
+
 ## Rebuild
 
 ```
