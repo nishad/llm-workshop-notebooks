@@ -169,3 +169,30 @@ def test_validate_sparql_rejects_federation_but_allows_label_service():
         'SELECT ?item ?itemLabel WHERE { ?item wdt:P31 wd:Q5 . SERVICE wikibase:label { bd:serviceParam wikibase:language "en". } }'
     )
     assert "SERVICE wikibase:label" in out
+
+def test_validate_sparql_accepts_update_words_as_names():
+    out = tools.validate_sparql("SELECT ?created WHERE { ?s <http://purl.org/dc/terms/created> ?created }")
+    assert out.rstrip().endswith("LIMIT 50")
+    out = tools.validate_sparql('SELECT ?s WHERE { ?s ?p ?l FILTER(?l = "Move") }')
+    assert '"Move"' in out
+
+
+def test_validate_sparql_rejects_construct_and_nested_service():
+    with pytest.raises(tools.ToolError):
+        tools.validate_sparql("CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }")
+    with pytest.raises(tools.ToolError):
+        tools.validate_sparql(
+            'SELECT ?s WHERE { SERVICE wikibase:label { SERVICE <https://evil.example/> { ?s ?p ?o } } }'
+        )
+
+
+def test_validate_sparql_limit_with_offset():
+    out = tools.validate_sparql("SELECT ?s WHERE { ?s ?p ?o } LIMIT 10 OFFSET 5")
+    assert out.count("LIMIT") == 1 and "LIMIT 10" in out
+    with pytest.raises(tools.ToolError, match="LIMIT"):
+        tools.validate_sparql("SELECT ?s WHERE { ?s ?p ?o } LIMIT 5000 OFFSET 5")
+
+
+def test_validate_sparql_ask_passes_through():
+    out = tools.validate_sparql("ASK { <http://www.wikidata.org/entity/Q42> ?p ?o }")
+    assert out.startswith("ASK") and "LIMIT" not in out

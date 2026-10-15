@@ -11,6 +11,8 @@ import re
 from pathlib import Path
 
 import requests
+from rdflib.plugins.sparql.parser import parseQuery
+from rdflib.plugins.sparql.parserutils import CompValue
 
 from workshop.config import USER_AGENT, load_settings
 
@@ -22,6 +24,7 @@ ALLOWED_ENDPOINTS: dict[str, str] = {
     "bnf": "https://data.bnf.fr/sparql",
 }
 TIMEOUT = 60
+WIKIBASE = "http://wikiba.se/ontology#"
 FIXTURE_USED = "[fixture]"
 _FIXTURE_DIR = Path(__file__).resolve().parent.parent / "fixtures"
 
@@ -57,42 +60,71 @@ def _headers() -> dict[str, str]:
     return {"User-Agent": USER_AGENT, "Accept": "application/json"}
 
 
-_UPDATE_WORDS = re.compile(r"\b(INSERT|DELETE|LOAD|CLEAR|DROP|CREATE|COPY|MOVE|ADD)\b", re.IGNORECASE)
-_FORM = re.compile(r"^\s*(?:PREFIX\s+\S+\s*<[^>]*>\s*)*(SELECT|ASK)\b", re.IGNORECASE)
 _LIMIT = re.compile(r"\bLIMIT\s+(\d+)\s*$", re.IGNORECASE)
-_SERVICE = re.compile(r"\bSERVICE\b(?:\s+SILENT\b)?\s*([^\s{]*)", re.IGNORECASE)
-_WIKIBASE_PREFIX = re.compile(r"\bPREFIX\s+wikibase:\s*<([^>]*)>", re.IGNORECASE)
-_CODEPOINT_ESCAPE = re.compile(r"\\[uU]")
+_PROLOGUE_DECL = re.compile(r"((?:PREFIX\s+\S+|BASE)\s*<[^>]*>)", re.IGNORECASE)
+
+
+def _parse(q: str):
+    """Parse with rdflib. A `#` inside a prologue IRI on the same line as later keywords trips rdflib's
+    parser, so on failure retry with each PREFIX/BASE declaration on its own line (whitespace only)."""
+    try:
+        return q, parseQuery(q)
+    except Exception as first:  # pyparsing raises ParseException; deeply nested patterns raise RecursionError
+        unfolded = _PROLOGUE_DECL.sub(r"\1\n", q)
+        if unfolded != q:
+            try:
+                return unfolded, parseQuery(unfolded)
+            except Exception:
+                pass
+        raise ToolError(f"The query does not parse as SPARQL: {str(first).splitlines()[0][:120]}") from None
+
+
+def _walk(node):
+    """Yield every CompValue node in an rdflib parse tree."""
+    if isinstance(node, CompValue):
+        yield node
+        for value in node.values():
+            yield from _walk(value)
+    elif isinstance(node, (list, tuple)):
+        for value in node:
+            yield from _walk(value)
+
+
+def _is_label_service(term, prefixes: dict[str, str]) -> bool:
+    """True only for Wikidata's label service, with the wikibase prefix undeclared or bound to its real IRI."""
+    if isinstance(term, CompValue) and term.name == "pname":
+        return (
+            str(term.prefix) == "wikibase"
+            and str(term.localname) == "label"
+            and prefixes.get("wikibase", WIKIBASE) == WIKIBASE
+        )
+    return str(term) == WIKIBASE + "label"
 
 
 def validate_sparql(query: str, *, max_limit: int = 50) -> str:
-    """Allow only SELECT and ASK, forbid update keywords, codepoint escapes and any SERVICE other than wikibase:label, force a small LIMIT.
+    """Parse the query and allow only what the workshop endpoints should see.
 
-    Semicolons are legal inside SPARQL (predicate-object lists), so chained updates are caught by the keyword check.
+    SELECT and ASK only; no SERVICE except Wikidata's label service; a LIMIT of at most `max_limit`.
+    Parsing instead of pattern-matching means a query the endpoint would read differently from us is rejected.
     """
-    q = query.strip().rstrip(";").strip()
-    if _CODEPOINT_ESCAPE.search(q):
-        raise ToolError("Unicode escape sequences (\\u, \\U) are not allowed in queries.")
-    form = _FORM.match(q)
-    if not form:
+    q, (prologue, body) = _parse(query.strip())
+    if body.name not in ("SelectQuery", "AskQuery"):
         raise ToolError("Only SELECT or ASK queries are allowed.")
-    if _UPDATE_WORDS.search(q):
-        raise ToolError("Update keywords are not allowed.")
-    for m in _SERVICE.finditer(q):
-        if m.group(1).lower() != "wikibase:label":
+    prefixes = {str(d.prefix): str(d.iri) for d in prologue if isinstance(d, CompValue) and d.name == "PrefixDecl"}
+    for node in _walk(body):
+        if node.name == "ServiceGraphPattern" and not _is_label_service(node.term, prefixes):
             raise ToolError("SERVICE is only allowed for wikibase:label; federated queries to other endpoints are not allowed.")
-    for m in _WIKIBASE_PREFIX.finditer(q):
-        if m.group(1) != "http://wikiba.se/ontology#":
-            raise ToolError("The wikibase: prefix must be <http://wikiba.se/ontology#>.")
-    if form.group(1).upper() == "ASK":
+    if body.name == "AskQuery":
         return q
-    m = _LIMIT.search(q)
-    if m:
-        if int(m.group(1)) > max_limit:
-            q = _LIMIT.sub(f"LIMIT {max_limit}", q)
-    else:
-        q = f"{q}\nLIMIT {max_limit}"
-    return q
+    clauses = body.get("limitoffset")
+    limit = int(clauses["limit"].toPython()) if isinstance(clauses, CompValue) and "limit" in clauses else None
+    if limit is None:
+        return f"{q}\nLIMIT {max_limit}"
+    if limit <= max_limit:
+        return q
+    if _LIMIT.search(q):
+        return _LIMIT.sub(f"LIMIT {max_limit}", q)
+    raise ToolError(f"LIMIT must be at most {max_limit}.")
 
 
 def search_gnd(name: str, type: str = "Person") -> str:
