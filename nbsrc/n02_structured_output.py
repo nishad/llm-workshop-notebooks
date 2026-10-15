@@ -123,6 +123,9 @@ for row in rows:
         if str(row[field] or "").strip().lower() != str(g[field] or "").strip().lower():
             misses[field] += 1
 print(misses.most_common())"""),
+    ("md", """Title and language are where the 8B slips most. It copies the subtitle after " : " although the description asks for the title
+proper, and it guesses the language of a French or Italian book as English from the imprint. A field description is a hint, not
+a guarantee; that is what the gold file and a human reviewer are for."""),
     ("md", """## 02.06 Exercises
 
 🔧 **Run and change:** add a field `pages: str = Field(default="", max_length=40, ...)` with a description, re-run 02.03 on card-02. Did the model copy "375 S."?
