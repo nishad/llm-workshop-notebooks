@@ -1,0 +1,4 @@
+Berners-Lee, Tim ; Hendler, James ; Lassila, Ora
+The Semantic Web
+In: Scientific American, vol. 284, no. 5 (May 2001), p. 34-43
+doi:10.1038/scientificamerican0501-34

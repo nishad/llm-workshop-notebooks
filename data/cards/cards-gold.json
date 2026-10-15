@@ -1,0 +1,244 @@
+[
+  {
+    "file": "card-01.txt",
+    "title": "Die Leiden des jungen Werthers",
+    "creators": [
+      "Goethe, Johann Wolfgang von"
+    ],
+    "date": "1774",
+    "place": "Leipzig",
+    "publisher": "Weygandsche Buchhandlung",
+    "language": "de",
+    "identifier": null
+  },
+  {
+    "file": "card-02.txt",
+    "title": "Vita activa oder Vom tätigen Leben",
+    "creators": [
+      "Arendt, Hannah"
+    ],
+    "date": null,
+    "place": "München",
+    "publisher": "Piper",
+    "language": "de",
+    "identifier": "978-3-492-23623-2"
+  },
+  {
+    "file": "card-03.txt",
+    "title": "Le deuxième sexe. I, Les faits et les mythes",
+    "creators": [
+      "Beauvoir, Simone de"
+    ],
+    "date": "1949",
+    "place": null,
+    "publisher": "Gallimard",
+    "language": "fr",
+    "identifier": null
+  },
+  {
+    "file": "card-04.txt",
+    "title": "Se una notte d'inverno un viaggiatore",
+    "creators": [
+      "Calvino, Italo"
+    ],
+    "date": "1979",
+    "place": "Torino",
+    "publisher": "Einaudi",
+    "language": "it",
+    "identifier": null
+  },
+  {
+    "file": "card-05.txt",
+    "title": "The Semantic Web",
+    "creators": [
+      "Berners-Lee, Tim",
+      "Hendler, James",
+      "Lassila, Ora"
+    ],
+    "date": "2001",
+    "place": null,
+    "publisher": null,
+    "language": "en",
+    "identifier": "10.1038/scientificamerican0501-34"
+  },
+  {
+    "file": "card-06.txt",
+    "title": "ノルウェイの森",
+    "creators": [
+      "村上春樹"
+    ],
+    "date": "1987",
+    "place": "東京",
+    "publisher": "講談社",
+    "language": "ja",
+    "identifier": null
+  },
+  {
+    "file": "card-07.txt",
+    "title": "Die Verwandlung",
+    "creators": [
+      "Kafka, Franz"
+    ],
+    "date": "1915",
+    "place": "Leipzig",
+    "publisher": "Kurt Wolff",
+    "language": "de",
+    "identifier": null
+  },
+  {
+    "file": "card-08.txt",
+    "title": "Buddenbrooks",
+    "creators": [
+      "Mann, Thomas"
+    ],
+    "date": "1901",
+    "place": null,
+    "publisher": "S. Fischer",
+    "language": "de",
+    "identifier": null
+  },
+  {
+    "file": "card-09.txt",
+    "title": "Also sprach Zarathustra",
+    "creators": [
+      "Nietzsche, Friedrich"
+    ],
+    "date": "1883",
+    "place": "Chemnitz",
+    "publisher": "Ernst Schmeitzner",
+    "language": "de",
+    "identifier": null
+  },
+  {
+    "file": "card-10.txt",
+    "title": "Der Steppenwolf",
+    "creators": [
+      "Hesse, Hermann"
+    ],
+    "date": "1927",
+    "place": "Berlin",
+    "publisher": "S. Fischer",
+    "language": "de",
+    "identifier": null
+  },
+  {
+    "file": "card-11.txt",
+    "title": "Les Misérables",
+    "creators": [
+      "Hugo, Victor"
+    ],
+    "date": "1862",
+    "place": null,
+    "publisher": "Lacroix, Verboeckhoven & Cie",
+    "language": "fr",
+    "identifier": null
+  },
+  {
+    "file": "card-12.txt",
+    "title": "Le Petit Prince",
+    "creators": [
+      "Saint-Exupéry, Antoine de"
+    ],
+    "date": "1943",
+    "place": "New York",
+    "publisher": "Reynal & Hitchcock",
+    "language": "fr",
+    "identifier": null
+  },
+  {
+    "file": "card-13.txt",
+    "title": "Du côté de chez Swann",
+    "creators": [
+      "Proust, Marcel"
+    ],
+    "date": null,
+    "place": "Paris",
+    "publisher": "Bernard Grasset",
+    "language": "fr",
+    "identifier": null
+  },
+  {
+    "file": "card-14.txt",
+    "title": "Il nome della rosa",
+    "creators": [
+      "Eco, Umberto"
+    ],
+    "date": "1980",
+    "place": "Milano",
+    "publisher": "Bompiani",
+    "language": "it",
+    "identifier": null
+  },
+  {
+    "file": "card-15.txt",
+    "title": "I promessi sposi",
+    "creators": [
+      "Manzoni, Alessandro"
+    ],
+    "date": "1827",
+    "place": "Milano",
+    "publisher": null,
+    "language": "it",
+    "identifier": null
+  },
+  {
+    "file": "card-16.txt",
+    "title": "Pride and Prejudice",
+    "creators": [
+      "Austen, Jane"
+    ],
+    "date": "1813",
+    "place": "London",
+    "publisher": "T. Egerton",
+    "language": "en",
+    "identifier": null
+  },
+  {
+    "file": "card-17.txt",
+    "title": "Moby-Dick; or, The Whale",
+    "creators": [
+      "Melville, Herman"
+    ],
+    "date": "1851",
+    "place": "New York",
+    "publisher": "Harper & Brothers",
+    "language": "en",
+    "identifier": null
+  },
+  {
+    "file": "card-18.txt",
+    "title": "A Mathematical Theory of Communication",
+    "creators": [
+      "Shannon, Claude E."
+    ],
+    "date": "1948",
+    "place": "New York",
+    "publisher": "American Telephone and Telegraph Company",
+    "language": "en",
+    "identifier": "10.1002/j.1538-7305.1948.tb01338.x"
+  },
+  {
+    "file": "card-19.txt",
+    "title": "On the Origin of Species by Means of Natural Selection",
+    "creators": [
+      "Darwin, Charles"
+    ],
+    "date": "1859",
+    "place": "London",
+    "publisher": "John Murray",
+    "language": "en",
+    "identifier": null
+  },
+  {
+    "file": "card-20.txt",
+    "title": "El ingenioso hidalgo don Quixote de la Mancha",
+    "creators": [
+      "Cervantes Saavedra, Miguel de"
+    ],
+    "date": "1605",
+    "place": "Madrid",
+    "publisher": "Juan de la Cuesta",
+    "language": "es",
+    "identifier": null
+  }
+]
