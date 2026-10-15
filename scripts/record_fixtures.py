@@ -21,8 +21,8 @@ WIKIDATA = [("Hannah Arendt", "en"), ("Johann Wolfgang von Goethe", "de"), ("Ann
             ("Semantic Web", "en"), ("Zürich", "de"), ("Albert Einstein", "en")]
 SPARQL = [
     ("wikidata", "SELECT ?item ?itemLabel WHERE { ?item wdt:P227 '118540238' . ?item rdfs:label ?itemLabel FILTER(LANG(?itemLabel)='en') }"),
-    ("wikidata", "SELECT ?item ?itemLabel WHERE { ?item wdt:P227 '118502158' . ?item rdfs:label ?itemLabel FILTER(LANG(?itemLabel)='en') }"),
-    ("wikidata", "SELECT ?hls WHERE { ?item wdt:P227 '118794949' . ?item wdt:P902 ?hls }"),
+    ("wikidata", "SELECT ?item ?itemLabel WHERE { ?item wdt:P227 '11850391X' . ?item rdfs:label ?itemLabel FILTER(LANG(?itemLabel)='en') }"),
+    ("wikidata", "SELECT ?hls WHERE { ?item wdt:P227 '118997718' . ?item wdt:P902 ?hls }"),
     ("wikidata", "SELECT ?work ?workLabel WHERE { ?work wdt:P50 wd:Q5879 . ?work wdt:P31 wd:Q7725634 . ?work rdfs:label ?workLabel FILTER(LANG(?workLabel)='de') }"),
     ("lindas", "SELECT ?scheme ?title WHERE { ?scheme a <http://www.w3.org/2004/02/skos/core#ConceptScheme> . OPTIONAL { ?scheme <http://purl.org/dc/terms/title> ?title } }"),
 ]
