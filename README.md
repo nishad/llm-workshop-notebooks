@@ -40,7 +40,7 @@ The workshop page is https://llm-workshop.thalhath.org/v3/. Questions and announ
 
    Open `00_check_setup.ipynb` and run all cells. Every line should show a check mark. If one does not, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
-If you prefer pip, with Python 3.12 or newer:
+If you prefer pip, with Python 3.12 or 3.13:
 
 ```bash
 python -m venv .venv
@@ -63,6 +63,16 @@ You need about 20 GB of free disk space and a stable connection for the download
 | `05_tool_use.ipynb` | 15 min | Let the model propose GND, Wikidata and SPARQL calls; approve, correct or refuse each one |
 
 Tiers. A machine with 8 GB runs the same notebooks with the 4B model: set `WORKSHOP_TIER=8gb` before starting JupyterLab. RAG then retrieves fewer chunks (the 4B window is 4,096 tokens), and tool use needs the `nishad/apertus:4b` tag, which carries a wrapper template for tools.
+
+```bash
+# macOS / Linux
+WORKSHOP_TIER=8gb uv run jupyter lab
+```
+
+```powershell
+# Windows PowerShell
+$env:WORKSHOP_TIER = "8gb"; uv run jupyter lab
+```
 
 Prebuilt vocabulary indexes. Notebook 03 builds two label indexes (`runs/stw-de-labels.sqlite`, about 20,000 STW labels, and `runs/unesco-en-labels.sqlite`) and loads them instead when the files exist. Prebuilt index files will be offered on the workshop page shortly before the session; put them in `runs/`. Building them yourself takes a few minutes on Apple Silicon and much longer on a CPU-only laptop.
 

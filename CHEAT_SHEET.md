@@ -70,6 +70,9 @@ The `Record` model from notebook 02. Plain strings with `max_length`, an empty s
 from typing import Literal
 from pydantic import BaseModel, Field, ValidationError
 
+INSTRUCTIONS = "Extract the bibliographic record from this catalogue card into the JSON schema. Copy each value as written; use an empty string for a field the card does not state."
+card_text = open("data/cards/card-01.txt", encoding="utf-8").read()
+
 class Record(BaseModel):
     title: str = Field(max_length=200, description="Title proper as written on the card: the part before any ' : ' subtitle, without statement of responsibility")
     creators: list[str] = Field(max_length=6, description="Persons or bodies responsible, as written, surname first")
@@ -96,6 +99,8 @@ The grammar guarantees well-formed JSON with the right keys and types, not true 
 The same through the OpenAI client:
 
 ```python
+from openai import OpenAI
+oa = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
 completion = oa.chat.completions.parse(model="nishad/apertus:8b", messages=messages, response_format=Record)
 record = completion.choices[0].message.parsed
 ```
@@ -193,10 +198,7 @@ oa = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")    # the key
 
 ## Memory and speed
 
-- 8B at Q4_K_M: about 5.4 GB at 4k context, 6.3 GB at 8k.
-- The KV cache costs 128 KiB per token of context.
-- 4B: about 2.8 GB.
-- Tokens per second for the 8B: base Apple chips 14-24, Pro and Max 40 and more, CPU-only laptops 3-14.
+Measured in October 2026 on an Apple Silicon laptop with the research footprint script: the 8B Q4_K_M build sits at about 5.4 GB with a 4k context and 6.3 GB with 8k. The KV cache alone is 128 KiB per token (0.5 GiB per 4k tokens; `OLLAMA_KV_CACHE_TYPE=q8_0` halves it); the rest of the growth is compute buffers. The 4B takes about 2.8 GB. Tokens per second are community-reported ranges, not measurements made here: base Apple chips 14 to 24 for the 8B, Pro and Max chips 40 or more, CPU-only laptops 3 to 14.
 
 ## Glossary
 

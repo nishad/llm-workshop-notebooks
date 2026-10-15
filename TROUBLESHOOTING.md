@@ -33,6 +33,18 @@ $env:OLLAMA_HOST = "127.0.0.1:11435"; ollama serve
 
 Then start JupyterLab from a terminal where `OLLAMA_HOST=http://127.0.0.1:11435` is set, so the notebooks use the same address.
 
+```bash
+# macOS / Linux
+export OLLAMA_HOST=http://127.0.0.1:11435
+```
+
+```powershell
+# Windows PowerShell
+$env:OLLAMA_HOST = "http://127.0.0.1:11435"
+```
+
+Every `ollama pull`, `ollama run` and notebook started from that terminal then talks to the server on the new port.
+
 ## Model not found or wrong tag
 
 Symptom: `model "..." not found`, or notebook 00 reports a missing model.
@@ -79,7 +91,7 @@ Look at the PROCESSOR column. `100% GPU` is best; a CPU percentage means part of
 1. Close browsers and other large apps.
 2. On an 8 GB machine use `nishad/apertus:4b` and `WORKSHOP_TIER=8gb`.
 3. Stop other loaded models with `ollama stop <tag>`.
-4. Set `OLLAMA_KV_CACHE_TYPE=q8_0` before `ollama serve`; it roughly halves the memory the context needs. Do not use `q4_0` with Apertus.
+4. Set `OLLAMA_KV_CACHE_TYPE=q8_0` before `ollama serve`; it roughly halves the memory the context needs. This is an environment variable of the server. On macOS and Windows the Ollama app reads it only if you quit the app and start `ollama serve` from a terminal where it is set; on Linux put it in the systemd unit. Do not use `q4_0` with Apertus.
 
 Windows machines with only an integrated GPU run on the CPU; that is expected and slower.
 
