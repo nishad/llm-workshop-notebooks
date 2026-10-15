@@ -56,6 +56,8 @@ def html_to_text(html: str) -> str:
     parser.feed(html)
     text = "".join(parser.parts)
     text = re.sub(r"[ \t]+", " ", text)
+    text = re.sub(r"[ \t]*\n[ \t]*", "\n", text)
+    text = re.sub(r"\n(#+ )\n", "\n", text)  # headings whose text was in a skipped or nested element
     return re.sub(r"\n{3,}", "\n\n", text).strip()
 
 
