@@ -1,0 +1,49 @@
+FROM hf.co/jondale/Apertus-v1.1-4B-Instruct-GGUF:Q4_K_M
+TEMPLATE """<s>
+{{- $hasSystem := false -}}
+{{- range $i, $m := .Messages -}}{{- if and (eq $i 0) (eq $m.Role "system") -}}{{- $hasSystem = true -}}<SPECIAL_61>{{ $m.Content }}<SPECIAL_62>{{- end -}}{{- end -}}
+{{- if not $hasSystem -}}<SPECIAL_61>You are Apertus, a helpful assistant created by the SwissAI initiative.<SPECIAL_62>{{- end -}}
+<SPECIAL_63>Deliberation: disabled
+Tool Capabilities:
+{{- if .Tools }}
+{{- range $t := .Tools }}
+// {{ $t.Function.Description }}
+type {{ $t.Function.Name }} = (_: {
+{{- $first := true }}
+{{- range $pn, $p := $t.Function.Parameters.Properties }}{{ if not $first }},{{ end }}{{ $first = false }}
+// {{ $p.Description }}
+{{ $pn }}: {{ index $p.Type 0 }}
+{{- end }}
+}) => any;
+{{- end }}
+{{- else }} disabled
+{{- end -}}
+<SPECIAL_64>
+{{- $inTool := false -}}{{- $inAssistant := false -}}
+{{- range .Messages -}}
+{{- if eq .Role "user" -}}
+{{- if $inTool -}}]{{- $inTool = false -}}{{- end -}}
+{{- if $inAssistant -}}<SPECIAL_68>{{- $inAssistant = false -}}{{- end -}}
+<SPECIAL_65>{{ .Content }}<SPECIAL_66>
+{{- else if eq .Role "assistant" -}}
+{{- if $inTool -}}]{{- $inTool = false -}}{{- end -}}
+{{- if not $inAssistant -}}<SPECIAL_67>{{- $inAssistant = true -}}{{- end -}}
+{{- .Content -}}
+{{- if gt (len .ToolCalls) 0 -}}<SPECIAL_71>{{- end -}}{{- if .ToolCalls -}}[{{- range $j, $tc := .ToolCalls -}}{{- if $j -}}, {{ end -}}{"{{ $tc.Function.Name }}": {{ $tc.Function.Arguments | json }}}{{- end -}}]<SPECIAL_72>{{- end -}}
+{{- else if eq .Role "tool" -}}
+{{- if not $inTool -}}[{{- $inTool = true -}}{{- else -}}, {{ end -}}{{ .Content }}
+{{- end -}}
+{{- end -}}
+{{- if $inTool -}}]{{- end -}}
+{{- if not $inAssistant -}}<SPECIAL_67>{{- end -}}"""
+PARAMETER stop <SPECIAL_68>
+PARAMETER stop <SPECIAL_72>
+PARAMETER stop <SPECIAL_65>
+PARAMETER num_ctx 4096
+PARAMETER temperature 0.8
+PARAMETER top_p 0.9
+LICENSE """Weights: Apache License 2.0, Swiss AI Initiative, https://huggingface.co/swiss-ai/Apertus-v1.1-4B-Instruct
+Use is subject to the Apertus LLM Acceptable Use Policy: https://github.com/swiss-ai/apertus-legal
+GGUF conversion: https://huggingface.co/jondale/Apertus-v1.1-4B-Instruct-GGUF (Q4_K_M)
+Template: SWIB26 workshop wrapper that renders tools in Apertus's TypeScript-style format so Ollama parses tool calls.
+Context is a hard 4,096 tokens. Packaged for https://llm-workshop.thalhath.org/"""

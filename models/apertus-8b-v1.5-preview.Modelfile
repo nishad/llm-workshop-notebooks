@@ -1,0 +1,8 @@
+# Preview only: community text-only conversion of Apertus v1.5 8B (vision and audio removed, no parity check).
+FROM hf.co/Colby/apertus-v1.5-8b-text-Q4_K_M-GGUF:Q4_K_M
+PARAMETER num_ctx 8192
+PARAMETER temperature 0.8
+PARAMETER top_p 0.9
+LICENSE """Weights: Apache License 2.0 with the Apertus LLM Acceptable Use Policy v1.5, https://huggingface.co/swiss-ai/Apertus-v1.5-8B
+Text-only extraction: https://huggingface.co/andreasmartin/apertus-v1.5-8b-text ; GGUF: https://huggingface.co/Colby/apertus-v1.5-8b-text-Q4_K_M-GGUF (sha256 a037df8d87ff6caacee794ee85f55342f2152e0d359b7389033300c3bee5f299)
+Unofficial. Thinking mode is not available through Ollama. Packaged as a preview for https://llm-workshop.thalhath.org/"""

@@ -1,0 +1,12 @@
+# Apertus 8B Instruct 2509, Unsloth Q4_K_M GGUF (Apache-2.0 weights; see LICENSE below).
+# The GGUF's own chat template (with Unsloth's tool-argument fixes) is kept: it is the only 8B v1 build
+# whose tool calls Ollama parses. Do not add a TEMPLATE line.
+FROM hf.co/unsloth/Apertus-8B-Instruct-2509-GGUF:Q4_K_M
+PARAMETER num_ctx 8192
+PARAMETER temperature 0.8
+PARAMETER top_p 0.9
+SYSTEM """You are Apertus, a helpful assistant created by the SwissAI initiative. Answer in the language of the question."""
+LICENSE """Weights: Apache License 2.0, Swiss AI Initiative (EPFL, ETH Zurich, CSCS), https://huggingface.co/swiss-ai/Apertus-8B-Instruct-2509
+Use is subject to the Apertus LLM Acceptable Use Policy: https://github.com/swiss-ai/apertus-legal
+Quantization: Unsloth, https://huggingface.co/unsloth/Apertus-8B-Instruct-2509-GGUF (file sha256 87e7f0eb5a1d33e1a8ea4e7fdd2363764e0465061dd92962e0073aec31a7944d)
+Packaged for the SWIB26 workshop "Getting started with local LLMs", https://llm-workshop.thalhath.org/"""
