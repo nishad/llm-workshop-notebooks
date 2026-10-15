@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from workshop.config import context_limit, load_settings
+from workshop.llm import chat
 from workshop.search import Index, search
 
 
@@ -81,18 +82,12 @@ def answer(
     k: int = 4,
     model: str | None = None,
 ) -> tuple[str, list[Chunk]]:
-    """Retrieve k chunks, build the grounded prompt, ask the model. Returns (answer, chunks used)."""
-    import ollama
+    """Retrieve k chunks, build the grounded prompt, ask the model. Returns (answer, chunks used).
 
-    settings = load_settings()
-    model = model or settings.model
+    The call goes through workshop.llm.chat: temperature 0, the tier's num_ctx, one line in runs/log.jsonl."""
+    model = model or load_settings().model
     hits = search(question, index, k=k)
     used = [chunks_by_id[hit_id] for hit_id, _, _ in hits]
     prompt = build_prompt(question, used, max_tokens=context_limit(model))
-    client = ollama.Client(host=settings.host)
-    response = client.chat(
-        model=model,
-        messages=[{"role": "user", "content": prompt}],
-        options={"temperature": 0, "num_ctx": context_limit(model)},
-    )
+    response = chat([{"role": "user", "content": prompt}], model=model)
     return response.message.content, used

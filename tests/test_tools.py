@@ -301,3 +301,10 @@ def test_validate_sparql_rejects_limit_hidden_behind_comment():
 def test_validate_sparql_ask_passes_through():
     out = tools.validate_sparql("ASK { <http://www.wikidata.org/entity/Q42> ?p ?o }")
     assert out.startswith("ASK") and "LIMIT" not in out
+
+
+def test_loop_marks_a_long_invented_number(monkeypatch):
+    monkeypatch.setenv("WORKSHOP_AUTO_APPROVE", "1")
+    chat = ScriptedChat([('The GND identifier for Hannah Arendt is "100000000000000000000000 Arendt, Hannah".', [])])
+    out = tools.run_tool_loop([{"role": "user", "content": "GND of Arendt?"}], [], chat_fn=chat)
+    assert "UNVERIFIED: 100000000000000000000000" in out[-1]["content"]

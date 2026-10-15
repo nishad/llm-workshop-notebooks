@@ -11,7 +11,7 @@ import sys
 import ollama
 
 from workshop.config import Settings, load_settings
-from workshop.llm import _server_version
+from workshop.llm import _server_version, chat
 
 Check = tuple[str, bool, str]
 GB = 1024**3
@@ -110,10 +110,8 @@ def check_embedding(embed_model: str, client=None, host: str | None = None) -> C
 
 def smoke_chat(model: str, client=None, host: str | None = None) -> Check:
     try:
-        r = _client(client, host or load_settings().host).chat(
-            model=model, messages=[{"role": "user", "content": "Reply with the single word OK."}],
-            options={"temperature": 0, "num_predict": 5},
-        )
+        r = chat([{"role": "user", "content": "Reply with the single word OK."}], model=model,
+                 options={"num_predict": 5}, client=_client(client, host or load_settings().host))
         text = (r.message.content or "").strip()
     except Exception as exc:
         return ("Smoke chat", False, str(exc))
@@ -130,10 +128,8 @@ def smoke_tool(model: str, client=None, host: str | None = None) -> Check:
         return json.dumps({"id": "test"})
 
     try:
-        r = _client(client, host or load_settings().host).chat(
-            model=model, messages=[{"role": "user", "content": "Find the authority record for Hannah Arendt."}],
-            tools=[lookup_authority], options={"temperature": 0},
-        )
+        r = chat([{"role": "user", "content": "Find the authority record for Hannah Arendt."}], model=model,
+                 tools=[lookup_authority], client=_client(client, host or load_settings().host))
     except Exception as exc:
         return ("Smoke tool call", False, str(exc))
     calls = r.message.tool_calls or []

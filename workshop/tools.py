@@ -15,6 +15,7 @@ from rdflib.plugins.sparql.parser import parseQuery
 from rdflib.plugins.sparql.parserutils import CompValue
 
 from workshop.config import USER_AGENT, load_settings
+from workshop.llm import chat
 
 ALLOWED_ENDPOINTS: dict[str, str] = {
     "wikidata": "https://query.wikidata.org/sparql",
@@ -246,8 +247,9 @@ def approve(name: str, arguments: dict) -> dict | None:
     return None
 
 
-# GND numbers (118540238, 11850391X, 4006445-3), Wikidata items (Q60025) and six-digit ids such as HLS article numbers.
-_IDENTIFIER = re.compile(r"\b\d{6,8}-[0-9X]\b|\b\d{7,9}[0-9X]?\b|\bQ\d{3,}\b|\b\d{6}\b")
+# GND numbers (118540238, 11850391X, 4006445-3), Wikidata items (Q60025), and any other run of six or more digits
+# (HLS article numbers, and long numbers a model invents), so every such number must have come from a tool result.
+_IDENTIFIER = re.compile(r"\b\d{6,8}-[0-9X]\b|\b\d{6,}X?\b|\bQ\d{3,}\b")
 _LEAKED_CALL = re.compile(r"^\s*[\[{]\s*\"?[a-zA-Z_]+\"?\s*[:(]", re.IGNORECASE)
 
 
@@ -277,16 +279,14 @@ def run_tool_loop(
     approve_fn=approve,
     chat_fn=None,
 ) -> list[dict]:
-    """Model proposes a call, the human approves, Python executes, the result goes back. One call per turn, at most max_turns rounds; identifiers the model states without a tool having returned them are marked. A reply that only names a tool, or says nothing, gets one reminder."""
-    import ollama
+    """Model proposes a call, the human approves, Python executes, the result goes back. One call per turn, at most max_turns rounds; identifiers the model states without a tool having returned them are marked. A reply that only names a tool, or says nothing, gets one reminder.
 
-    settings = load_settings()
-    model = model or settings.model
+    By default each model call goes through workshop.llm.chat: temperature 0, the tier's num_ctx, one line in runs/log.jsonl."""
+    model = model or load_settings().model
     if chat_fn is None:
-        client = ollama.Client(host=settings.host)
 
         def chat_fn(model, messages, tools):
-            return client.chat(model=model, messages=messages, tools=tools, options={"temperature": 0})
+            return chat(messages, model=model, tools=tools)
 
     by_name = {fn.__name__: fn for fn in tools}
     messages = list(messages)

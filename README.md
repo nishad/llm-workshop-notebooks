@@ -95,7 +95,7 @@ Prebuilt vocabulary indexes. Notebook 03 builds two label indexes (`runs/stw-de-
 
 ## Afterwards
 
-Every notebook is committed with its outputs, so you can read it without running anything. Each `workshop.llm.chat` call (the model calls in notebooks 01 and 02) appends a line to `runs/log.jsonl` with the time, the model, its digest, the options and the first 300 characters of the prompt and of the answer, so you can trace those results to the exact model.
+Every notebook is committed with its outputs, so you can read it without running anything. Every chat call through `workshop.llm.chat`, which the RAG helper, the tool loop and the setup check's smoke calls also use, appends a line to `runs/log.jsonl` with the time, the model, its digest, the options and the first 300 characters of the prompt and of the answer, so you can trace each result to the exact model. Two calls bypass the helper on purpose and are not logged: the OpenAI client in 01.06 and the oversized prompt in 04.07. Embedding calls are not logged either.
 
 ## Helpers (`workshop/`)
 
