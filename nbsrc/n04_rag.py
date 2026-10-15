@@ -43,7 +43,9 @@ index = build_index([c.id for c in chunks], [c.text for c in chunks], model=EMBE
 print(f"indexed {len(chunks)} chunks in {time.time()-t:.0f} s")"""),
     ("md", """## 04.04 Look at what was retrieved before you read any answer
 
-If the right passage is not in the top hits, no prompt can fix it. Retrieval quality comes first."""),
+If the right passage is not in the top hits, no prompt can fix it. Retrieval quality comes first.
+
+In the October 2026 run the top hits for the DCMI question were generic date terms and `dcterms:issued` was not among them, so the cited answer in 04.05 is wrong; the exercise in 04.10 (smaller chunks) is where to start fixing that."""),
     ("code", """question = "Which DCMI term expresses the date on which a resource was formally issued?"
 for cid, text, score in search(question, index, k=K):
     print(f"{score:.3f}  {cid}\\n      {text[:160]}...\\n")"""),
@@ -76,9 +78,9 @@ try:
 except PromptTooLong as err:
     print("helper refused:", err)
 try:
-    big = "\\n\\n".join(c.text for c in many)
+    big = "\\n\\n".join(c.text for c in many)[: int(LIMIT * 1.5 * 3.5)]   # about one and a half windows of text
     ollama.Client(host=settings.host).chat(model=MODEL, messages=[{"role": "user", "content": big + "\\n\\nSummarize."}],
-                                          options={"num_ctx": LIMIT, "temperature": 0})
+                                          options={"num_ctx": LIMIT, "temperature": 0, "num_predict": 20})
     print("Ollama accepted the long prompt (it may have truncated silently; check num_ctx).")
 except ollama.ResponseError as err:
     print("Ollama said:", err)"""),
