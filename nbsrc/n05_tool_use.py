@@ -49,7 +49,8 @@ show_markdown(out[-1]["content"])"""),
 Wikidata links authority files: property P227 holds the GND identifier, P902 the HLS article id. One question, two tool rounds. The loop runs one call per turn, so the second call can only be made after the first result is in."""),
     ("code", """chain = [messages[0], {"role": "user", "content":
     "Find the GND identifier of Annemarie Schwarzenbach with search_gnd, then use the sparql tool on wikidata to find the item with that "
-    "GND id (property wdt:P227, the id as a string literal) and return its HLS id (property wdt:P902)."}]
+    "GND id (property wdt:P227, the bare id as a string literal) and return its HLS id (property wdt:P902). "
+    "Call the tools one after the other; do not describe the steps."}]
 out = run_tool_loop(chain, TOOLS, model=MODEL, max_turns=4)
 for m in out[len(chain):]:
     print(m["role"].upper(), "→", (m.get("content") or "")[:300], m.get("tool_calls", ""))"""),
@@ -58,6 +59,7 @@ for m in out[len(chain):]:
 - An identifier in the answer that no tool result contained is marked `[UNVERIFIED ...]`, whether the model skipped the tools or made the number up after calling them.
 - A tool call written as text (the pattern of the community Ollama tag) stops the loop with an explanation.
 - A declined call becomes an error result the model sees, so it can ask you instead of guessing.
+- A reply that only announces a tool call gets one reminder to make the call.
 
 Try to provoke the first one."""),
     ("code", """try:

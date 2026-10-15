@@ -260,7 +260,7 @@ def run_tool_loop(
     approve_fn=approve,
     chat_fn=None,
 ) -> list[dict]:
-    """Model proposes a call, the human approves, Python executes, the result goes back. One call per turn, at most max_turns rounds; identifiers the model states without a tool having returned them are marked."""
+    """Model proposes a call, the human approves, Python executes, the result goes back. One call per turn, at most max_turns rounds; identifiers the model states without a tool having returned them are marked. A reply that only names a tool gets one reminder to call it."""
     import ollama
 
     settings = load_settings()
@@ -274,6 +274,7 @@ def run_tool_loop(
     by_name = {fn.__name__: fn for fn in tools}
     messages = list(messages)
     tool_outputs: list[str] = []  # every tool result, so identifiers in the final answer can be checked against them
+    nudged = False  # one reminder per run when the model announces a call instead of making it
     for _ in range(max_turns):
         response = chat_fn(model, messages, tools)
         content = response.message.content or ""
@@ -284,6 +285,11 @@ def run_tool_loop(
                     "The model wrote a tool call as text instead of a structured call. "
                     "Check the model tag: use nishad/apertus:8b (Unsloth template), not a community tag."
                 )
+            if tools and not nudged and any(name in content for name in by_name):
+                nudged = True
+                messages.append({"role": "assistant", "content": content})
+                messages.append({"role": "user", "content": "Call the tool now instead of describing it."})
+                continue
             unverified = sorted({i for i in _IDENTIFIER.findall(content) if not any(i in out for out in tool_outputs)})
             if unverified:
                 content += f"\n\n[UNVERIFIED: {', '.join(unverified)} did not come from any tool result.]"

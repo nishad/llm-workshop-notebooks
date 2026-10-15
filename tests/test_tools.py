@@ -144,6 +144,19 @@ def test_loop_runs_one_call_per_turn(monkeypatch):
     assert "UNVERIFIED" not in out[-1]["content"]
 
 
+def test_loop_nudges_an_announced_call_once(monkeypatch):
+    monkeypatch.setenv("WORKSHOP_AUTO_APPROVE", "1")
+
+    def fake_tool(name: str) -> str:
+        """Fake. Args: name: a name."""
+        return json.dumps({"results": [{"id": "gnd/1"}], "fixture": False})
+
+    chat = ScriptedChat([("Next, I will use fake_tool to look this up.", []), ("", [("fake_tool", {"name": "x"})]), ("Done.", [])])
+    out = tools.run_tool_loop([{"role": "user", "content": "q"}], [fake_tool], chat_fn=chat, max_turns=4)
+    assert any(m["role"] == "user" and m["content"].startswith("Call the tool now") for m in out)
+    assert any(m["role"] == "tool" for m in out) and out[-1]["content"] == "Done."
+
+
 def test_loop_flags_identifier_no_tool_returned(monkeypatch):
     monkeypatch.setenv("WORKSHOP_AUTO_APPROVE", "1")
 
