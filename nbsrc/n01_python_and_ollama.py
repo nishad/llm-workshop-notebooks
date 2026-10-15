@@ -27,6 +27,7 @@ print("Model:", MODEL, "| context we use:", context_limit(MODEL), "tokens")"""),
 client = ollama.Client(host=settings.host)
 for m in client.list().models:
     print(f"{m.model:45} {m.size/1e9:5.1f} GB  digest {m.digest[:12]}")"""),
+    ("md", """Now one model's own metadata. The `capabilities` list is where Ollama says whether this build can call tools."""),
     ("code", """info = client.show(MODEL)
 print("parameters:  ", info.details.parameter_size)
 print("quantization:", info.details.quantization_level)

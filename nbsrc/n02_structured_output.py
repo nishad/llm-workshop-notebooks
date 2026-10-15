@@ -114,8 +114,8 @@ Path("runs").mkdir(exist_ok=True)
 with open("runs/cards-extracted.csv", "w", newline="", encoding="utf-8") as fh:
     writer = csv.DictWriter(fh, fieldnames=list(rows[0].keys())); writer.writeheader(); writer.writerows(rows)
 print(f"{len(rows)} cards, field accuracy {correct}/{total} = {correct/total:.0%}; wrote runs/cards-extracted.csv")"""),
-    ("code", """# Which fields fail most? This is where a human reviewer should look first.
-from collections import Counter
+    ("md", """Which fields fail most? This is where a human reviewer should look first."""),
+    ("code", """from collections import Counter
 misses = Counter()
 for row in rows:
     g = gold[row["file"]]
