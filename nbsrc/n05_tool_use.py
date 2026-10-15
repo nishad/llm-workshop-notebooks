@@ -42,22 +42,31 @@ show_markdown(out[-1]["content"])"""),
 
 Small models misspell names in tool arguments. Run this cell, and when the gate shows the proposed call, paste corrected JSON,
 for example `{"name": "Annemarie Schwarzenbach", "type": "Person"}`."""),
-    ("code", """out = run_tool_loop([messages[0], {"role": "user", "content": "Look up the Swiss writer Annemarie Schwarzenbach in the GND."}], TOOLS, model=MODEL)
-show_markdown(out[-1]["content"])"""),
+    ("code", """if ":4b" not in MODEL:
+    out = run_tool_loop([messages[0], {"role": "user", "content": "Look up the Swiss writer Annemarie Schwarzenbach in the GND."}], TOOLS, model=MODEL)
+    show_markdown(out[-1]["content"])
+else:
+    print("Skipped on the 4B: the single-tool cell above is the one to run on the 8 GB tier.")"""),
     ("md", """## 05.05 Two tools in a row: GND → Wikidata → the Historical Dictionary of Switzerland
 
 Wikidata links authority files: property P227 holds the GND identifier, P902 the HLS article id. One question, two tool rounds.
 The loop runs one call per turn, so the second call can only be made after the first result is in.
 
 Two-step chains are where an 8B model at this quantization gets unreliable. In the October 2026 runs it sometimes looked up the GND record and then stopped (it pasted the URL form of the id, or announced the second call without making it), and sometimes answered with an empty code block right away. Nothing was invented, which is the point of the gate. Run the cell and see what
-you get; the next cell shows how you finish the chain yourself when the model stops."""),
+you get; the next cell shows how you finish the chain yourself when the model stops.
+
+**On the 8 GB tier run the single-tool cells only.** The 4B model can fall into a repetition loop that Ollama aborts with an error on the multi-step prompts (05.04 and this cell), so both cells are skipped there and the next cell makes the calls by hand."""),
     ("code", """chain = [messages[0], {"role": "user", "content":
     "Find the GND identifier of Annemarie Schwarzenbach with search_gnd, then use the sparql tool on wikidata to find the item with that "
     "GND id (property wdt:P227, the bare id as a string literal) and return its HLS id (property wdt:P902). "
     "Call the tools one after the other; do not describe the steps."}]
-out = run_tool_loop(chain, TOOLS, model=MODEL, max_turns=4)
-for m in out[len(chain):]:
-    print(m["role"].upper(), "→", (m.get("content") or "")[:300], m.get("tool_calls", ""))"""),
+if ":4b" not in MODEL:
+    out = run_tool_loop(chain, TOOLS, model=MODEL, max_turns=4)
+    for m in out[len(chain):]:
+        print(m["role"].upper(), "→", (m.get("content") or "")[:300], m.get("tool_calls", ""))
+else:
+    out = []
+    print("Skipped on the 4B; the next cell makes the two calls by hand.")"""),
     ("md", """### When the model stops, you finish
 
 The tools are plain functions, so you can call them yourself. Take the identifier a tool returned, never one the model wrote, and run the second step by hand. If the model made no call at all, make the first one too. These are the same two calls the model was asked to make."""),

@@ -45,7 +45,7 @@ print(f"indexed {len(chunks)} chunks in {time.time()-t:.0f} s")"""),
 
 If the right passage is not in the top hits, no prompt can fix it. Retrieval quality comes first.
 
-In the October 2026 run the top hits for the DCMI question were generic date terms and `dcterms:issued` was not among them, so the cited answer in 04.05 is wrong; the exercise in 04.10 (smaller chunks) is where to start fixing that."""),
+In the October 2026 run the top hits for the DCMI question were mostly generic date terms and `dcterms:issued` was not among them, so the cited answer in 04.05 is wrong; the exercise in 04.10 (smaller chunks) is where to start fixing that."""),
     ("code", """question = "Which DCMI term expresses the date on which a resource was formally issued?"
 for cid, text, score in search(question, index, k=K):
     print(f"{score:.3f}  {cid}\\n      {text[:160]}...\\n")"""),
@@ -67,7 +67,7 @@ A grounded system must refuse. Ask something the corpus cannot know."""),
 show_markdown(text)"""),
     ("md", """## 04.07 The context budget
 
-On the 8 GB tier the window is 4,096 tokens: system text, retrieved chunks, question and answer must all fit. The helper
+On the 8 GB tier the window is 4,096 tokens (8,192 on the 8B shown here): system text, retrieved chunks, question and answer must all fit. The helper
 estimates the size and refuses to build an oversized prompt; Ollama itself returns an HTTP 400 when a request exceeds the
 window. Here is what both look like."""),
     ("code", """from workshop.rag import PromptTooLong
@@ -122,7 +122,7 @@ of the top 10 chunks answers the question; keep only the relevant ones and answe
     ("md", """## ✅ Checkpoint
 
 - Documents became chunks with sources; chunks became vectors; questions retrieve the chunks that matter
-- Answers cite the passages and refuse when the corpus is silent
+- Answers are asked to cite the passages and to refuse when the corpus is silent; you saw one of each, and one answer that got it wrong
 - You know what the context budget is and what happens when it is exceeded
 - You judged five answers against expectations instead of trusting them
 

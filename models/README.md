@@ -30,6 +30,17 @@ Harness run (`scripts/tool_harness.py --only tools,controls,mt,so`, one run per 
 
 Notes on the structured-output cases: the 8B returns `isbn: null` correctly for the biblio record; the 4B fills `isbn` with `"2 Bände"` (valid JSON, wrong value). The unsatisfiable `minimum 10 / maximum 5` schema yields a number from both models rather than an error. Raw per-request results are in the research results directory (`results/tags-2026-10-15/`).
 
+### Final run 2026-10-15
+
+Repeat of the harness (`--only tools,controls,mt,so`, same endpoint, Ollama 0.35.1) after the notebooks and tags were final. The counts match the earlier table. Raw results: `results/final-2026-10-15/harness.jsonl`.
+
+| Tag | Tool prompts with structured `tool_calls` | Controls clean | Multi-turn loops | Structured output |
+| --- | --- | --- | --- | --- |
+| `nishad/apertus:8b` | 16 of 20 (2 `leak_unparsed`, 2 `no_call`) | 10 of 10 | 5 of 5 ok | 5 of 6 requests answered (HTTP 200); the empty-enum schema returns HTTP 400 (expected) |
+| `nishad/apertus:4b` | 11 of 20 (2 `leak_unparsed`, 7 `no_call`) | 10 of 10 | 3 of 5 ok (2 `answer_mismatch`) | 5 of 6 requests answered (HTTP 200); the empty-enum schema returns HTTP 400 (expected) |
+
+On the 8 GB tier the 4B can also hit Ollama's repetition guard ("prediction aborted, token repeat limit reached") on multi-step tool prompts, so notebook 05 skips those two cells there.
+
 ## Embedding model
 
 Default: `qwen3-embedding:0.6b` (Apache-2.0), chosen on 2026-10-15 by the gold-set evaluation (50 queries over the research corpora; one document per concept, synonym removed).

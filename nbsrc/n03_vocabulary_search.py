@@ -139,7 +139,7 @@ for g in gold:
 print(f"{EMBED_MODEL}: recall@1 {hits1/len(gold):.2f}, recall@5 {hits5/len(gold):.2f}")
 for kind, (a, b, n) in by_kind.items():
     print(f"  {kind:32} recall@1 {a}/{n}  recall@5 {b}/{n}")"""),
-    ("md", "The same held-out queries against the label index from 03.03, with the query's own label removed first, as the gold set does. This isolates the effect of index design with the model held constant."),
+    ("md", "## 03.07 continued: the same queries against your label index\n\nThe same held-out queries against the label index from 03.03, with the query's own label removed first, as the gold set does. This isolates the effect of index design with the model held constant. The label index helps the synonym kind most (A: 5/12 to 8/12 at rank 1) and does not help the cross-lingual kind B at rank 1 (8/12 to 6/12, 10/12 within the top five): one-word labels carry less context for a translation than a document does."),
     ("code", """import json, numpy as np
 from workshop.embed import embed
 gold = json.loads(Path("data/vocab/goldset.json").read_text(encoding="utf-8"))
