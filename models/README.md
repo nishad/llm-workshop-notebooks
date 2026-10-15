@@ -32,15 +32,29 @@ Notes on the structured-output cases: the 8B returns `isbn: null` correctly for 
 
 ## Embedding model
 
-Default `bge-m3`, measured on 2026-10-15 with `03_vocabulary_search.ipynb` (50-query gold set, Ollama 0.35.1). Overall recall@1 is 0.34 and recall@5 is 0.48.
+Default: `qwen3-embedding:0.6b` (Apache-2.0), chosen on 2026-10-15 by the gold-set evaluation (50 queries over the research corpora; one document per concept, synonym removed).
+
+| Model (prefix mode) | recall@1 | recall@5 | MRR | Licence |
+| --- | --- | --- | --- | --- |
+| `bge-m3` (none) | 0.34 | 0.48 | 0.42 | MIT, dropped |
+| `qwen3-embedding:0.6b` (query instruction) | 0.62 | 0.82 | 0.72 | Apache-2.0, default |
+| `embeddinggemma` (prefixes) | 0.68 | 0.92 | 0.78 | Gemma Terms of Use, documented alternative |
+
+Raw results: `scripts/eval_embeddings.py`, run by the controller on 2026-10-15.
+
+Per-kind recall@1 for the default, from `03_vocabulary_search.ipynb` (03.07, one document per concept):
 
 | Kind | recall@1 | recall@5 | n |
 | --- | --- | --- | --- |
-| `A_stw_de_alt_to_concept` | 3 | 4 | 12 |
-| `B_stw_en_to_de` (cross-lingual) | 5 | 7 | 12 |
-| `C_unesco_fr_to_en` (cross-lingual) | 5 | 6 | 10 |
-| `D_unesco_en_to_fr` (cross-lingual) | 4 | 6 | 10 |
-| `E_unesco_scopenote_to_concept` | 0 | 1 | 6 |
+| `A_stw_de_alt_to_concept` | 5 | 9 | 12 |
+| `B_stw_en_to_de` (cross-lingual) | 8 | 10 | 12 |
+| `C_unesco_fr_to_en` (cross-lingual) | 6 | 8 | 10 |
+| `D_unesco_en_to_fr` (cross-lingual) | 10 | 10 | 10 |
+| `E_unesco_scopenote_to_concept` | 2 | 4 | 6 |
+
+Label-level index (every preferred and alternative label is an entry, query label held out): kind A recall@1 8/12, recall@5 11/12; kind B recall@1 6/12, recall@5 10/12. Index design matters as much as the model.
+
+Throughput on an M1 Max with Ollama 0.35.1: 19,688 short German labels embedded in 314 s (about 63 per second); the whole notebook runs in about 12 minutes.
 
 ## Rebuild
 

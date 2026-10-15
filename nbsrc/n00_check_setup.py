@@ -38,7 +38,7 @@ print(json.dumps(provenance(settings.model), indent=2))"""),
 - **Ollama 0.40 or newer: ❌** Update the Ollama app (menu bar icon → Restart to update, or download it again from ollama.com), then run the checks again.
 - **Model not found:** run `ollama pull nishad/apertus:8b` (16 GB) or `ollama pull nishad/apertus:4b` (8 GB) in a terminal, then re-run.
 - **Chat template unexpected:** you have a different Apertus build. Pull the tag above; tool calls only work with it.
-- **Embedding model missing:** `ollama pull bge-m3`.
+- **Embedding model missing:** `ollama pull qwen3-embedding:0.6b`.
 - **Smoke tool call ❌ on the 4B:** expected to be slower; wait for it, and if it still fails re-pull `nishad/apertus:4b`.
 
 When asking for help in the shared document, paste the output of the next cell."""),

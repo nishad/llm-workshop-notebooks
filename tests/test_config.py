@@ -7,7 +7,7 @@ def test_defaults_when_env_unset(monkeypatch):
         monkeypatch.delenv(var, raising=False)
     s = config.load_settings()
     assert s.model == "nishad/apertus:8b"
-    assert s.embed_model == "bge-m3"
+    assert s.embed_model == "qwen3-embedding:0.6b"
     assert s.host == "http://localhost:11434"
     assert s.tier == "16gb"
 
