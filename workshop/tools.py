@@ -60,10 +60,11 @@ def _headers() -> dict[str, str]:
 _UPDATE_WORDS = re.compile(r"\b(INSERT|DELETE|LOAD|CLEAR|DROP|CREATE|COPY|MOVE|ADD)\b", re.IGNORECASE)
 _FORM = re.compile(r"^\s*(?:PREFIX\s+\S+\s*<[^>]*>\s*)*(SELECT|ASK)\b", re.IGNORECASE)
 _LIMIT = re.compile(r"\bLIMIT\s+(\d+)\s*$", re.IGNORECASE)
+_FEDERATION = re.compile(r"\bSERVICE\s+(?:SILENT\s+)?[<?$]", re.IGNORECASE)
 
 
 def validate_sparql(query: str, *, max_limit: int = 50) -> str:
-    """Allow only SELECT and ASK, forbid update keywords, force a small LIMIT.
+    """Allow only SELECT and ASK, forbid update keywords and federated SERVICE blocks, force a small LIMIT.
 
     Semicolons are legal inside SPARQL (predicate-object lists), so chained updates are caught by the keyword check.
     """
@@ -73,6 +74,8 @@ def validate_sparql(query: str, *, max_limit: int = 50) -> str:
         raise ToolError("Only SELECT or ASK queries are allowed.")
     if _UPDATE_WORDS.search(q):
         raise ToolError("Update keywords are not allowed.")
+    if _FEDERATION.search(q):
+        raise ToolError("Federated SERVICE queries to other endpoints are not allowed.")
     if form.group(1).upper() == "ASK":
         return q
     m = _LIMIT.search(q)
@@ -179,12 +182,16 @@ def approve(name: str, arguments: dict) -> dict | None:
     if reply.lower() in ("y", "yes"):
         return dict(arguments)
     if reply.startswith("{"):
-        return json.loads(reply)
+        try:
+            return json.loads(reply)
+        except json.JSONDecodeError:
+            print("That was not valid JSON; treating it as no.")
+            return None
     return None
 
 
 _IDENTIFIER = re.compile(r"\b\d{8,9}[0-9X]?\b|\bQ\d{3,}\b")
-_LEAKED_CALL = re.compile(r"^\s*[\[{]\s*\"?[a-z_]+\"?\s*[:(]", re.IGNORECASE)
+_LEAKED_CALL = re.compile(r"^\s*[\[{]\s*\"?[a-zA-Z_]+\"?\s*[:(]", re.IGNORECASE)
 
 
 def run_tool_loop(
@@ -215,7 +222,7 @@ def run_tool_loop(
         content = response.message.content or ""
         calls = response.message.tool_calls or []
         if not calls:
-            if _LEAKED_CALL.match(content) and tools:
+            if tools and _LEAKED_CALL.match(content) and any(name in content for name in by_name):
                 raise ToolError(
                     "The model wrote a tool call as text instead of a structured call. "
                     "Check the model tag: use nishad/apertus:8b (Unsloth template), not a community tag."
@@ -238,7 +245,7 @@ def run_tool_loop(
                 try:
                     result = by_name[name](**arguments)
                     executed_any = True
-                except ToolError as exc:
+                except (ToolError, TypeError, ValueError) as exc:
                     result = json.dumps({"error": str(exc)})
             messages.append({"role": "tool", "tool_name": name, "content": result})
     messages.append({"role": "assistant", "content": "[Stopped after the maximum number of tool rounds.]"})

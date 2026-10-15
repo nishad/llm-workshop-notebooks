@@ -59,6 +59,12 @@ def test_approve_edit_arguments(monkeypatch):
     assert tools.approve("search_gnd", {"name": "Hanah Arent"}) == {"name": "Hannah Arendt"}
 
 
+def test_approve_bad_json_declines(monkeypatch):
+    monkeypatch.delenv("WORKSHOP_AUTO_APPROVE", raising=False)
+    monkeypatch.setattr("builtins.input", lambda prompt="": "{not json")
+    assert tools.approve("search_gnd", {"name": "x"}) is None
+
+
 def test_approve_decline(monkeypatch):
     monkeypatch.delenv("WORKSHOP_AUTO_APPROVE", raising=False)
     monkeypatch.setattr("builtins.input", lambda prompt="": "n")
@@ -111,3 +117,40 @@ def test_loop_detects_tool_call_leaked_as_text(monkeypatch):
 
     with pytest.raises(tools.ToolError, match="model tag"):
         tools.run_tool_loop([{"role": "user", "content": "Find Arendt"}], [search_gnd], chat_fn=chat)
+
+
+def test_loop_keeps_json_answer_that_is_not_a_tool_call(monkeypatch):
+    monkeypatch.setenv("WORKSHOP_AUTO_APPROVE", "1")
+    chat = ScriptedChat([('{"answer": "Arendt was born in 1906."}', [])])
+
+    def search_gnd(name: str) -> str:
+        """Stand-in tool. Args: name: a name."""
+        return "{}"
+
+    out = tools.run_tool_loop([{"role": "user", "content": "When was Arendt born?"}], [search_gnd], chat_fn=chat)
+    assert out[-1]["role"] == "assistant" and "1906" in out[-1]["content"]
+
+
+def test_loop_reports_bad_arguments_as_tool_error_message(monkeypatch):
+    monkeypatch.setenv("WORKSHOP_AUTO_APPROVE", "1")
+
+    def fake_tool(name: str) -> str:
+        """Fake. Args: name: a name."""
+        return "{}"
+
+    chat = ScriptedChat([("", [("fake_tool", {"nam": "Arendt"})]), ("Sorry, that did not work.", [])])
+    out = tools.run_tool_loop([{"role": "user", "content": "Find Arendt"}], [fake_tool], chat_fn=chat)
+    tool_msgs = [m for m in out if m["role"] == "tool"]
+    assert "error" in json.loads(tool_msgs[0]["content"])
+    assert out[-1]["role"] == "assistant"
+
+
+def test_validate_sparql_rejects_federation_but_allows_label_service():
+    with pytest.raises(tools.ToolError):
+        tools.validate_sparql("SELECT ?s WHERE { SERVICE <https://evil.example/sparql> { ?s ?p ?o } }")
+    with pytest.raises(tools.ToolError):
+        tools.validate_sparql("SELECT ?s WHERE { SERVICE ?endpoint { ?s ?p ?o } }")
+    out = tools.validate_sparql(
+        'SELECT ?item ?itemLabel WHERE { ?item wdt:P31 wd:Q5 . SERVICE wikibase:label { bd:serviceParam wikibase:language "en". } }'
+    )
+    assert "SERVICE wikibase:label" in out
