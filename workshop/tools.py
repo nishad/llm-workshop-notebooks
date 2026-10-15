@@ -60,22 +60,30 @@ def _headers() -> dict[str, str]:
 _UPDATE_WORDS = re.compile(r"\b(INSERT|DELETE|LOAD|CLEAR|DROP|CREATE|COPY|MOVE|ADD)\b", re.IGNORECASE)
 _FORM = re.compile(r"^\s*(?:PREFIX\s+\S+\s*<[^>]*>\s*)*(SELECT|ASK)\b", re.IGNORECASE)
 _LIMIT = re.compile(r"\bLIMIT\s+(\d+)\s*$", re.IGNORECASE)
-_FEDERATION = re.compile(r"\bSERVICE\s+(?:SILENT\s+)?[<?$]", re.IGNORECASE)
+_SERVICE = re.compile(r"\bSERVICE\b(?:\s+SILENT\b)?\s*([^\s{]*)", re.IGNORECASE)
+_WIKIBASE_PREFIX = re.compile(r"\bPREFIX\s+wikibase:\s*<([^>]*)>", re.IGNORECASE)
+_CODEPOINT_ESCAPE = re.compile(r"\\[uU]")
 
 
 def validate_sparql(query: str, *, max_limit: int = 50) -> str:
-    """Allow only SELECT and ASK, forbid update keywords and federated SERVICE blocks, force a small LIMIT.
+    """Allow only SELECT and ASK, forbid update keywords, codepoint escapes and any SERVICE other than wikibase:label, force a small LIMIT.
 
     Semicolons are legal inside SPARQL (predicate-object lists), so chained updates are caught by the keyword check.
     """
     q = query.strip().rstrip(";").strip()
+    if _CODEPOINT_ESCAPE.search(q):
+        raise ToolError("Unicode escape sequences (\\u, \\U) are not allowed in queries.")
     form = _FORM.match(q)
     if not form:
         raise ToolError("Only SELECT or ASK queries are allowed.")
     if _UPDATE_WORDS.search(q):
         raise ToolError("Update keywords are not allowed.")
-    if _FEDERATION.search(q):
-        raise ToolError("Federated SERVICE queries to other endpoints are not allowed.")
+    for m in _SERVICE.finditer(q):
+        if m.group(1).lower() != "wikibase:label":
+            raise ToolError("SERVICE is only allowed for wikibase:label; federated queries to other endpoints are not allowed.")
+    for m in _WIKIBASE_PREFIX.finditer(q):
+        if m.group(1) != "http://wikiba.se/ontology#":
+            raise ToolError("The wikibase: prefix must be <http://wikiba.se/ontology#>.")
     if form.group(1).upper() == "ASK":
         return q
     m = _LIMIT.search(q)

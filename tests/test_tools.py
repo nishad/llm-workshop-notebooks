@@ -150,6 +150,21 @@ def test_validate_sparql_rejects_federation_but_allows_label_service():
         tools.validate_sparql("SELECT ?s WHERE { SERVICE <https://evil.example/sparql> { ?s ?p ?o } }")
     with pytest.raises(tools.ToolError):
         tools.validate_sparql("SELECT ?s WHERE { SERVICE ?endpoint { ?s ?p ?o } }")
+    with pytest.raises(tools.ToolError):
+        tools.validate_sparql("SELECT ?s WHERE { SERVICE<https://evil.example/sparql> { ?s ?p ?o } }")
+    with pytest.raises(tools.ToolError):
+        tools.validate_sparql("PREFIX ev: <https://evil.example/> SELECT ?s WHERE { SERVICE ev:sparql { ?s ?p ?o } }")
+    with pytest.raises(tools.ToolError):
+        tools.validate_sparql(
+            "PREFIX wikibase: <https://evil.example/> SELECT ?s WHERE { SERVICE wikibase:label { ?s ?p ?o } }"
+        )
+    with pytest.raises(tools.ToolError):
+        tools.validate_sparql("SELECT ?s WHERE { S\\u0045RVICE <https://evil.example/sparql> { ?s ?p ?o } }")
+    out2 = tools.validate_sparql(
+        "PREFIX wikibase: <http://wikiba.se/ontology#> SELECT ?item ?itemLabel WHERE { ?item wdt:P31 wd:Q5 . "
+        'SERVICE wikibase:label { bd:serviceParam wikibase:language "en". } }'
+    )
+    assert "SERVICE wikibase:label" in out2
     out = tools.validate_sparql(
         'SELECT ?item ?itemLabel WHERE { ?item wdt:P31 wd:Q5 . SERVICE wikibase:label { bd:serviceParam wikibase:language "en". } }'
     )
