@@ -182,6 +182,31 @@ def test_loop_flags_identifier_no_tool_returned(monkeypatch):
     assert "UNVERIFIED: 1595223-8" in out[-1]["content"] and "11850391X did not" not in out[-1]["content"]
 
 
+def test_loop_ignores_identifiers_echoed_from_the_query(monkeypatch):
+    monkeypatch.setenv("WORKSHOP_AUTO_APPROVE", "1")
+
+    def sparql_like(query: str) -> str:
+        """Fake sparql. Args: query: a query."""
+        return json.dumps({"results": [], "fixture": False, "query": query})
+
+    chat = ScriptedChat([("", [("sparql_like", {"query": "SELECT ?s WHERE { ?s wdt:P227 '118543333' }"})]),
+                         ("The GND number is 118543333.", [])])
+    out = tools.run_tool_loop([{"role": "user", "content": "q"}], [sparql_like], chat_fn=chat)
+    assert "UNVERIFIED: 118543333" in out[-1]["content"]
+
+
+def test_loop_matches_identifiers_as_whole_tokens(monkeypatch):
+    monkeypatch.setenv("WORKSHOP_AUTO_APPROVE", "1")
+
+    def fake_tool(name: str) -> str:
+        """Fake. Args: name: a name."""
+        return json.dumps({"results": [{"id": "https://d-nb.info/gnd/1190671301"}], "fixture": False})
+
+    chat = ScriptedChat([("", [("fake_tool", {"name": "x"})]), ("The HLS id is 190671.", [])])
+    out = tools.run_tool_loop([{"role": "user", "content": "q"}], [fake_tool], chat_fn=chat)
+    assert "UNVERIFIED: 190671" in out[-1]["content"]
+
+
 def test_loop_detects_tool_call_leaked_as_text(monkeypatch):
     monkeypatch.setenv("WORKSHOP_AUTO_APPROVE", "1")
     chat = ScriptedChat([('{"search_gnd": {"name": "Arendt"}}', [])])

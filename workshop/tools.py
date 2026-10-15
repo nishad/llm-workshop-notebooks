@@ -251,6 +251,23 @@ _IDENTIFIER = re.compile(r"\b\d{6,8}-[0-9X]\b|\b\d{7,9}[0-9X]?\b|\bQ\d{3,}\b|\b\
 _LEAKED_CALL = re.compile(r"^\s*[\[{]\s*\"?[a-zA-Z_]+\"?\s*[:(]", re.IGNORECASE)
 
 
+def _returned_text(result: str) -> str:
+    """The part of a tool result that came from the service, without the model's own query echo."""
+    try:
+        payload = json.loads(result)
+    except ValueError:
+        return result
+    if isinstance(payload, dict):
+        payload = {k: v for k, v in payload.items() if k != "query"}
+    return json.dumps(payload, ensure_ascii=False)
+
+
+def _was_returned(identifier: str, outputs: list[str]) -> bool:
+    """True when the identifier appears as a whole token in some tool result."""
+    pattern = re.compile(rf"(?<![\w-]){re.escape(identifier)}(?![\w-])")
+    return any(pattern.search(out) for out in outputs)
+
+
 def run_tool_loop(
     messages: list[dict],
     tools: list,
@@ -290,7 +307,7 @@ def run_tool_loop(
                 messages.append({"role": "assistant", "content": content})
                 messages.append({"role": "user", "content": "Call the next tool now, or give your final answer."})
                 continue
-            unverified = sorted({i for i in _IDENTIFIER.findall(content) if not any(i in out for out in tool_outputs)})
+            unverified = sorted({i for i in _IDENTIFIER.findall(content) if not _was_returned(i, tool_outputs)})
             if unverified:
                 content += f"\n\n[UNVERIFIED: {', '.join(unverified)} did not come from any tool result.]"
             messages.append({"role": "assistant", "content": content})
@@ -312,7 +329,7 @@ def run_tool_loop(
                     result = by_name[name](**arguments)
                 except (ToolError, TypeError, ValueError) as exc:
                     result = json.dumps({"error": str(exc)})
-            tool_outputs.append(result)
+            tool_outputs.append(_returned_text(result))
             if dropped:
                 try:
                     payload = json.loads(result)

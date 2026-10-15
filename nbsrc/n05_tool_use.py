@@ -65,7 +65,7 @@ The tools are plain functions, so you can call them yourself. Take the identifie
 if not first or not first.get("results"):
     print("The model made no tool call; calling search_gnd ourselves.")
     first = json.loads(search_gnd("Annemarie Schwarzenbach", "Person"))
-gnd = first["results"][0]["gnd"]
+gnd = first["results"][0].get("gnd") or str(first["results"][0]["id"]).rsplit("/", 1)[-1]
 print("GND from the tool result:", gnd)
 hls = json.loads(sparql(f"SELECT ?hls WHERE {{ ?item wdt:P227 '{gnd}' . ?item wdt:P902 ?hls }}", "wikidata"))
 print("HLS id:", [row["hls"] for row in hls["results"]], "(fixture)" if hls["fixture"] else "(live)")"""),
@@ -107,7 +107,7 @@ ask a question about Schwarzenbach's travels. That is the full chain: authority 
 
 - Tools are functions; the model proposes calls; you decide; results flow back
 - Identifiers that were not looked up are marked, and text-shaped calls stop the loop
-- Two tools chained a GND identifier to a Wikidata item and an HLS article
+- Two tools chained a GND identifier to a Wikidata item and an HLS article: by the model when it manages, by you when it stops
 - You know when to re-ask in English and when to refuse a call
 
 You are done with Part 2. Keep `runs/log.jsonl`: it is the record of what model produced which result."""),
