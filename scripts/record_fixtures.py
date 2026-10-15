@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parent.parent
 FIXTURES = ROOT / "fixtures"
 
 GND = [("Hannah Arendt", "Person"), ("Johann Wolfgang von Goethe", "Person"), ("Annemarie Schwarzenbach", "Person"),
+       ("Annemarie Schwartzenbach", "Person"),  # the misspelling in notebook 05.04, so an uncorrected call works offline
        ("Albert Einstein", "Person"), ("Bibliothek", "SubjectHeading"), ("Semantic Web", "SubjectHeading"),
        ("Zürich", "PlaceOrGeographicName"), ("Deutsche Nationalbibliothek", "CorporateBody")]
 WIKIDATA = [("Hannah Arendt", "en"), ("Johann Wolfgang von Goethe", "de"), ("Annemarie Schwarzenbach", "de"),

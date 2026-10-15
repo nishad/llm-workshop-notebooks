@@ -49,16 +49,17 @@ response = chat(messages, model=MODEL)
 show_markdown(response.message.content)"""),
     ("md", """## 01.04 Temperature, seed and repeatability
 
-Run the same question three times at temperature 0 with a fixed seed, then three times at 0.8. Watch which set varies.
-This is the difference between a reproducible pipeline and a creative assistant."""),
-    ("code", """question = [{"role": "user", "content": "Name three controlled vocabularies used in libraries. One line each."}]
+Run the same request three times at temperature 0 with a fixed seed, then three times at 0.8. Watch which set varies.
+This is the difference between a reproducible pipeline and a creative assistant. For a short factual question the top
+candidates dominate, so a higher temperature may change nothing; a creative prompt shows the difference."""),
+    ("code", """question = [{"role": "user", "content": "Suggest a title for a newsletter about open data in libraries. One line, no explanation."}]
 for temp in (0, 0.8):
     print(f"--- temperature {temp} ---")
     for run in range(3):
         r = chat(question, model=MODEL, options={"temperature": temp, "seed": 42} if temp == 0 else {"temperature": temp})
         print(run + 1, r.message.content.strip().replace("\\n", " | ")[:160])"""),
-    ("md", """🔧 **Run and change:** change the seed in one of the temperature-0 runs. Does the answer change? Then change the question
-to German ("Nenne drei kontrollierte Vokabulare...") and compare."""),
+    ("md", """🔧 **Run and change:** change the seed in one of the temperature-0 runs. Does the answer change? Then change the request
+to German ("Schlage einen Titel für einen Newsletter über offene Daten in Bibliotheken vor...") and compare."""),
     ("md", """## 01.05 Streaming
 
 Long answers arrive token by token. Streaming shows them as they come, like the chat window did."""),
@@ -81,8 +82,10 @@ completion = oa.chat.completions.create(
 print(completion.choices[0].message.content)"""),
     ("md", """## 01.07 Record what produced the answer
 
-A result without its provenance cannot be checked later. Log the model digest, the options and the prompt with every answer.
-The other notebooks do this for you; here you see what is written."""),
+A result without its provenance cannot be checked later. `workshop.llm.chat` does this on every call: it appends one line
+to `runs/log.jsonl` with the time, the model, its digest, the options and the first 300 characters of the prompt and the answer.
+This cell shows the full provenance record once (quantization, context length, template and Ollama version as well) and
+writes it with `log_run`, the same function the helper uses."""),
     ("code", """from workshop.llm import provenance, log_run
 prov = provenance(MODEL)
 record = {"notebook": "01", "prompt": messages[-1]["content"], "answer": response.message.content, **prov,
@@ -91,6 +94,9 @@ log_run(record)
 print({k: record[k] for k in ("model", "digest", "quantization", "ollama_version", "captured_at")})
 print("appended to runs/log.jsonl")"""),
     ("md", """## 01.08 Exercises
+
+🖥️ **GUI:** ask the question from 01.04 twice in the Ollama app, whose default temperature is above 0 (the workshop tags set
+0.8), and compare with the runs above.
 
 🔧 **Run and change:** give the system prompt a persona ("You are a music librarian") and ask the authority-file question again.
 What changed, what did not?

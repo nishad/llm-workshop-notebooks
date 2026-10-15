@@ -34,7 +34,7 @@ from workshop.llm import provenance
 print(json.dumps(provenance(settings.model), indent=2))"""),
     ("md", """## 00.04 If something is red
 
-- **Ollama reachable: ❌** Start the Ollama app (or `ollama serve` on Linux). The checks need `http://localhost:11434`.
+- **Ollama reachable: ❌** Start the Ollama app (or `ollama serve` on Linux). The checks need the address shown in 00.01.
 - **Ollama 0.40 or newer: ❌** Update the Ollama app (menu bar icon → Restart to update, or download it again from ollama.com), then run the checks again.
 - **Model not found:** run `ollama pull nishad/apertus:8b` (16 GB) or `ollama pull nishad/apertus:4b` (8 GB) in a terminal, then re-run.
 - **Chat template unexpected:** you have a different Apertus build. Pull the tag above; tool calls only work with it.
@@ -47,6 +47,10 @@ print("Python", sys.version.split()[0], "on", platform.platform())
 print("Tier", settings.tier, "model", settings.model)
 if ok:
     print("All checks passed.")"""),
+    ("md", """## 00.05 Exercise
+
+🖥️ **GUI:** open the Ollama app, pick `nishad/apertus:8b` (or `:4b`) and send "Say hello in three languages." If an answer
+appears, the model works; the checks above cover the rest."""),
     ("md", """## ✅ Checkpoint
 
 You have a working Python environment, Ollama answers on your machine, the workshop model and the embedding model are

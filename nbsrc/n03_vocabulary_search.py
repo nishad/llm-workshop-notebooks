@@ -34,8 +34,9 @@ print("preferred:", c["pref"]["de"], "| alternatives:", c["alt"].get("de", []))
 print("as one document:", concept_document(c, "de"))"""),
     ("md", """## 03.03 Embed the German STW labels in one batch
 
-About 20,000 short labels. On Apple Silicon this takes a few minutes the first time, on a CPU-only laptop considerably longer.
-If you are short on time, download the prebuilt index from the workshop page into `runs/`; the cell loads it instead of building.
+About 20,000 short labels. Building the index takes about five minutes on an Apple Silicon Mac with 64 GB and far longer on a
+CPU-only laptop. The prebuilt file `runs/stw-de-labels.sqlite` is linked from the download post on the SWIB26 forum topic; put it
+in `runs/` and the cell loads it instead of building. On the 8 GB tier, downloading it is the way to follow this notebook live.
 The helper applies the embedding model's prefix convention (qwen3-embedding wants an instruction in front of every query and
 nothing in front of documents) and returns unit vectors."""),
     ("code", """import time
@@ -52,6 +53,8 @@ Path("runs").mkdir(exist_ok=True)
 index_path = "runs/stw-de-labels.sqlite"
 if Path(index_path).exists():
     index = load_index(index_path); print("loaded", len(index.ids), "label vectors from", index_path)
+    if index.model != EMBED_MODEL:
+        print(f"warning: index built with {index.model} but the session uses {EMBED_MODEL}; delete the file to rebuild")
 else:
     t = time.time(); index = build_index([e for e, _ in entries], [l for _, l in entries], model=EMBED_MODEL); save_index(index, index_path)
     print(f"embedded {len(entries)} labels in {time.time()-t:.0f} s, dimension {index.vectors.shape[1]}, saved to {index_path}")"""),
@@ -96,12 +99,14 @@ This is the pattern for indexing support: the machine proposes, the cataloguer d
     for n, (cid, p, label, s) in enumerate(hits, 1):
         print(f"[{n}] {s:.3f}  {p}  (matched: {label})")
     choice = input("Pick 1-3, or 0 for none: ") if os.environ.get("WORKSHOP_AUTO_APPROVE") != "1" else "1"
-    return hits[int(choice) - 1][0] if choice in ("1", "2", "3") else None
+    return hits[int(choice) - 1][0] if choice in ("1", "2", "3") and int(choice) <= len(hits) else None
 
 print("chosen:", suggest("Streik der Lokführer"))"""),
     ("md", """## 03.06 The UNESCO Thesaurus: French and English
 
-Build a second label index from the English preferred and alternative labels and query it in French and German. Cross-lingual retrieval is where embedding models differ most; some of these queries will miss, and 03.07 measures how often."""),
+Build a second label index from the English preferred and alternative labels and query it in French and German. Cross-lingual retrieval is where embedding models differ most; some of these queries will miss, and 03.07 measures how often.
+
+`runs/unesco-en-labels.sqlite` is the second prebuilt file in the download post; with it in `runs/` the cell loads the index instead of building it."""),
     ("code", """u_entries = [(f'{c["id"]}#{n}', label) for c in unesco
              for n, label in enumerate([c["pref"].get("en")] + c["alt"].get("en", [])) if label]
 u_pref = {c["id"]: c["pref"].get("en", "") for c in unesco}
@@ -173,12 +178,15 @@ for i, t, d in knn_sqlite(index_path, q, k=3):
     print(f"distance {d:.3f}  {t[:80]}")"""),
     ("md", """## 03.09 Exercises
 
+🖥️ **GUI:** this notebook has no chat-app equivalent. Read the four tables in 03.04 and decide for each query which hit a
+cataloguer would accept.
+
 🔧 **Run and change:** lower the threshold in 03.05 to 0.4 and query something outside economics ("Mondlandung"). What does the
 model suggest, and would a cataloguer accept it?
 
 🔧 **Run and change:** query the German index in Italian or Spanish. Which kinds of terms survive translation, which do not?
 
-🚀 **Stretch:** set `WORKSHOP_EMBED_MODEL=embeddinggemma` (pull it first; it is under Google's Gemma Terms of Use, not an open-source licence), restart the kernel and re-run 03.07. In the October 2026 tests it scored recall@1 0.68 against 0.62 for qwen3-embedding and 0.34 for bge-m3. Note the prefixes the helper adds for each model (`workshop.embed.prefix_for`).
+🚀 **Stretch:** switch the embedding model to `embeddinggemma` (pull it first; it is under Google's Gemma Terms of Use, not an open-source licence). Set `WORKSHOP_EMBED_MODEL=embeddinggemma` in the shell before `uv run jupyter lab`, or add `os.environ["WORKSHOP_EMBED_MODEL"] = "embeddinggemma"` in 03.01 before `load_settings()`. Delete or rename the two index files in `runs/` first (they hold qwen3-embedding vectors), restart the kernel and run from 03.01 to 03.07. In the October 2026 tests it scored recall@1 0.68 against 0.62 for qwen3-embedding and 0.34 for bge-m3. Note the prefixes the helper adds for each model (`workshop.embed.prefix_for`).
 
 🚀 **Stretch:** build an index over a GND subject-heading subset (the DNB publishes GND dumps under CC0 at https://data.dnb.de/opendata/) and query it with
 STW labels: a first step towards vocabulary mapping."""),

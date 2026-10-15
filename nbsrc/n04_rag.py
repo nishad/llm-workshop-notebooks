@@ -111,6 +111,10 @@ else:
     show_markdown(text)"""),
     ("md", """## 04.10 Exercises
 
+🖥️ **GUI:** LM Studio's Chat with Documents does this retrieval without code: attach the DCMI file from `data/docs/`
+(`dcmi-terms.md`; save a copy as `.txt` if the app does not accept `.md`) and ask the `dcterms:issued` question from 04.04;
+compare with 04.05.
+
 🔧 **Run and change:** set `K = 1` and re-run 04.08. Which questions break? Then try `size=150` in 04.02.
 
 🔧 **Run and change:** ask the same question in German. Does retrieval over English documents still find the passage?

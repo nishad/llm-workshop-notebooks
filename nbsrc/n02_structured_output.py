@@ -128,6 +128,9 @@ proper, and it guesses the language of a French or Italian book as English from 
 a guarantee; that is what the gold file and a human reviewer are for."""),
     ("md", """## 02.06 Exercises
 
+🖥️ **GUI:** paste the text of `data/cards/card-03.txt` into the Ollama app together with the `INSTRUCTIONS` text from 02.03 and
+the field list from 02.02, and see whether the model invents a place of publication.
+
 🔧 **Run and change:** add a field `pages: str = Field(default="", max_length=40, ...)` with a description, re-run 02.03 on card-02. Did the model copy "375 S."?
 
 🔧 **Run and change:** change `INSTRUCTIONS` to ask for the title in English translation. Is that extraction or invention?
@@ -135,8 +138,9 @@ a guarantee; that is what the gold file and a human reviewer are for."""),
 🚀 **Stretch:** add `confidence: float = Field(description="0 to 1")`. Run five cards and compare the confidence values with
 the actual errors in 02.05. Small models fill this field without meaning; a real confidence needs a second check, not a number.
 
-🚀 **Stretch:** the same extraction through the OpenAI client: `oa.chat.completions.parse(model=MODEL, messages=..., response_format=Record)`
-returns `completion.choices[0].message.parsed`."""),
+🚀 **Stretch:** the same extraction through the OpenAI client. Create the client as in 01.06
+(`from openai import OpenAI; oa = OpenAI(base_url=f"{settings.host}/v1", api_key="ollama")`); then
+`oa.chat.completions.parse(model=MODEL, messages=..., response_format=Record)` returns `completion.choices[0].message.parsed`."""),
     ("md", """## ✅ Checkpoint
 
 - A Pydantic model defined the answer shape; Ollama enforced the structure; Pydantic validated it

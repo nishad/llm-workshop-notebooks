@@ -5,8 +5,10 @@ CELLS = [
 A tool call is the model asking your program to do something: look up a name in the GND, query Wikidata, run a SPARQL query.
 The model only *proposes*. You approve, correct or refuse; Python executes; the result goes back to the model.
 
-Why the gate: in the October 2026 tests the 8B called tools correctly for every English prompt but for one of nine German
-prompts, and when it did not call a tool it sometimes invented a GND number. The gate turns a confident guess into a checked fact.
+Why the gate: In the 9 October 2026 probe the 8B produced a structured call for 44 of 44 English prompts, 1 of 9 German and
+4 of 6 French; in the 15 October harness it scored 16 of 20, with one English SPARQL prompt whose call leaked as text
+(`models/README.md`). When it did not call a tool it sometimes invented a GND number. The gate turns a confident guess into a
+checked fact.
 
 **What you'll learn**
 1. Define tools as plain Python functions with docstrings
@@ -40,13 +42,41 @@ for m in out[len(messages):]:
 show_markdown(out[-1]["content"])"""),
     ("md", """## 05.04 Correcting the model
 
-Small models misspell names in tool arguments. Run this cell, and when the gate shows the proposed call, paste corrected JSON,
-for example `{"name": "Annemarie Schwarzenbach", "type": "Person"}`."""),
-    ("code", """if ":4b" not in MODEL:
-    out = run_tool_loop([messages[0], {"role": "user", "content": "Look up the Swiss writer Annemarie Schwarzenbach in the GND."}], TOOLS, model=MODEL)
+Names get misspelled, by people in questions and by models in tool arguments. This question spells the name *Schwartzenbach*;
+the GND has it as *Schwarzenbach*, and lobid finds nobody under the misspelling. In the live session the gate shows the proposed
+call and you paste the corrected JSON, `{"name": "Annemarie Schwarzenbach", "type": "Person"}` (or type **y** if the model already
+fixed the spelling). The committed run cannot type at the gate, so `gate` scripts the same correction and prints the proposed and
+the corrected call, so you can see it."""),
+    ("code", """from workshop.tools import approve
+
+def gate(name, arguments):
+    \"\"\"The usual approval gate. Headless (WORKSHOP_AUTO_APPROVE=1), it applies the correction you would paste.\"\"\"
+    approved = approve(name, arguments)
+    if os.environ.get("WORKSHOP_AUTO_APPROVE") != "1" or approved is None:
+        return approved
+    corrected = json.loads(json.dumps(approved, ensure_ascii=False).replace("Schwartzenbach", "Schwarzenbach"))
+    print(f"proposed: {name}({json.dumps(arguments, ensure_ascii=False)})")
+    print(f"corrected: {name}({json.dumps(corrected, ensure_ascii=False)})")
+    return corrected
+
+if ":4b" not in MODEL:
+    fix = [messages[0], {"role": "user", "content": "Look up the Swiss writer Annemarie Schwartzenbach in the GND."}]
+    out = run_tool_loop(fix, TOOLS, model=MODEL, approve_fn=gate)
+    for m in out[len(fix):]:
+        print(m["role"].upper(), "→", (m.get("content") or "")[:300], m.get("tool_calls", ""))
     show_markdown(out[-1]["content"])
 else:
     print("Skipped on the 4B: the single-tool cell above is the one to run on the 8 GB tier.")"""),
+    ("md", """Compare the model's summary with the tool message. The ASSISTANT line keeps the call as the model proposed it, misspelling
+included; the TOOL line is the result of the corrected call, cut at 300 characters in the printout (the same five lobid records
+are in `fixtures/search_gnd/annemarie_schwarzenbach_person.json`).
+
+In the October 2026 run the summary attached dates and professions that the lobid result does not contain. lobid has
+`Speerli, Annemarie | Künstlerin; Malerin` with no dates, and the summary gives her 1906–1999, Suzanne Schwarzenbach's dates.
+lobid has `Schwarzenbach, Bettina Elisabeth Annemarie | 1979–` with no profession, and the summary calls her an agrarian
+scientist, Suzanne's profession. It also calls all five people Swiss, which no lobid label says, and writes the writer's name
+with the question's misspelling, *Schwartzenbach*. Nothing was marked: the gate and the `[UNVERIFIED]` check verify identifiers
+only, and 118997718 did come from the tool. Prose about a person must be checked against the tool message."""),
     ("md", """## 05.05 Two tools in a row: GND → Wikidata → the Historical Dictionary of Switzerland
 
 Wikidata links authority files: property P227 holds the GND identifier, P902 the HLS article id. One question, two tool rounds.
@@ -101,6 +131,10 @@ for q in ["SELECT ?s WHERE { ?s ?p ?o }", "SELECT ?s WHERE { ?s ?p ?o } LIMIT 10
     except ToolError as err:
         print("REJECTED", q, "→", err)"""),
     ("md", """## 05.08 Exercises
+
+🖥️ **GUI:** tool calls need code. Read the 05.03 output, find the TOOL line where the lobid result enters (the printout cuts it
+at 300 characters; the full record is in `fixtures/search_gnd/hannah_arendt_person.json`), and check the GND number in the final
+answer against it.
 
 🔧 **Run and change:** ask 05.03 in German ("Finde den GND-Normdatensatz für Hannah Arendt"). Does the 8B still call the tool?
 If not, that is the documented weakness; re-ask in English.
