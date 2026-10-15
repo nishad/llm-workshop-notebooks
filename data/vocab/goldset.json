@@ -1,0 +1,452 @@
+[
+ {
+  "id": "A_stw_de_alt_to_concept-01",
+  "kind": "A_stw_de_alt_to_concept",
+  "corpus": "stw_de",
+  "query": "Fernsehproduktion",
+  "target": "http://zbw.eu/stw/descriptor/18929-6",
+  "target_doc": "Filmproduktion (Film- und Fernsehproduktion; Filmproduzent; Kinofilmproduktion; Programmindustrie; TV-Produktionssektor; TV-Unterhaltungsproduktion; Videofilmproduktion). Herstellung von Kino-, TV- oder Werbefilmen.",
+  "note": "German synonym held out of doc"
+ },
+ {
+  "id": "A_stw_de_alt_to_concept-02",
+  "kind": "A_stw_de_alt_to_concept",
+  "corpus": "stw_de",
+  "query": "Euroanleihe",
+  "target": "http://zbw.eu/stw/descriptor/18686-6",
+  "target_doc": "Eurobond (Euro-Anleihe)",
+  "note": "German synonym held out of doc"
+ },
+ {
+  "id": "A_stw_de_alt_to_concept-03",
+  "kind": "A_stw_de_alt_to_concept",
+  "corpus": "stw_de",
+  "query": "Soziale Präferenzen",
+  "target": "http://zbw.eu/stw/descriptor/10106-6",
+  "target_doc": "Soziale Wohlfahrtsfunktion (Gesellschaftliche Wohlfahrtsfunktion; Kollektive Nutzenfunktion; Soziale Präferenzordnung)",
+  "note": "German synonym held out of doc"
+ },
+ {
+  "id": "A_stw_de_alt_to_concept-04",
+  "kind": "A_stw_de_alt_to_concept",
+  "corpus": "stw_de",
+  "query": "Lenkungssteuer",
+  "target": "http://zbw.eu/stw/descriptor/30585-5",
+  "target_doc": "Lenkungsabgabe (Wirkungszwecksteuer). Steht für eine Abgabe, deren Hauptzweck es ist, das Verhalten der Abgabepflichtigen in eine bestimmte vom Gesetzgeber gewünschte Richtung zu lenken.",
+  "note": "German synonym held out of doc"
+ },
+ {
+  "id": "A_stw_de_alt_to_concept-05",
+  "kind": "A_stw_de_alt_to_concept",
+  "corpus": "stw_de",
+  "query": "Moldawierinnen",
+  "target": "http://zbw.eu/stw/descriptor/26499-2",
+  "target_doc": "Moldauer (Moldauerinnen; Moldawier)",
+  "note": "German synonym held out of doc"
+ },
+ {
+  "id": "A_stw_de_alt_to_concept-06",
+  "kind": "A_stw_de_alt_to_concept",
+  "corpus": "stw_de",
+  "query": "Neuro-Marketing",
+  "target": "http://zbw.eu/stw/descriptor/28977-3",
+  "target_doc": "Neuromarketing",
+  "note": "German synonym held out of doc"
+ },
+ {
+  "id": "A_stw_de_alt_to_concept-07",
+  "kind": "A_stw_de_alt_to_concept",
+  "corpus": "stw_de",
+  "query": "Zahlungsbilanzanpassung",
+  "target": "http://zbw.eu/stw/descriptor/29732-0",
+  "target_doc": "Zahlungsbilanztheorie (Absorptionstheorie; Monetaristische Zahlungsbilanztheorie; Monetäre Zahlungsbilanztheorie; Theorie des Zahlungsbilanzausgleichs; Zahlungsbilanzeffekt; Zahlungsbilanzmechanismus)",
+  "note": "German synonym held out of doc"
+ },
+ {
+  "id": "A_stw_de_alt_to_concept-08",
+  "kind": "A_stw_de_alt_to_concept",
+  "corpus": "stw_de",
+  "query": "Telekommunikationsindustrie",
+  "target": "http://zbw.eu/stw/descriptor/18649-5",
+  "target_doc": "Telekommunikationssektor (Diensteanbieter; Telefongesellschaft; Telekommunikationsanbieter; Telekommunikationsgesellschaft; Telekommunikationsunternehmen; Telephongesellschaft). Telekommunikationssektor insgesamt oder Betreiber / Anbieter von Telekommunikationsnetzen und -diensten.",
+  "note": "German synonym held out of doc"
+ },
+ {
+  "id": "A_stw_de_alt_to_concept-09",
+  "kind": "A_stw_de_alt_to_concept",
+  "corpus": "stw_de",
+  "query": "Flussschifffahrt",
+  "target": "http://zbw.eu/stw/descriptor/13242-4",
+  "target_doc": "Binnenschifffahrt (Binnenschiffahrt; Kanalschifffahrt; Partikulier; Schubschifffahrt)",
+  "note": "German synonym held out of doc"
+ },
+ {
+  "id": "A_stw_de_alt_to_concept-10",
+  "kind": "A_stw_de_alt_to_concept",
+  "corpus": "stw_de",
+  "query": "Unternehmenskauf",
+  "target": "http://zbw.eu/stw/descriptor/12304-6",
+  "target_doc": "Übernahme (Betriebsübernahme; Erwerb des Unternehmens; Feindliche Übernahme; Kauf des Betriebs; M&amp;A-Transaktionen; Unternehmensakquisition; Unternehmensübernahme). Nur für Übernahme und Kauf von Unternehmen.",
+  "note": "German synonym held out of doc"
+ },
+ {
+  "id": "A_stw_de_alt_to_concept-11",
+  "kind": "A_stw_de_alt_to_concept",
+  "corpus": "stw_de",
+  "query": "Progressive Konsumsteuer",
+  "target": "http://zbw.eu/stw/descriptor/19412-3",
+  "target_doc": "Konsumorientierte Besteuerung (Ausgabensteuer; Direkte Konsumbesteuerung). Angelehnt an theoretische Überlegungen von z.B. Irving Fisher.",
+  "note": "German synonym held out of doc"
+ },
+ {
+  "id": "A_stw_de_alt_to_concept-12",
+  "kind": "A_stw_de_alt_to_concept",
+  "corpus": "stw_de",
+  "query": "Altmetall",
+  "target": "http://zbw.eu/stw/descriptor/14273-2",
+  "target_doc": "Schrott",
+  "note": "German synonym held out of doc"
+ },
+ {
+  "id": "B_stw_en_to_de-01",
+  "kind": "B_stw_en_to_de",
+  "corpus": "stw_de",
+  "query": "Rational expectations",
+  "target": "http://zbw.eu/stw/descriptor/10056-2",
+  "target_doc": "Rationale Erwartung (Rationale Erwartungen; Rationale Erwartungsbildung)",
+  "note": "cross-lingual en->de"
+ },
+ {
+  "id": "B_stw_en_to_de-02",
+  "kind": "B_stw_en_to_de",
+  "corpus": "stw_de",
+  "query": "Gender",
+  "target": "http://zbw.eu/stw/descriptor/15945-2",
+  "target_doc": "Geschlecht. Umfasst die Erzeugung von Geschlechtsdifferenz sowohl in Form eines sozialen als auch eines biologischen Geschlechts.",
+  "note": "cross-lingual en->de"
+ },
+ {
+  "id": "B_stw_en_to_de-03",
+  "kind": "B_stw_en_to_de",
+  "corpus": "stw_de",
+  "query": "Wheat production",
+  "target": "http://zbw.eu/stw/descriptor/19302-3",
+  "target_doc": "Weizenanbau",
+  "note": "cross-lingual en->de"
+ },
+ {
+  "id": "B_stw_en_to_de-04",
+  "kind": "B_stw_en_to_de",
+  "corpus": "stw_de",
+  "query": "Index construction",
+  "target": "http://zbw.eu/stw/descriptor/15097-5",
+  "target_doc": "Indexberechnung (Indexrechnung; Indextheorie; Kettenindex; Laspeyres-Index; Paasche-Index; Umbasierung)",
+  "note": "cross-lingual en->de"
+ },
+ {
+  "id": "B_stw_en_to_de-05",
+  "kind": "B_stw_en_to_de",
+  "corpus": "stw_de",
+  "query": "Local public utilities",
+  "target": "http://zbw.eu/stw/descriptor/18345-4",
+  "target_doc": "Kommunale Versorgungswirtschaft (Kommunaler Querverbund; Stadtwerke; Städtische Versorgungswirtschaft; Örtliche Versorgungswirtschaft)",
+  "note": "cross-lingual en->de"
+ },
+ {
+  "id": "B_stw_en_to_de-06",
+  "kind": "B_stw_en_to_de",
+  "corpus": "stw_de",
+  "query": "Press market",
+  "target": "http://zbw.eu/stw/descriptor/29064-1",
+  "target_doc": "Pressemarkt (Zeitschriftenmarkt; Zeitungsmarkt)",
+  "note": "cross-lingual en->de"
+ },
+ {
+  "id": "B_stw_en_to_de-07",
+  "kind": "B_stw_en_to_de",
+  "corpus": "stw_de",
+  "query": "Mauritania",
+  "target": "http://zbw.eu/stw/descriptor/17713-6",
+  "target_doc": "Mauretanien",
+  "note": "cross-lingual en->de"
+ },
+ {
+  "id": "B_stw_en_to_de-08",
+  "kind": "B_stw_en_to_de",
+  "corpus": "stw_de",
+  "query": "Soft drink",
+  "target": "http://zbw.eu/stw/descriptor/14975-5",
+  "target_doc": "Softdrink (Erfrischungsgetränk)",
+  "note": "cross-lingual en->de"
+ },
+ {
+  "id": "B_stw_en_to_de-09",
+  "kind": "B_stw_en_to_de",
+  "corpus": "stw_de",
+  "query": "Printing technique",
+  "target": "http://zbw.eu/stw/descriptor/18434-5",
+  "target_doc": "Drucktechnik (Druckverfahren; Offsetdruck)",
+  "note": "cross-lingual en->de"
+ },
+ {
+  "id": "B_stw_en_to_de-10",
+  "kind": "B_stw_en_to_de",
+  "corpus": "stw_de",
+  "query": "Bargaining power",
+  "target": "http://zbw.eu/stw/descriptor/19606-4",
+  "target_doc": "Verhandlungsmacht",
+  "note": "cross-lingual en->de"
+ },
+ {
+  "id": "B_stw_en_to_de-11",
+  "kind": "B_stw_en_to_de",
+  "corpus": "stw_de",
+  "query": "Educational attainment",
+  "target": "http://zbw.eu/stw/descriptor/19916-3",
+  "target_doc": "Bildungsabschluss (Abitur; Bildungsabschluß; Schulabschluss)",
+  "note": "cross-lingual en->de"
+ },
+ {
+  "id": "B_stw_en_to_de-12",
+  "kind": "B_stw_en_to_de",
+  "corpus": "stw_de",
+  "query": "Health personnel",
+  "target": "http://zbw.eu/stw/descriptor/18890-0",
+  "target_doc": "Gesundheitsberufe (Arzthelfer; Arzthelferinnen; Entbindungspfleger; Ernährungsfachleute; Hebammen; Heilpraktiker; Heilpraktikerinnen; Krankengymnasten; Krankengymnastinnen; Masseure; Masseurinnen; Nichtärztliche Gesundheitsberufe; Sprechstundenhelfer; Sprechstundenhelferinnen)",
+  "note": "cross-lingual en->de"
+ },
+ {
+  "id": "C_unesco_fr_to_en-01",
+  "kind": "C_unesco_fr_to_en",
+  "corpus": "unesco_en",
+  "query": "Roche métamorphique",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept14031",
+  "target_doc": "Metamorphic rocks",
+  "note": "cross-lingual fr->en"
+ },
+ {
+  "id": "C_unesco_fr_to_en-02",
+  "kind": "C_unesco_fr_to_en",
+  "corpus": "unesco_en",
+  "query": "Éducation morale",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept5292",
+  "target_doc": "Moral education",
+  "note": "cross-lingual fr->en"
+ },
+ {
+  "id": "C_unesco_fr_to_en-03",
+  "kind": "C_unesco_fr_to_en",
+  "corpus": "unesco_en",
+  "query": "Type de développement",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept7904",
+  "target_doc": "Development styles",
+  "note": "cross-lingual fr->en"
+ },
+ {
+  "id": "C_unesco_fr_to_en-04",
+  "kind": "C_unesco_fr_to_en",
+  "corpus": "unesco_en",
+  "query": "Pénurie d'enseignants",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept5381",
+  "target_doc": "Teacher shortage",
+  "note": "cross-lingual fr->en"
+ },
+ {
+  "id": "C_unesco_fr_to_en-05",
+  "kind": "C_unesco_fr_to_en",
+  "corpus": "unesco_en",
+  "query": "Enseignement de l'orthographe",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept9857",
+  "target_doc": "Spelling instruction",
+  "note": "cross-lingual fr->en"
+ },
+ {
+  "id": "C_unesco_fr_to_en-06",
+  "kind": "C_unesco_fr_to_en",
+  "corpus": "unesco_en",
+  "query": "Grossesse",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept1015",
+  "target_doc": "Pregnancy",
+  "note": "cross-lingual fr->en"
+ },
+ {
+  "id": "C_unesco_fr_to_en-07",
+  "kind": "C_unesco_fr_to_en",
+  "corpus": "unesco_en",
+  "query": "Linguistique comparée",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept5908",
+  "target_doc": "Comparative linguistics (Synchronic linguistics). Study of language change and variation.",
+  "note": "cross-lingual fr->en"
+ },
+ {
+  "id": "C_unesco_fr_to_en-08",
+  "kind": "C_unesco_fr_to_en",
+  "corpus": "unesco_en",
+  "query": "Contrôle financier",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept1188",
+  "target_doc": "Financial audit",
+  "note": "cross-lingual fr->en"
+ },
+ {
+  "id": "C_unesco_fr_to_en-09",
+  "kind": "C_unesco_fr_to_en",
+  "corpus": "unesco_en",
+  "query": "Enseignement multimédias",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept3342",
+  "target_doc": "Multimedia instruction (Media assisted education). Integration of more than one medium in a presentation or module of instruction.",
+  "note": "cross-lingual fr->en"
+ },
+ {
+  "id": "C_unesco_fr_to_en-10",
+  "kind": "C_unesco_fr_to_en",
+  "corpus": "unesco_en",
+  "query": "Eau de mer",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept1872",
+  "target_doc": "Sea water (Marine water; Sea water properties; Sea water quality)",
+  "note": "cross-lingual fr->en"
+ },
+ {
+  "id": "D_unesco_en_to_fr-01",
+  "kind": "D_unesco_en_to_fr",
+  "corpus": "unesco_fr",
+  "query": "Child mortality",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept5070",
+  "target_doc": "Mortalité infantile (Mortalité néonatale)",
+  "note": "cross-lingual en->fr"
+ },
+ {
+  "id": "D_unesco_en_to_fr-02",
+  "kind": "D_unesco_en_to_fr",
+  "corpus": "unesco_fr",
+  "query": "Archive personnel",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept2743",
+  "target_doc": "Personnel des archives",
+  "note": "cross-lingual en->fr"
+ },
+ {
+  "id": "D_unesco_en_to_fr-03",
+  "kind": "D_unesco_en_to_fr",
+  "corpus": "unesco_fr",
+  "query": "Vocational school curriculum",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept7257",
+  "target_doc": "Curriculum d'école professionnelle supérieure (Curriculum d'école professionnelle; Curriculum d'école professionnelle et technique; Curriculum de collège professionnel)",
+  "note": "cross-lingual en->fr"
+ },
+ {
+  "id": "D_unesco_en_to_fr-04",
+  "kind": "D_unesco_en_to_fr",
+  "corpus": "unesco_fr",
+  "query": "Women authors",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept3383",
+  "target_doc": "Femme écrivain (Femme auteur)",
+  "note": "cross-lingual en->fr"
+ },
+ {
+  "id": "D_unesco_en_to_fr-05",
+  "kind": "D_unesco_en_to_fr",
+  "corpus": "unesco_fr",
+  "query": "Dropout rate",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept8517",
+  "target_doc": "Taux d'abandon en cours d'études",
+  "note": "cross-lingual en->fr"
+ },
+ {
+  "id": "D_unesco_en_to_fr-06",
+  "kind": "D_unesco_en_to_fr",
+  "corpus": "unesco_fr",
+  "query": "Cultural models",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept7119",
+  "target_doc": "Modèle culturel (Unification culturelle)",
+  "note": "cross-lingual en->fr"
+ },
+ {
+  "id": "D_unesco_en_to_fr-07",
+  "kind": "D_unesco_en_to_fr",
+  "corpus": "unesco_fr",
+  "query": "Environmental health",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept8424",
+  "target_doc": "Hygiène du milieu (Hygiène de l'environnement; Salubrité de l'environnement)",
+  "note": "cross-lingual en->fr"
+ },
+ {
+  "id": "D_unesco_en_to_fr-08",
+  "kind": "D_unesco_en_to_fr",
+  "corpus": "unesco_fr",
+  "query": "Transport infrastructure",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept656",
+  "target_doc": "Infrastructure des transports",
+  "note": "cross-lingual en->fr"
+ },
+ {
+  "id": "D_unesco_en_to_fr-09",
+  "kind": "D_unesco_en_to_fr",
+  "corpus": "unesco_fr",
+  "query": "Water resources",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept191",
+  "target_doc": "Ressources en eau (Ressources hydrauliques; Ressources hydriques)",
+  "note": "cross-lingual en->fr"
+ },
+ {
+  "id": "D_unesco_en_to_fr-10",
+  "kind": "D_unesco_en_to_fr",
+  "corpus": "unesco_fr",
+  "query": "Migrant education",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept8982",
+  "target_doc": "Éducation des migrants (Éducation des enfants migrants; Éducation des nomades). Se réfère à l'éducation des travailleurs migrants et de leurs familles.",
+  "note": "cross-lingual en->fr"
+ },
+ {
+  "id": "E_unesco_scopenote_to_concept-01",
+  "kind": "E_unesco_scopenote_to_concept",
+  "corpus": "unesco_en",
+  "query": "Determination by objective procedures of the relative value of individual jobs in an organization for such purposes as wage determination and promotion.",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept10498",
+  "target_doc": "Job evaluation (Job classification; Post classification; Post evaluation)",
+  "note": "scope note held out of doc"
+ },
+ {
+  "id": "E_unesco_scopenote_to_concept-02",
+  "kind": "E_unesco_scopenote_to_concept",
+  "corpus": "unesco_en",
+  "query": "A pronounceable abbreviation of a compound, name or phrase used as one word.",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept989",
+  "target_doc": "Acronyms",
+  "note": "scope note held out of doc"
+ },
+ {
+  "id": "E_unesco_scopenote_to_concept-03",
+  "kind": "E_unesco_scopenote_to_concept",
+  "corpus": "unesco_en",
+  "query": "Indoor or outdoor areas that offer a variety of resources (e.g. supplies, materials, information, equipment). Use a more precise term, if possible.",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept98",
+  "target_doc": "Resource centres (Educational resource centres)",
+  "note": "scope note held out of doc"
+ },
+ {
+  "id": "E_unesco_scopenote_to_concept-04",
+  "kind": "E_unesco_scopenote_to_concept",
+  "corpus": "unesco_en",
+  "query": "Refers to the increased output of goods and services. Do not confuse with \"economic and social development\".",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept6828",
+  "target_doc": "Economic growth (Growth theory)",
+  "note": "scope note held out of doc"
+ },
+ {
+  "id": "E_unesco_scopenote_to_concept-05",
+  "kind": "E_unesco_scopenote_to_concept",
+  "corpus": "unesco_en",
+  "query": "The right to engage in scientific enquiry, to pursue and communicate knowledge, and to associate freely in such activities.",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept17174",
+  "target_doc": "Scientific freedom (Freedom of research; Freedom of science; Freedom of scientific research; Research freedom)",
+  "note": "scope note held out of doc"
+ },
+ {
+  "id": "E_unesco_scopenote_to_concept-06",
+  "kind": "E_unesco_scopenote_to_concept",
+  "corpus": "unesco_en",
+  "query": "A 'library' receiving by law or under arrangements free copies of all or all required national publications.",
+  "target": "http://vocabularies.unesco.org/thesaurus/concept3814",
+  "target_doc": "Depository libraries (Copyright libraries)",
+  "note": "scope note held out of doc"
+ }
+]

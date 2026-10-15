@@ -1,0 +1,13 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix zbwext: <http://zbw.eu/namespaces/zbw-extensions/> .
+<http://example.org/c1> a skos:Concept, zbwext:Descriptor ;
+  skos:prefLabel "Bibliothek"@de, "Library"@en ;
+  skos:altLabel "Bücherei"@de ;
+  skos:scopeNote "Einrichtung zur Sammlung von Medien."@de ;
+  skos:broader <http://example.org/c0> .
+<http://example.org/c0> a skos:Concept ;
+  skos:prefLabel "Kultur"@de, "Culture"@en .
+<http://example.org/c9> a skos:Concept, zbwext:Descriptor ;
+  skos:prefLabel "Altes Wort"@de ;
+  owl:deprecated true .

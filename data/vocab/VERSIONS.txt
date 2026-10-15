@@ -1,0 +1,2 @@
+STW 9.20 (issued 2025-12-16; from https://zbw.eu/stw/version/latest/about.en.html)
+UNESCO Thesaurus dct:modified 2026-08-31
