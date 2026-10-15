@@ -274,7 +274,7 @@ def run_tool_loop(
     by_name = {fn.__name__: fn for fn in tools}
     messages = list(messages)
     tool_outputs: list[str] = []  # every tool result, so identifiers in the final answer can be checked against them
-    nudged = False  # one reminder per run when the model announces a call instead of making it
+    nudged = False  # one reminder per run when the model announces a call, or says nothing, instead of calling
     for _ in range(max_turns):
         response = chat_fn(model, messages, tools)
         content = response.message.content or ""
