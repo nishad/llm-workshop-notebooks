@@ -14,7 +14,7 @@ All three set `temperature 0.8` and `top_p 0.9`. The 8B sets a short system prom
 
 ## Verification
 
-Verified with Ollama **0.35.1** on 2026-10-15. The workshop's readiness check requires Ollama 0.40 or newer, so the tags must be re-verified after the facilitator upgrades. A re-verification passes when the tool prompts with structured `tool_calls` are at or above 16/20 for the 8B and 11/20 for the 4B, the rates measured on 15 October 2026.
+Verified with Ollama **0.40.4** on 2026-10-15 (first on 0.35.1 the same morning; the counts were identical, see the repeat below). The workshop's readiness check requires Ollama 0.40 or newer. A re-verification passes when the tool prompts with structured `tool_calls` are at or above 16/20 for the 8B and 11/20 for the 4B, the rates measured on 15 October 2026.
 
 Template and capability checks:
 
@@ -32,7 +32,7 @@ Notes on the structured-output cases: the 8B returns `isbn: null` correctly for 
 
 ### Final run 2026-10-15
 
-Repeat of the harness (`--only tools,controls,mt,so`, same endpoint, Ollama 0.35.1) after the notebooks and tags were final. The counts match the earlier table. Raw results: `results/final-2026-10-15/harness.jsonl`, in the planning folder of the workshop project, not in this repository.
+Repeat of the harness (`--only tools,controls,mt,so`, same endpoint) after the notebooks and tags were final, first on Ollama 0.35.1 and again on Ollama 0.40.4 after the upgrade: both runs match the earlier table case for case (8B: 16 of 20 tool prompts, 2 leaks, 2 no-calls; 4B: 11 of 20, 2 leaks, 7 no-calls; multi-turn 5 of 5 and 3 of 5; structured output 5 of 6). Raw results: `results/final-2026-10-15/harness.jsonl` and `results/final-2026-10-15-ollama-0.40.4/harness.jsonl`, in the planning folder of the workshop project, not in this repository.
 
 | Tag | Tool prompts with structured `tool_calls` | Controls clean | Multi-turn loops | Structured output |
 | --- | --- | --- | --- | --- |
@@ -65,7 +65,7 @@ Per-kind recall@1 for the default, from `03_vocabulary_search.ipynb` (03.07, one
 
 Label-level index (every preferred and alternative label is an entry, query label held out): kind A recall@1 8/12, recall@5 11/12; kind B recall@1 6/12, recall@5 10/12. Index design matters as much as the model.
 
-Throughput on an M1 Max with Ollama 0.35.1: 19,688 short German labels embedded in 314 s (about 63 per second); the whole notebook runs in about 12 minutes.
+Throughput on an M1 Max with Ollama 0.40.4: 19,688 short German labels embedded in 313 s (about 63 per second); the whole notebook runs in about 12 minutes.
 
 ## Rebuild
 
@@ -75,7 +75,7 @@ NAMESPACE=myname models/publish.sh  # build under another namespace
 PUSH=1 models/publish.sh          # also push (facilitator only; needs the machine's key on ollama.com)
 ```
 
-Prebuilt index files, measured on 2026-10-15 (`ls -l`, `shasum -a 256`): `runs/stw-de-labels.sqlite` 85,745,664 bytes (85.7 MB), sha256 `5d89c6704268b0c0ae29656dcfc31ea3d1402469edbd76f80a043f1843b07e8c`; `runs/unesco-en-labels.sqlite` 34,385,920 bytes (34.4 MB), sha256 `c4755d17a9c00c742f9f2b601e82e51165f69d5380395adaa083a7ea43ae10c7`. The README and the cheat sheet quote these figures. Re-measure the sizes and checksums after the final re-execution, and update both documents and the download post if they change.
+Prebuilt index files, measured on 2026-10-15 after the final re-execution on Ollama 0.40.4 (`ls -l`, `shasum -a 256`): `runs/stw-de-labels.sqlite` 85,745,664 bytes (85.7 MB), sha256 `d85108cd6d38b949ac6c80decbf405021a61a7db4670495b2dea4e63807559bf`; `runs/unesco-en-labels.sqlite` 34,385,920 bytes (34.4 MB), sha256 `47728635aff8bd8fb9d19197c34d1f1e5e05efea039bd9429bbfa4448ddda537`. The README and the cheat sheet quote these figures. Re-measure the sizes and checksums after the final re-execution, and update both documents and the download post if they change.
 
 ## Re-check one week before the workshop
 

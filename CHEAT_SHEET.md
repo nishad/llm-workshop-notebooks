@@ -229,4 +229,4 @@ Measured in October 2026 on an Apple Silicon laptop: `ollama ps` reports the 8B 
 
 ---
 
-Tested with Ollama 0.35.1, ollama-python 0.6.3, pydantic 2.14.1, Python 3.12.12 on 2026-10-15.
+Tested with Ollama 0.40.4, ollama-python 0.6.3, pydantic 2.14.1, Python 3.12.12 on 2026-10-15.
