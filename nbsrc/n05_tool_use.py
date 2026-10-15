@@ -46,7 +46,7 @@ for example `{"name": "Annemarie Schwarzenbach", "type": "Person"}`."""),
 show_markdown(out[-1]["content"])"""),
     ("md", """## 05.05 Two tools in a row: GND → Wikidata → the Historical Dictionary of Switzerland
 
-Wikidata links authority files: property P227 holds the GND identifier, P902 the HLS article id. One question, two tool rounds."""),
+Wikidata links authority files: property P227 holds the GND identifier, P902 the HLS article id. One question, two tool rounds. The loop runs one call per turn, so the second call can only be made after the first result is in."""),
     ("code", """chain = [messages[0], {"role": "user", "content":
     "Find the GND identifier of Annemarie Schwarzenbach with search_gnd, then use the sparql tool on wikidata to find the item with that "
     "GND id (property wdt:P227, the id as a string literal) and return its HLS id (property wdt:P902)."}]
@@ -55,7 +55,7 @@ for m in out[len(chain):]:
     print(m["role"].upper(), "→", (m.get("content") or "")[:300], m.get("tool_calls", ""))"""),
     ("md", """## 05.06 Failure modes the loop catches
 
-- An answer that states an identifier without any tool call is marked `[UNVERIFIED ...]`.
+- An identifier in the answer that no tool result contained is marked `[UNVERIFIED ...]`, whether the model skipped the tools or made the number up after calling them.
 - A tool call written as text (the pattern of the community Ollama tag) stops the loop with an explanation.
 - A declined call becomes an error result the model sees, so it can ask you instead of guessing.
 

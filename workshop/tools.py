@@ -241,7 +241,8 @@ def approve(name: str, arguments: dict) -> dict | None:
     return None
 
 
-_IDENTIFIER = re.compile(r"\b\d{8,9}[0-9X]?\b|\bQ\d{3,}\b")
+# GND numbers (118540238, 11850391X, 4006445-3), Wikidata items (Q60025) and six-digit ids such as HLS article numbers.
+_IDENTIFIER = re.compile(r"\b\d{6,8}-[0-9X]\b|\b\d{7,9}[0-9X]?\b|\bQ\d{3,}\b|\b\d{6}\b")
 _LEAKED_CALL = re.compile(r"^\s*[\[{]\s*\"?[a-zA-Z_]+\"?\s*[:(]", re.IGNORECASE)
 
 
@@ -254,7 +255,7 @@ def run_tool_loop(
     approve_fn=approve,
     chat_fn=None,
 ) -> list[dict]:
-    """Model proposes a call, the human approves, Python executes, the result goes back. At most max_turns rounds."""
+    """Model proposes a call, the human approves, Python executes, the result goes back. One call per turn, at most max_turns rounds; identifiers the model states without a tool having returned them are marked."""
     import ollama
 
     settings = load_settings()
@@ -267,7 +268,7 @@ def run_tool_loop(
 
     by_name = {fn.__name__: fn for fn in tools}
     messages = list(messages)
-    executed_any = False
+    tool_outputs: list[str] = []  # every tool result, so identifiers in the final answer can be checked against them
     for _ in range(max_turns):
         response = chat_fn(model, messages, tools)
         content = response.message.content or ""
@@ -278,10 +279,13 @@ def run_tool_loop(
                     "The model wrote a tool call as text instead of a structured call. "
                     "Check the model tag: use nishad/apertus:8b (Unsloth template), not a community tag."
                 )
-            if not executed_any and _IDENTIFIER.search(content):
-                content += "\n\n[UNVERIFIED: this answer states an identifier without looking it up.]"
+            unverified = sorted({i for i in _IDENTIFIER.findall(content) if not any(i in out for out in tool_outputs)})
+            if unverified:
+                content += f"\n\n[UNVERIFIED: {', '.join(unverified)} did not come from any tool result.]"
             messages.append({"role": "assistant", "content": content})
             return messages
+        dropped = len(calls) - 1
+        calls = calls[:1]  # one call per turn: the human sees each result before the next call is proposed
         messages.append({"role": "assistant", "content": content, "tool_calls": [
             {"function": {"name": c.function.name, "arguments": dict(c.function.arguments)}} for c in calls
         ]})
@@ -295,9 +299,16 @@ def run_tool_loop(
             else:
                 try:
                     result = by_name[name](**arguments)
-                    executed_any = True
                 except (ToolError, TypeError, ValueError) as exc:
                     result = json.dumps({"error": str(exc)})
+            tool_outputs.append(result)
+            if dropped:
+                try:
+                    payload = json.loads(result)
+                    payload["note"] = f"You proposed {dropped + 1} tool calls at once; only this one ran. Read its result, then call the next tool."
+                    result = json.dumps(payload, ensure_ascii=False)
+                except (ValueError, TypeError):
+                    pass
             messages.append({"role": "tool", "tool_name": name, "content": result})
     messages.append({"role": "assistant", "content": "[Stopped after the maximum number of tool rounds.]"})
     return messages

@@ -107,6 +107,39 @@ def test_loop_flags_identifier_without_tool_call(monkeypatch):
     assert "UNVERIFIED" in out[-1]["content"]
 
 
+def test_loop_runs_one_call_per_turn(monkeypatch):
+    monkeypatch.setenv("WORKSHOP_AUTO_APPROVE", "1")
+    ran = []
+
+    def tool_a(name: str) -> str:
+        """A. Args: name: a name."""
+        ran.append("a"); return json.dumps({"results": [{"id": "gnd/118997718"}], "fixture": False})
+
+    def tool_b(query: str) -> str:
+        """B. Args: query: a query."""
+        ran.append("b"); return json.dumps({"results": [], "fixture": False})
+
+    chat = ScriptedChat([("", [("tool_a", {"name": "x"}), ("tool_b", {"query": "y"})]), ("Found 118997718.", [])])
+    out = tools.run_tool_loop([{"role": "user", "content": "chain"}], [tool_a, tool_b], chat_fn=chat)
+    assert ran == ["a"]
+    tool_msgs = [m for m in out if m["role"] == "tool"]
+    assert len(tool_msgs) == 1 and "only this one ran" in tool_msgs[0]["content"]
+    assert len([m for m in out if m["role"] == "assistant"][0]["tool_calls"]) == 1
+    assert "UNVERIFIED" not in out[-1]["content"]
+
+
+def test_loop_flags_identifier_no_tool_returned(monkeypatch):
+    monkeypatch.setenv("WORKSHOP_AUTO_APPROVE", "1")
+
+    def fake_tool(name: str) -> str:
+        """Fake. Args: name: a name."""
+        return json.dumps({"results": [{"id": "https://d-nb.info/gnd/11850391X"}], "fixture": False})
+
+    chat = ScriptedChat([("", [("fake_tool", {"name": "Arendt"})]), ("Her GND is 11850391X and her HLS id is 1595223-8.", [])])
+    out = tools.run_tool_loop([{"role": "user", "content": "q"}], [fake_tool], chat_fn=chat)
+    assert "UNVERIFIED: 1595223-8" in out[-1]["content"] and "11850391X did not" not in out[-1]["content"]
+
+
 def test_loop_detects_tool_call_leaked_as_text(monkeypatch):
     monkeypatch.setenv("WORKSHOP_AUTO_APPROVE", "1")
     chat = ScriptedChat([('{"search_gnd": {"name": "Arendt"}}', [])])
