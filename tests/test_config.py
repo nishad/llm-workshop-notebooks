@@ -17,6 +17,16 @@ def test_host_without_scheme_gets_http(monkeypatch):
     assert config.load_settings().host == "http://127.0.0.1:11435"
     monkeypatch.setenv("OLLAMA_HOST", "http://localhost:11434/")
     assert config.load_settings().host == "http://localhost:11434"
+    monkeypatch.setenv("OLLAMA_HOST", "localhost:11435")
+    assert config.load_settings().host == "http://localhost:11435"
+
+
+def test_host_without_scheme_or_port_gets_the_default_port(monkeypatch):
+    for given, expected in [("0.0.0.0", "http://0.0.0.0:11434"), ("localhost", "http://localhost:11434"),
+                            ("[::1]", "http://[::1]:11434"), ("[::1]:11435", "http://[::1]:11435"),
+                            ("http://myhost", "http://myhost")]:
+        monkeypatch.setenv("OLLAMA_HOST", given)
+        assert config.load_settings().host == expected, given
 
 
 def test_tier_8gb_switches_model(monkeypatch):

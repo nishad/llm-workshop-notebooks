@@ -167,7 +167,7 @@ Index and query must use the same model. Prefixes by model (`workshop.embed.pref
 | nomic-embed-text | `search_query: ` | `search_document: ` |
 | embeddinggemma | `task: search result \| query: ` | `title: none \| text: ` |
 
-Prebuilt index files for notebook 03 (`runs/stw-de-labels.sqlite`, 85.7 MB, and `runs/unesco-en-labels.sqlite`, 34.4 MB) are linked from the download post on the SWIB26 forum topic; put them in `runs/`. Building them yourself takes about five minutes on an Apple Silicon Mac with 64 GB and far longer on a CPU-only laptop.
+Prebuilt index files for notebook 03 (`runs/stw-de-labels.sqlite`, 85.7 MB, and `runs/unesco-en-labels.sqlite`, 34.4 MB) are linked from the download post on the SWIB26 forum topic; put them in `runs/`. Building them yourself takes about seven minutes for both (about five for STW, two for UNESCO) on an Apple Silicon Mac with 64 GB and far longer on a CPU-only laptop.
 
 ## RAG
 

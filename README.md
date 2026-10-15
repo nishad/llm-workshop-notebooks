@@ -47,7 +47,7 @@ The workshop page is https://llm-workshop.thalhath.org/v3/. Questions and announ
    | `stw-de-labels.sqlite` | 85.7 MB | `5d89c6704268b0c0ae29656dcfc31ea3d1402469edbd76f80a043f1843b07e8c` |
    | `unesco-en-labels.sqlite` | 34.4 MB | `c4755d17a9c00c742f9f2b601e82e51165f69d5380395adaa083a7ea43ae10c7` |
 
-   Check a file with `shasum -a 256 runs/stw-de-labels.sqlite` (macOS and Linux) or `Get-FileHash runs\stw-de-labels.sqlite` (Windows PowerShell). Building the two indexes takes about five minutes on an Apple Silicon Mac with 64 GB and far longer on a CPU-only laptop, so on the 8 GB tier downloading them is the way to follow notebook 03 live.
+   Check a file with `shasum -a 256 runs/stw-de-labels.sqlite` (macOS and Linux) or `Get-FileHash runs\stw-de-labels.sqlite` (Windows PowerShell). Building the two indexes takes about seven minutes for both (about five for STW, two for UNESCO) on an Apple Silicon Mac with 64 GB and far longer on a CPU-only laptop, so on the 8 GB tier downloading them is the way to follow notebook 03 live.
 
 If you prefer pip, with Python 3.12 or 3.13:
 
@@ -71,7 +71,7 @@ You need about 20 GB of free disk space and a stable connection for the download
 | `04_rag.ipynb` | 20 min | Chunk documents, retrieve, answer with numbered citations, hit the context limit on purpose |
 | `05_tool_use.ipynb` | 15 min | Let the model propose GND, Wikidata and SPARQL calls; approve, correct or refuse each one |
 
-The six notebooks are committed with outputs from the 16 GB tier (`nishad/apertus:8b`). `tier-8gb/` holds notebooks 04 and 05 as executed on the 8 GB tier (`nishad/apertus:4b`), so a reader on a smaller machine can see what to expect. In that run (15 October 2026, Ollama 0.35.1) the 4B behaved differently in three places. In 04.06 it did not refuse the Nobel Prize question but answered with a bare citation, `[2]`, where the 8B said "The documents do not answer the question". In 04.07 the cell printed "Ollama accepted the long prompt" instead of the 8B's HTTP 400; Ollama's server log shows the prompt cut silently from 5,076 to 2,051 tokens. In 05.06, asked to answer from memory, it invented "100000000000000000000000 Arendt, Hannah", which the loop marked `[UNVERIFIED: 100000000000000000000000 did not come from any tool result.]`.
+The six notebooks are committed with outputs from the 16 GB tier (`nishad/apertus:8b`). `tier-8gb/` holds notebooks 04 and 05 as executed on the 8 GB tier (`nishad/apertus:4b`), so a reader on a smaller machine can see what to expect. In that run (15 October 2026, Ollama 0.35.1) the 4B behaved differently in three ways. In 04 it answered every question in 04.05, 04.06 and 04.08 with a bare citation such as `[3]` or a bare term ("Date (http://purl.org/dc/terms/date)" for the `dcterms:issued` question), including the Nobel Prize question in 04.06, where the 8B said "The documents do not answer the question". In 04.07 the cell printed "Ollama accepted the long prompt" instead of the 8B's HTTP 400; Ollama's server log shows the prompt cut silently from 5,076 to 2,051 tokens. In 05.06, asked to answer from memory, it first declined and named the `search_gnd` tool, which triggered the loop's one reminder, and then invented "100000000000000000000000 Arendt, Hannah", which the loop marked `[UNVERIFIED: 100000000000000000000000 did not come from any tool result.]`.
 
 Tiers. A machine with 8 GB runs the same notebooks with the 4B model: set `WORKSHOP_TIER=8gb` before starting JupyterLab. RAG then retrieves fewer chunks (the 4B window is 4,096 tokens), and tool use needs the `nishad/apertus:4b` tag, which carries a wrapper template for tools.
 
@@ -95,7 +95,7 @@ Prebuilt vocabulary indexes. Notebook 03 builds two label indexes (`runs/stw-de-
 
 ## Afterwards
 
-Every notebook is committed with its outputs, so you can read it without running anything. Every chat call through `workshop.llm.chat`, which the RAG helper, the tool loop and the setup check's smoke calls also use, appends a line to `runs/log.jsonl` with the time, the model, its digest, the options and the first 300 characters of the prompt and of the answer, so you can trace each result to the exact model. Two calls bypass the helper on purpose and are not logged: the OpenAI client in 01.06 and the oversized prompt in 04.07. Embedding calls are not logged either.
+Every notebook is committed with its outputs, so you can read it without running anything. Every chat call through `workshop.llm.chat`, which the RAG helper, the tool loop and the setup check's smoke calls also use, appends a line to `runs/log.jsonl` with the time, the model, its digest, the options, the end of the prompt and the start of the answer (the last and first 300 characters; streamed calls log the request only), so you can trace each result to the exact model. Two calls bypass the helper on purpose and are not logged: the OpenAI client in 01.06 and the oversized prompt in 04.07. Embedding calls are not logged either.
 
 ## Helpers (`workshop/`)
 

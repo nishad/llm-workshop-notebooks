@@ -52,7 +52,7 @@ def _log_call(client, model: str, messages: list, opts: dict, format, response, 
             "model": model,
             "digest": _digest(model, client),
             "options": opts,
-            "prompt": None if prompt is None else str(prompt)[:300],
+            "prompt": None if prompt is None else str(prompt)[-300:],  # the end: a RAG prompt ends with the question
             "answer": None if stream else (response.message.content or "")[:300],
             "tool_calls": None if stream else len(response.message.tool_calls or []),
             "format": "schema" if format is not None else None,
@@ -78,7 +78,8 @@ def chat(
     """Call the model with temperature 0 and the tier's num_ctx unless overridden. Never sends `think`.
 
     With log=True (the default) every call appends one line to runs/log.jsonl: time, model, digest, options,
-    the first 300 characters of the prompt and of the answer, the number of tool calls and whether a format was set.
+    the last 300 characters of the prompt and the first 300 of the answer (streamed calls log the request only),
+    the number of tool calls and whether a format was set.
     """
     if tools and format is not None:
         raise ValueError("Do not combine tools with format in one request: Ollama then returns the call as plain JSON.")

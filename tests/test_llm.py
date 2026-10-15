@@ -78,13 +78,13 @@ LOG_KEYS = {"captured_at", "model", "digest", "options", "prompt", "answer", "to
 def test_chat_logs_one_line_per_call(tmp_path, monkeypatch):
     path = tmp_path / "log.jsonl"
     monkeypatch.setenv("WORKSHOP_LOG", str(path))
-    llm.chat([{"role": "user", "content": "x" * 400}], model="nishad/apertus:8b", format={"type": "object"}, client=FakeClient())
+    llm.chat([{"role": "user", "content": "x" * 100 + "y" * 300}], model="nishad/apertus:8b", format={"type": "object"}, client=FakeClient())
     lines = path.read_text(encoding="utf-8").splitlines()
     assert len(lines) == 1
     record = json.loads(lines[0])
     assert set(record) == LOG_KEYS
     assert record["digest"] == "abc123" and record["answer"] == "ok" and record["tool_calls"] == 0
-    assert len(record["prompt"]) == 300 and record["format"] == "schema" and record["options"]["num_ctx"] == 8192
+    assert record["prompt"] == "y" * 300 and record["format"] == "schema" and record["options"]["num_ctx"] == 8192
 
 
 def test_chat_logs_streams_without_answer(tmp_path, monkeypatch):

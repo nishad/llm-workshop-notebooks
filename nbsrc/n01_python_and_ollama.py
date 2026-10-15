@@ -83,7 +83,8 @@ print(completion.choices[0].message.content)"""),
     ("md", """## 01.07 Record what produced the answer
 
 A result without its provenance cannot be checked later. `workshop.llm.chat` does this on every call: it appends one line
-to `runs/log.jsonl` with the time, the model, its digest, the options and the first 300 characters of the prompt and the answer.
+to `runs/log.jsonl` with the time, the model, its digest, the options, the end of the prompt and the start of the answer
+(300 characters each; streamed calls log the request only).
 This cell shows the full provenance record once (quantization, context length, template and Ollama version as well) and
 writes it with `log_run`, the same function the helper uses."""),
     ("code", """from workshop.llm import provenance, log_run

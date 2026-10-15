@@ -25,10 +25,16 @@ class Settings:
 
 
 def _normalise_host(host: str) -> str:
-    """Ollama accepts OLLAMA_HOST without a scheme (127.0.0.1:11435); requests does not, so add http://."""
+    """Ollama accepts OLLAMA_HOST without a scheme (127.0.0.1:11435, or 0.0.0.0 with the default port); requests does not.
+
+    Without a scheme, add http:// and, when no port is given, Ollama's default port 11434. With a scheme, the URL is kept
+    as given (the user chose the port).
+    """
+    host = host.rstrip("/")
     if "://" not in host:
-        host = "http://" + host
-    return host.rstrip("/")
+        has_port = "]:" in host if host.startswith("[") else ":" in host  # [::1]:11434 is an IPv6 address with a port
+        host = "http://" + (host if has_port else f"{host}:11434")
+    return host
 
 
 def load_settings() -> Settings:
