@@ -198,7 +198,7 @@ oa = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")    # the key
 
 ## Memory and speed
 
-Measured in October 2026 on an Apple Silicon laptop with the research footprint script: the 8B Q4_K_M build sits at about 5.4 GB with a 4k context and 6.3 GB with 8k. The KV cache alone is 128 KiB per token (0.5 GiB per 4k tokens; `OLLAMA_KV_CACHE_TYPE=q8_0` halves it); the rest of the growth is compute buffers. The 4B takes about 2.8 GB. Tokens per second are community-reported ranges, not measurements made here: base Apple chips 14 to 24 for the 8B, Pro and Max chips 40 or more, CPU-only laptops 3 to 14.
+Measured in October 2026 on an Apple Silicon laptop: `ollama ps` reports the 8B Q4_K_M build at 5.3 GB with a 4k context and 5.8 GB with 8k (the figures the workshop site quotes); the research footprint script, which measures the whole process, saw about 5.4 GB and 6.3 GB. The KV cache alone is 128 KiB per token (0.5 GiB per 4k tokens; `OLLAMA_KV_CACHE_TYPE=q8_0` halves it); the rest of the growth is compute buffers. The 4B takes about 2.8 GB. Tokens per second are community-reported ranges, not measurements made here: base Apple chips 14 to 24 for the 8B, Pro and Max chips 40 or more, CPU-only laptops 3 to 14.
 
 ## Glossary
 

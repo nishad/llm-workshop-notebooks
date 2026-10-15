@@ -29,7 +29,7 @@ The workshop page is https://llm-workshop.thalhath.org/v3/. Questions and announ
    powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
    ```
 
-4. Clone this repository, install the packages and open the first notebook. uv installs Python 3.12 for you if needed.
+4. Clone this repository, install the packages and open the first notebook. uv installs Python 3.12 for you if needed. Windows does not ship git: install [Git for Windows](https://git-scm.com/download/win), or use the green Code button on GitHub and Download ZIP, then unpack the folder. macOS offers to install its command line tools on the first `git` call.
 
    ```bash
    git clone https://github.com/nishad/llm-workshop-notebooks.git
