@@ -1,628 +1,230 @@
-# Local LLM Workshop - Quick Reference Cheat Sheet
+# Cheat sheet: getting started with local LLMs (SWIB26)
 
-Your go-to reference for common commands and code patterns during the workshop.
+Commands and code patterns from the notebooks. For errors see [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
----
-
-## 🚀 Quick Start Commands
-
-### Ollama Service
+## Ollama CLI
 
 ```bash
-# Start Ollama service
-ollama serve
-
-# Check if Ollama is running
-ollama list
-
-# Check Ollama version
-ollama --version
-
-# View running status
-ps aux | grep ollama  # macOS/Linux
-tasklist | findstr ollama  # Windows
+ollama list                                  # installed models, with sizes
+ollama pull nishad/apertus:8b                # download (4b for 8 GB machines)
+ollama run nishad/apertus:8b --verbose       # chat; read "eval rate" for tokens per second
+ollama ps                                    # loaded models: SIZE, PROCESSOR, CONTEXT
+ollama show nishad/apertus:8b                # parameters, quantization, context length, capabilities
+ollama rm nishad/apertus:8b                  # remove a model
+ollama stop nishad/apertus:8b                # unload from memory
 ```
 
-### Model Management
+Inside `ollama run`:
 
-```bash
-# List installed models
-ollama list
-
-# Download a model
-ollama pull llama3.2:3b
-ollama pull nomic-embed-text
-
-# Remove a model
-ollama rm llama3.2:3b
-
-# Get model information
-ollama show llama3.2:3b
-
-# Run model from command line
-ollama run llama3.2:3b "Tell me a joke"
+```text
+/set system You are a cataloguing assistant. Be brief.
+/set parameter temperature 0
+/set parameter num_ctx 8192
+/save mytag
+/bye
 ```
 
-### Jupyter Notebook
-
-```bash
-# Start Jupyter Notebook
-jupyter notebook
-
-# Start on specific port
-jupyter notebook --port 8889
-
-# List running notebooks
-jupyter notebook list
-
-# Stop all notebooks
-jupyter notebook stop
-```
-
----
-
-## 📝 Python Code Snippets
-
-### Basic Ollama Usage
-
-#### Import and Setup
+## Python with the `ollama` package
 
 ```python
 import ollama
-```
+client = ollama.Client(host="http://localhost:11434")
 
-#### Simple Text Generation
-
-```python
-response = ollama.generate(
-    model='llama3.2:3b',
-    prompt='Explain quantum computing in simple terms'
+response = client.chat(
+    model="nishad/apertus:8b",
+    messages=[{"role": "user", "content": "What is an authority file?"}],
+    options={"temperature": 0, "num_ctx": 8192},
 )
-
-print(response['response'])
+print(response.message.content)          # dict access also works: response["message"]["content"]
 ```
 
-#### Streaming Responses
+Streaming:
 
 ```python
-stream = ollama.generate(
-    model='llama3.2:3b',
-    prompt='Write a story about AI',
-    stream=True
+for part in client.chat(model="nishad/apertus:8b", messages=messages, stream=True):
+    print(part.message.content, end="", flush=True)
+```
+
+Embeddings, model details and the list of installed models:
+
+```python
+vectors = client.embed(model="qwen3-embedding:0.6b", input=["Kinderzulage", "family allowance"]).embeddings
+info = client.show("nishad/apertus:8b")
+print(info.details.parameter_size, info.details.quantization_level, info.modelinfo)
+for m in client.list().models:
+    print(m.model, m.digest[:12])
+```
+
+The workshop wrapper sets temperature 0 and the right `num_ctx` for your tier:
+
+```python
+from workshop.llm import chat
+response = chat(messages, model="nishad/apertus:8b")
+```
+
+## Structured output
+
+The `Record` model from notebook 02. Plain strings with `max_length`, an empty string when the card is silent, fields in imprint order:
+
+```python
+from typing import Literal
+from pydantic import BaseModel, Field, ValidationError
+
+class Record(BaseModel):
+    title: str = Field(max_length=200, description="Title proper as written on the card: the part before any ' : ' subtitle, without statement of responsibility")
+    creators: list[str] = Field(max_length=6, description="Persons or bodies responsible, as written, surname first")
+    place: str = Field(max_length=60, description="Place of publication, the part before the colon in the imprint line; empty string if the imprint has no place. Never guess it from the publisher")
+    publisher: str = Field(max_length=100, description="Publisher name only, the part between the colon and the comma in the imprint line; empty string if absent")
+    date: str = Field(max_length=20, description="Year of publication as written, for example 1774; empty string if the card says o.J. or s.d. or gives no year")
+    language: Literal["de", "en", "fr", "it", "es", "ja", "other"] = Field(description="Language of the work")
+    identifier: str = Field(max_length=60, description="ISBN or DOI if the card has one, digits and hyphens only (no 'ISBN' or 'doi:' prefix); empty string if none")
+
+response = chat(
+    [{"role": "user", "content": f"{INSTRUCTIONS}\n\nCard:\n{card_text}"}],
+    model="nishad/apertus:8b", format=Record.model_json_schema(), options={"num_predict": 300},
 )
-
-for chunk in stream:
-    print(chunk['response'], end='', flush=True)
-```
-
-#### Chat Interface
-
-```python
-messages = [
-    {'role': 'user', 'content': 'What is Python?'},
-]
-
-response = ollama.chat(
-    model='llama3.2:3b',
-    messages=messages
-)
-
-print(response['message']['content'])
-```
-
-#### Multi-turn Conversation
-
-```python
-messages = []
-
-# First turn
-messages.append({'role': 'user', 'content': 'Hello! What\'s your purpose?'})
-response = ollama.chat(model='llama3.2:3b', messages=messages)
-messages.append(response['message'])
-
-# Second turn
-messages.append({'role': 'user', 'content': 'Tell me more about that'})
-response = ollama.chat(model='llama3.2:3b', messages=messages)
-print(response['message']['content'])
-```
-
-### Working with Models
-
-#### List All Models
-
-```python
-import ollama
-
-models = ollama.list()
-for model in models['models']:
-    print(f"{model['name']:30s} - {model['size']/(1024**3):.2f} GB")
-```
-
-#### Get Model Information
-
-```python
-import ollama
-import json
-
-info = ollama.show('llama3.2:3b')
-print(json.dumps(info, indent=2))
-```
-
-#### Download Model Programmatically
-
-```python
-import ollama
-
-# This might take a while
-ollama.pull('llama3.2:3b')
-print("Model downloaded!")
-```
-
-### Embeddings
-
-#### Generate Embeddings
-
-```python
-embedding = ollama.embeddings(
-    model='nomic-embed-text',
-    prompt='Machine learning is a subset of AI'
-)
-
-# embedding['embedding'] is a list of floats
-print(f"Embedding dimensions: {len(embedding['embedding'])}")
-```
-
-#### Compare Text Similarity
-
-```python
-import ollama
-import numpy as np
-
-def get_embedding(text):
-    result = ollama.embeddings(
-        model='nomic-embed-text',
-        prompt=text
-    )
-    return np.array(result['embedding'])
-
-def cosine_similarity(a, b):
-    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
-
-# Compare two texts
-text1 = "I love programming"
-text2 = "I enjoy coding"
-
-emb1 = get_embedding(text1)
-emb2 = get_embedding(text2)
-
-similarity = cosine_similarity(emb1, emb2)
-print(f"Similarity: {similarity:.4f}")
-```
-
----
-
-## 🗄️ ChromaDB (Vector Database)
-
-### Setup and Initialization
-
-```python
-import chromadb
-
-# Create persistent client (data saved to disk)
-client = chromadb.PersistentClient(path="./vector-db/my-database")
-
-# Create or get collection
-collection = client.get_or_create_collection(
-    name="my-collection",
-    metadata={"hnsw:space": "cosine"}
-)
-```
-
-### Adding Documents
-
-```python
-# Add documents with automatic IDs
-collection.add(
-    documents=["This is document 1", "This is document 2"],
-    ids=["doc1", "doc2"]
-)
-
-# Add with embeddings (if you generated them separately)
-collection.add(
-    documents=["Document text"],
-    embeddings=[[0.1, 0.2, 0.3, ...]],  # Your embedding vector
-    ids=["doc1"]
-)
-
-# Add with metadata
-collection.add(
-    documents=["Python is a programming language"],
-    metadatas=[{"source": "wikipedia", "category": "programming"}],
-    ids=["doc1"]
-)
-```
-
-### Querying
-
-```python
-# Semantic search
-results = collection.query(
-    query_texts=["programming languages"],
-    n_results=5
-)
-
-# Access results
-for i, doc in enumerate(results['documents'][0]):
-    distance = results['distances'][0][i]
-    print(f"Distance: {distance:.4f} - {doc}")
-```
-
-### Collection Management
-
-```python
-# Count documents
-count = collection.count()
-print(f"Documents in collection: {count}")
-
-# List all collections
-collections = client.list_collections()
-for coll in collections:
-    print(coll.name)
-
-# Delete collection
-client.delete_collection("my-collection")
-```
-
----
-
-## 🎯 RAG (Retrieval-Augmented Generation)
-
-### Complete RAG Pipeline
-
-```python
-import ollama
-import chromadb
-
-# 1. Setup database
-client = chromadb.PersistentClient(path="./vector-db/my-rag")
-collection = client.get_or_create_collection(
-    name="documents",
-    metadata={"hnsw:space": "cosine"}
-)
-
-# 2. Generate and store embeddings
-def add_document(text, doc_id):
-    # Generate embedding
-    embedding = ollama.embeddings(
-        model='nomic-embed-text',
-        prompt=text
-    )
-
-    # Store in database
-    collection.add(
-        documents=[text],
-        embeddings=[embedding['embedding']],
-        ids=[doc_id]
-    )
-
-# Add your documents
-add_document("Python is a programming language", "doc1")
-add_document("JavaScript runs in browsers", "doc2")
-
-# 3. Query function
-def query_with_rag(question, n_results=3):
-    # Generate embedding for question
-    query_embedding = ollama.embeddings(
-        model='nomic-embed-text',
-        prompt=question
-    )
-
-    # Search database
-    results = collection.query(
-        query_embeddings=[query_embedding['embedding']],
-        n_results=n_results
-    )
-
-    # Get relevant documents
-    context = "\n\n".join(results['documents'][0])
-
-    # Create prompt with context
-    prompt = f"""Based on the following context, answer the question.
-
-Context:
-{context}
-
-Question: {question}
-
-Answer:"""
-
-    # Generate response
-    response = ollama.generate(
-        model='llama3.2:3b',
-        prompt=prompt
-    )
-
-    return response['response']
-
-# Use RAG
-answer = query_with_rag("What programming languages are mentioned?")
-print(answer)
-```
-
-### RAG with Jinja2 Templates
-
-```python
-from jinja2 import Template
-import ollama
-
-# Define template
-template_string = """You are a helpful assistant. Answer the question based on the context provided.
-
-Context:
-{% for doc in context_documents %}
-{{ doc }}
-{% endfor %}
-
-Question: {{ question }}
-
-Answer:"""
-
-template = Template(template_string)
-
-# Use template
-def query_with_template(question, context_docs):
-    prompt = template.render(
-        question=question,
-        context_documents=context_docs
-    )
-
-    response = ollama.generate(
-        model='llama3.2:3b',
-        prompt=prompt
-    )
-
-    return response['response']
-```
-
----
-
-## 💡 Helpful Utilities
-
-### Display Markdown in Jupyter
-
-```python
-from IPython.display import display, Markdown
-
-def display_response(text):
-    display(Markdown(text))
-
-# Usage
-response = ollama.generate(model='llama3.2:3b', prompt='Hello')
-display_response(response['response'])
-```
-
-### Streaming with Markdown Display
-
-```python
-from IPython.display import display, Markdown, clear_output
-import time
-
-def stream_markdown(prompt):
-    full_response = ""
-    stream = ollama.generate(
-        model='llama3.2:3b',
-        prompt=prompt,
-        stream=True
-    )
-
-    for chunk in stream:
-        full_response += chunk['response']
-        clear_output(wait=True)
-        display(Markdown(full_response))
-        time.sleep(0.05)  # Small delay for readability
-```
-
-### Progress Bar for Processing
-
-```python
-from tqdm import tqdm
-
-documents = ["doc1", "doc2", "doc3", ...]
-
-for doc in tqdm(documents, desc="Processing documents"):
-    # Process each document
-    embedding = ollama.embeddings(
-        model='nomic-embed-text',
-        prompt=doc
-    )
-    # Store embedding...
-```
-
-### Error Handling
-
-```python
-import ollama
-
-def safe_generate(prompt, model='llama3.2:3b'):
-    try:
-        response = ollama.generate(
-            model=model,
-            prompt=prompt
-        )
-        return response['response']
-    except Exception as e:
-        return f"Error: {str(e)}"
-
-# Usage
-result = safe_generate("Hello!")
-print(result)
-```
-
-### Check System Resources
-
-```python
-import psutil
-
-def check_resources():
-    # Memory
-    mem = psutil.virtual_memory()
-    print(f"Total RAM: {mem.total / (1024**3):.2f} GB")
-    print(f"Available RAM: {mem.available / (1024**3):.2f} GB")
-    print(f"RAM Usage: {mem.percent}%")
-
-    # Disk
-    disk = psutil.disk_usage('/')
-    print(f"\nFree Disk: {disk.free / (1024**3):.2f} GB")
-
-    # CPU
-    print(f"\nCPU Usage: {psutil.cpu_percent()}%")
-
-check_resources()
-```
-
----
-
-## 📊 Common Parameters
-
-### ollama.generate()
-
-```python
-response = ollama.generate(
-    model='llama3.2:3b',        # Model to use
-    prompt='Your prompt here',   # Input text
-    stream=False,                # Stream response? (True/False)
-    options={
-        'temperature': 0.7,      # Randomness (0.0-1.0)
-        'top_p': 0.9,           # Nucleus sampling
-        'top_k': 40,            # Top-k sampling
-        'num_predict': 100,     # Max tokens to generate
-    }
-)
-```
-
-### ollama.chat()
-
-```python
-response = ollama.chat(
-    model='llama3.2:3b',
-    messages=[
-        {'role': 'system', 'content': 'You are helpful assistant'},
-        {'role': 'user', 'content': 'Hello!'},
-    ],
-    stream=False,
-    options={
-        'temperature': 0.7,
-    }
-)
-```
-
-### Temperature Guide
-
-- **0.0-0.3**: Focused, deterministic (good for factual questions)
-- **0.4-0.7**: Balanced (default, good for most tasks)
-- **0.8-1.0**: Creative, random (good for creative writing)
-
----
-
-## 🔧 Debugging
-
-### Test Ollama Connection
-
-```python
-import ollama
-
 try:
-    models = ollama.list()
-    print("✅ Ollama is working!")
-    print(f"Available models: {len(models['models'])}")
-except Exception as e:
-    print(f"❌ Error: {e}")
-    print("Make sure Ollama is running: ollama serve")
+    record = Record.model_validate_json(response.message.content)
+except ValidationError as err:
+    print(err.errors()[0]["msg"])
 ```
 
-### Verbose Output
+Why plain strings and `num_predict`: with `Optional` fields and `null`, the 8B emits null for every optional field and runs away in the first free-text field. The ceiling of 300 tokens stops a runaway answer.
+
+The grammar guarantees well-formed JSON with the right keys and types, not true values. Add validators for what you know about your data.
+
+The same through the OpenAI client:
 
 ```python
-import logging
-
-logging.basicConfig(level=logging.DEBUG)
-
-# Now run your code - you'll see detailed logs
+completion = oa.chat.completions.parse(model="nishad/apertus:8b", messages=messages, response_format=Record)
+record = completion.choices[0].message.parsed
 ```
 
-### Measure Response Time
+## Tools
+
+A tool is a plain function. The docstring is the description the model sees:
 
 ```python
-import time
-import ollama
+def search_gnd(name: str, type: str = "Person") -> str:
+    """Look up a name in the GND authority file via lobid-gnd.
 
-start = time.time()
-response = ollama.generate(
-    model='llama3.2:3b',
-    prompt='Tell me a short joke'
-)
-end = time.time()
-
-print(f"Response time: {end - start:.2f} seconds")
-print(f"Response: {response['response']}")
+    Args:
+        name: the person, organization or subject to search for
+        type: GND entity type, one of Person, CorporateBody, SubjectHeading, PlaceOrGeographicName, Work
+    """
 ```
 
+```python
+response = client.chat(model="nishad/apertus:8b", messages=messages, tools=[search_gnd])
+call = response.message.tool_calls[0]
+name, arguments = call.function.name, call.function.arguments
+result = search_gnd(**arguments)           # after you have approved the call
+messages.append(response.message)
+messages.append({"role": "tool", "tool_name": name, "content": result})
+```
+
+Rules:
+
+- Never combine `tools` with `format` in one request. Ollama then returns the call as plain JSON.
+- Never send `think` to Apertus.
+- Ask for tool use in English; the 8B misses tool calls in German prompts more often.
+
+The workshop loop does the bookkeeping:
+
+```python
+from workshop.tools import run_tool_loop, TOOLS
+out = run_tool_loop(messages, TOOLS, model="nishad/apertus:8b")
+```
+
+`workshop.tools.run_tool_loop` runs one tool call per turn, marks identifiers no tool returned as `[UNVERIFIED ...]`, and reminds the model once when it announces a call or says nothing. `search_gnd` results carry a bare `gnd` field next to lobid's URL id.
+
+## Embeddings and search
+
+```python
+from workshop.embed import embed
+from workshop.search import build_index, search, save_index, load_index
+
+docs = embed(["Kinderzulage", "Familienleistungsausgleich"], "document")    # unit vectors
+query = embed(["Geld für Kinder"], "query")
+scores = docs @ query[0]                                                    # dot product = cosine
+
+index = build_index(ids, texts)          # uses WORKSHOP_EMBED_MODEL (qwen3-embedding:0.6b)
+for entry_id, text, score in search("Geld für Kinder", index, k=5):
+    print(score, entry_id, text)
+```
+
+Index and query must use the same model. Prefixes by model (`workshop.embed.prefix_for` adds them):
+
+| Model | Query prefix | Document prefix |
+| --- | --- | --- |
+| qwen3-embedding (default) | `Instruct: <task>` then `Query:` | none |
+| bge-m3 | none | none |
+| nomic-embed-text | `search_query: ` | `search_document: ` |
+| embeddinggemma | `task: search result \| query: ` | `title: none \| text: ` |
+
+Prebuilt index files for notebook 03 (`runs/stw-de-labels.sqlite`, `runs/unesco-en-labels.sqlite`) will be offered on the workshop page shortly before the session; put them in `runs/`. Building them yourself takes a few minutes on Apple Silicon and much longer on a CPU-only laptop.
+
+## RAG
+
+```python
+from workshop.rag import load_document, chunk_text, build_prompt, answer
+
+chunks = chunk_text(load_document("data/docs/dcmi-terms.md"), "dcmi-terms", size=300, overlap=50)   # size in words
+by_id = {c.id: c for c in chunks}
+index = build_index([c.id for c in chunks], [c.text for c in chunks])
+text, used = answer("Which DCMI term expresses the date a resource was issued?", index, by_id, k=4)
+```
+
+Budget rule: keep the prompt under 75% of `num_ctx`. `build_prompt` raises `PromptTooLong` otherwise. Look at the retrieved chunks before you read the answer.
+
+## OpenAI client against local servers
+
+```python
+from openai import OpenAI
+oa = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")    # the key is required but ignored
+```
+
+| Server | Base URL |
+| --- | --- |
+| Ollama | `http://localhost:11434/v1` |
+| LM Studio | `http://localhost:1234/v1` |
+| llama-server (llama.cpp) | `http://localhost:8080/v1` |
+| Llama app | `http://localhost:9931/v1` |
+
+## Memory and speed
+
+- 8B at Q4_K_M: about 5.4 GB at 4k context, 6.3 GB at 8k.
+- The KV cache costs 128 KiB per token of context.
+- 4B: about 2.8 GB.
+- Tokens per second for the 8B: base Apple chips 14-24, Pro and Max 40 and more, CPU-only laptops 3-14.
+
+## Glossary
+
+- **Token**: a piece of a word; models read and write tokens, not letters.
+- **Context window (`num_ctx`)**: how many tokens the model sees at once, prompt plus answer.
+- **Temperature**: randomness of sampling; 0 is repeatable.
+- **Quantization (Q4_K_M)**: weights stored in about 4 bits to save memory.
+- **GGUF**: the file format Ollama and llama.cpp load.
+- **System prompt**: the instruction that sets the model's role.
+- **Embedding**: a vector that places a text in a space where similar meanings are close.
+- **Cosine similarity**: closeness of two vectors; a dot product for unit vectors.
+- **Chunk**: a piece of a document small enough to retrieve and fit in a prompt.
+- **RAG**: retrieve passages, put them in the prompt, answer from them with citations.
+- **Grammar-enforced output**: decoding constrained to a JSON schema.
+- **Tool call**: the model asking your program to run a function; you decide whether it runs.
+
+## Quick fixes
+
+| Symptom | Try |
+| --- | --- |
+| Connection refused | Start the Ollama app; `curl http://localhost:11434/api/version` |
+| Model not found | `ollama pull nishad/apertus:8b` (type the full tag) |
+| Very slow | `ollama ps`: if PROCESSOR shows CPU, close other apps or use the 4B |
+| `exceeds the available context size` | Lower `k` or chunk `size`; the 4B tops out at 4,096 tokens |
+| Tool call appears as text | `ollama show nishad/apertus:8b --template \| head -1` must print `{# Unsloth template fixes #}` |
+| `ModuleNotFoundError: workshop` | Start JupyterLab from the repository folder: `uv run jupyter lab` |
+| Embedding size mismatch | Rebuild the index with the model you query with |
+
 ---
 
-## 📖 Glossary
-
-| Term | Definition |
-|------|------------|
-| **LLM** | Large Language Model - AI trained on text to generate human-like responses |
-| **Embedding** | Vector representation of text that captures semantic meaning |
-| **Vector Database** | Database optimized for storing and searching embeddings |
-| **RAG** | Retrieval-Augmented Generation - combining search with LLM generation |
-| **Prompt** | Input text given to an LLM |
-| **Token** | Basic unit of text (roughly 1 word = 1-2 tokens) |
-| **Temperature** | Controls randomness in generation (0=deterministic, 1=creative) |
-| **Streaming** | Receiving response progressively instead of all at once |
-| **Context Window** | Maximum amount of text an LLM can process at once |
-| **Semantic Search** | Searching by meaning rather than exact keywords |
-| **Cosine Similarity** | Measure of similarity between two vectors (embeddings) |
-| **Quantization** | Compression technique to reduce model size |
-
----
-
-## 🎓 Model Comparison
-
-| Model | Size | RAM Needed | Speed | Quality | Best For |
-|-------|------|------------|-------|---------|----------|
-| llama3.2:1b | ~1.3GB | 4GB+ | ⚡⚡⚡ | ⭐⭐ | Testing, low-end hardware |
-| llama3.2:3b | ~2GB | 8GB+ | ⚡⚡ | ⭐⭐⭐ | **Workshop default** - balanced |
-| mistral:7b | ~4.1GB | 16GB+ | ⚡ | ⭐⭐⭐⭐ | Alternative to Llama |
-
----
-
-## 🆘 Quick Fixes
-
-| Problem | Quick Fix |
-|---------|-----------|
-| Ollama not found | Run: `ollama serve` |
-| Model not found | Run: `ollama pull llama3.2:3b` |
-| Import error | Run: `pip install -r requirements.txt` |
-| Kernel died | Restart kernel, close other apps |
-| Slow responses | Use smaller model (1b instead of 3b) |
-| Out of memory | Close apps, use smaller model |
-| No results from RAG | Check collection.count() > 0 |
-
----
-
-## 📚 Resources
-
-- **Ollama Docs**: https://ollama.ai/docs
-- **ChromaDB Docs**: https://docs.trychroma.com/
-- **Jinja2 Docs**: https://jinja.palletsprojects.com/
-- **TROUBLESHOOTING.md**: Detailed troubleshooting guide in this repository
-
----
-
-**📌 Tip**: Bookmark this page during the workshop for quick reference!
-
----
-
-*Last updated: Workshop 2025*
+Tested with Ollama 0.35.1, ollama-python 0.6.3, pydantic 2.14.1, Python 3.12.12 on 2026-10-15.

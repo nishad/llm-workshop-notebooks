@@ -1,291 +1,112 @@
-# Getting Started with Local LLMs Workshop Notebooks
+# Getting started with local LLMs: workshop notebooks (SWIB26, 16 November 2026)
 
-This repository contains supporting resources for the workshop **"Getting Started with Local LLMs"**, presented by **Nishad Thalhath** (ORCID: [0000-0001-9845-9714](https://orcid.org/0000-0001-9845-9714)). The workshop introduces participants to the setup and usage of local large language models (LLMs) using open-source tools.
+This repository holds the notebooks, helper code and data for the SWIB26 workshop "Getting started with local LLMs". You run an open model on your own laptop and use it for library tasks: structured extraction from catalogue cards, vocabulary search with embeddings, retrieval-augmented generation (RAG) and tool use with a human in the loop. Nothing leaves your machine.
 
-## Abstract
+The workshop page is https://llm-workshop.thalhath.org/v3/. Questions and announcements go to the SWIB26 forum topic: https://forum.swib.org/t/getting-started-with-local-llms/1732.
 
-Local large language models (LLMs) are becoming popular due to their privacy-first approach, security, and cost-effectiveness. This workshop introduces participants to the basics of setting up and running local LLMs using open-source tools.
+## Before the workshop (20-30 minutes)
 
-The workshop covers both basic and intermediate topics:
-- **Part 1**: Introduction to LLMs, setting up local LLMs, selecting tools and models, and fundamental prompting techniques.
-- **Part 2**: Programmatically using local LLMs, automating tasks, vector embeddings, semantic search, and Retrieval-Augmented Generation (RAG) basics.
+1. Install Ollama 0.40.1 or newer. The install page on the workshop site has the steps for macOS, Windows and Linux. The materials were built on Ollama 0.35.1 and are re-verified on 0.40 before the workshop.
+2. Pull the model for your machine:
 
-This hands-on workshop allows participants to set up their local LLMs during the session or follow up later with the provided materials. It is designed for beginners and those seeking intermediate-level knowledge, making it suitable for participants at various stages of their journey with local LLMs.
+   | Your laptop | Command | Download |
+   | --- | --- | --- |
+   | 16 GB of memory or more | `ollama pull nishad/apertus:8b` | 5.1 GB |
+   | 8 GB of memory | `ollama pull nishad/apertus:4b` | 2.4 GB |
+   | everyone | `ollama pull qwen3-embedding:0.6b` | 639 MB |
 
-### Prerequisites
+3. Install [uv](https://docs.astral.sh/uv/).
 
-#### System Requirements
-- **Operating System**: Windows, macOS, or Linux
-- **RAM**: At least 8GB (16GB recommended for better performance)
-- **Disk Space**: At least 20GB free (for models and libraries)
-- **Internet**: Stable connection for initial setup and model downloads
-- **Python**: Version 3.8 or higher
-- **Ollama**: Installed and running (see installation instructions below)
+   macOS and Linux:
 
-#### Knowledge Requirements
-- **Part 1**: No prior AI/ML knowledge required - beginner friendly!
-- **Part 2**: Basic Python programming familiarity helpful but not required
+   ```bash
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
 
-#### Time Requirements
-- **Pre-workshop setup**: 30-60 minutes (do this before attending!)
-- **Workshop duration**: 2-3 hours (hands-on)
+   Windows PowerShell:
 
-## Repository Contents
+   ```powershell
+   powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+   ```
 
-### Notebooks
+4. Clone this repository, install the packages and open the first notebook. uv installs Python 3.12 for you if needed.
 
-#### 0. `00_setup-and-verification.ipynb` ⏱️ 30 minutes
-**Part 1A: Setup, Verification & LLM Fundamentals**
+   ```bash
+   git clone https://github.com/nishad/llm-workshop-notebooks.git
+   cd llm-workshop-notebooks
+   uv sync
+   uv run jupyter lab
+   ```
 
-This notebook covers the essential foundation:
-- **What are LLMs?** Understanding concepts and architecture
-- **Local vs. Cloud LLMs**: Trade-offs and benefits
-- **Environment verification**: System readiness checks
-- **Model selection guide**: Choosing the right model for your needs
-- **Automated setup**: Download and prepare required models
-- **Troubleshooting**: Fix common setup issues
+   Open `00_check_setup.ipynb` and run all cells. Every line should show a check mark. If one does not, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
-**🎯 Start here if you're attending the workshop!**
-
-#### 1. `01_using-ollama-with-python.ipynb` ⏱️ 30 minutes
-**Part 1B: Using Ollama with Python**
-
-This notebook introduces the **Ollama** Python library:
-- Installing and setting up Ollama
-- Interacting with models for text generation
-- Understanding streaming responses
-- Retrieving and understanding model metadata
-- Prompt engineering basics
-
-#### 2. `02_introduction-to-rag-with-ollama.ipynb` ⏱️ 60 minutes
-**Part 2: Retrieval-Augmented Generation**
-
-This notebook demonstrates a complete **RAG pipeline**:
-- **Vector embeddings**: Understanding semantic representations
-- **ChromaDB**: Setting up persistent vector database
-- **Semantic search**: Finding relevant information by meaning
-- **RAG implementation**: Combining retrieval with generation
-- **Jinja2 templates**: Creating structured, dynamic prompts
-- **Comparison**: With and without external knowledge
-
-### Supporting Files
-
-- **`requirements.txt`**: Python dependencies for easy installation
-- **`TROUBLESHOOTING.md`**: Common issues and solutions
-- **`CHEAT_SHEET.md`**: Quick reference guide
-- **`made-with-cc.txt`**: Sample dataset (Creative Commons licensed)
-
-## Quick Start Guide
-
-### Pre-Workshop Setup (Do This First! ⏱️ 30-60 minutes)
-
-**It's highly recommended to complete this setup before attending the workshop** to avoid network/download issues during the session.
-
-#### Step 1: Install Ollama
-
-**macOS:**
-```bash
-brew install ollama
-```
-
-**Linux:**
-```bash
-curl https://ollama.ai/install.sh | sh
-```
-
-**Windows:**
-- Download from: https://ollama.com/download
-- Run the installer
-- Ollama will start automatically
-
-**Verify Installation:**
-```bash
-ollama --version
-```
-
-#### Step 2: Start Ollama Service
-
-**macOS/Linux:**
-```bash
-ollama serve
-```
-*Leave this terminal running, or run Ollama from Applications*
-
-**Windows:**
-- Ollama starts automatically
-- Check system tray for Ollama icon
-
-#### Step 3: Clone This Repository
+If you prefer pip, with Python 3.12 or newer:
 
 ```bash
-git clone https://github.com/nishad/llm-workshop-notebooks
-cd llm-workshop-notebooks
-```
-
-#### Step 4: Install Python Dependencies
-
-```bash
+python -m venv .venv
+source .venv/bin/activate      # Windows: .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
+jupyter lab
 ```
 
-This installs: `ollama`, `chromadb`, `Jinja2`, `jupyter`, `ipython`, `psutil`, `tqdm`
+You need about 20 GB of free disk space and a stable connection for the downloads.
 
-#### Step 5: Start Jupyter
+## The notebooks
 
-```bash
-jupyter notebook
-```
+| Notebook | Time | What you do |
+| --- | --- | --- |
+| `00_check_setup.ipynb` | 10 min | Check Python, memory, disk, Ollama, both models and one smoke call each |
+| `01_python_and_ollama.ipynb` | 20 min | Chat, system prompts, temperature, streaming, the OpenAI client, provenance logging |
+| `02_structured_output.ipynb` | 25 min | Extract catalogue card records into a Pydantic schema, validate them, measure against a gold file |
+| `03_vocabulary_search.ipynb` | 25 min | Embeddings, cross-lingual search over STW and UNESCO labels, a sqlite-vec index |
+| `04_rag.ipynb` | 20 min | Chunk documents, retrieve, answer with numbered citations, hit the context limit on purpose |
+| `05_tool_use.ipynb` | 15 min | Let the model propose GND, Wikidata and SPARQL calls; approve, correct or refuse each one |
 
-This will open your browser with the notebook interface.
+Tiers. A machine with 8 GB runs the same notebooks with the 4B model: set `WORKSHOP_TIER=8gb` before starting JupyterLab. RAG then retrieves fewer chunks (the 4B window is 4,096 tokens), and tool use needs the `nishad/apertus:4b` tag, which carries a wrapper template for tools.
 
-#### Step 6: Run Setup Notebook
+Prebuilt vocabulary indexes. Notebook 03 builds two label indexes (`runs/stw-de-labels.sqlite`, about 20,000 STW labels, and `runs/unesco-en-labels.sqlite`) and loads them instead when the files exist. Prebuilt index files will be offered on the workshop page shortly before the session; put them in `runs/`. Building them yourself takes a few minutes on Apple Silicon and much longer on a CPU-only laptop.
 
-1. Open `00_setup-and-verification.ipynb`
-2. Run all cells (Cell → Run All)
-3. This will:
-   - Verify your environment
-   - Download required models (~2.3GB)
-   - Confirm everything is ready
+## During the workshop
 
-**✅ If all checks pass, you're ready for the workshop!**
+- The Zoom room opens at 03:30 UTC; the session runs 04:00-08:00 UTC on Monday 16 November 2026.
+- Questions go to the shared document linked from the workshop page.
+- Run cells from top to bottom. The Checkpoint cell at the end of each notebook tells you where you should be.
 
----
+## Afterwards
 
-### During the Workshop
+Every notebook is committed with its outputs, so you can read it without running anything. Each model call you make is logged to `runs/log.jsonl` with the model digest, options and prompt, so you can trace any result.
 
-Follow the notebooks in order:
+## Helpers (`workshop/`)
 
-1. **Notebook 00**: Setup & Fundamentals (30 min)
-   - *Skip if you completed pre-workshop setup*
-   - Or review the LLM concepts section
+| Module | What it does |
+| --- | --- |
+| `config` | Model, embedding model, Ollama host and hardware tier, with environment overrides |
+| `check` | Readiness checks for Python, memory, disk, Ollama, models and one smoke call each |
+| `llm` | A thin wrapper around `ollama.chat` with temperature 0, the tier's `num_ctx` and provenance logging |
+| `embed` | Embeddings through Ollama, with the query and document prefix each model expects |
+| `search` | Semantic search as a dot product over unit vectors, with optional sqlite-vec persistence |
+| `rag` | Load, chunk, retrieve, build the prompt and answer, without a framework |
+| `tools` | GND, Wikidata and read-only SPARQL tools, and the approve-and-run loop |
+| `display` | Markdown and table rendering for notebooks |
 
-2. **Notebook 01**: Using Ollama with Python (30 min)
-   - Basic model interaction
-   - Streaming responses
-   - Prompt engineering
+## Data and licences
 
-3. **Notebook 02**: Introduction to RAG (60 min)
-   - Vector embeddings
-   - Semantic search
-   - Complete RAG pipeline
+Sources, licences and retrieval dates for every data file are in [data/ATTRIBUTION.md](data/ATTRIBUTION.md).
 
----
+- Code: MIT (see [LICENSE](LICENSE)).
+- Vocabularies: STW under CC BY 4.0, UNESCO Thesaurus under CC BY-SA 3.0 IGO.
+- Documents and catalogue cards: CC BY 4.0.
+- Model weights: Apache-2.0, with the Apertus LLM Acceptable Use Policy.
 
-### Self-Paced Learning
+## Rebuilding the model tags
 
-If you're working through this on your own:
+The `nishad/apertus` tags are built from the Modelfiles in `models/` with `models/publish.sh`. See [models/README.md](models/README.md) for the base files, templates and verification results.
 
-1. Start with `00_setup-and-verification.ipynb`
-2. Take your time with each section
-3. Experiment with the code cells
-4. Try the "Try It Yourself" challenges
-5. Refer to `TROUBLESHOOTING.md` if you encounter issues
+## Troubleshooting and cheat sheet
 
-## Troubleshooting
-
-### Common Issues
-
-#### "Connection refused" or "Ollama not responding"
-
-**Problem**: Can't connect to Ollama service
-
-**Solution**:
-```bash
-# Check if Ollama is running
-ollama list
-
-# If not, start it
-ollama serve
-```
-
-#### "Model not found"
-
-**Problem**: Model hasn't been downloaded
-
-**Solution**:
-```bash
-ollama pull llama3.2:3b
-ollama pull nomic-embed-text
-```
-
-#### "Not enough memory"
-
-**Problem**: System RAM is insufficient
-
-**Solution**:
-- Close other applications
-- Use a smaller model: `llama3.2:1b` instead of `llama3.2:3b`
-- Consider upgrading RAM or using a more powerful machine
-
-#### Python/Library Issues
-
-**Problem**: Import errors or missing packages
-
-**Solution**:
-```bash
-# Upgrade pip
-pip install --upgrade pip
-
-# Reinstall requirements
-pip install -r requirements.txt --force-reinstall
-```
-
-**For more detailed troubleshooting, see `TROUBLESHOOTING.md`**
-
----
-
-## Resources
-
-### Official Documentation
-- [Ollama](https://ollama.ai/) - Main website and downloads
-- [Ollama Python Library](https://github.com/ollama/ollama-python) - Python client documentation
-- [ChromaDB](https://www.trychroma.com/) - Vector database documentation
-- [Jinja2](https://jinja.palletsprojects.com/) - Template engine documentation
-
-### Learning Resources
-- [Ollama Model Library](https://ollama.ai/library) - Browse available models
-- [ChromaDB Cookbook](https://cookbook.chromadb.dev/) - Practical examples
-- [Prompt Engineering Guide](https://www.promptingguide.ai/) - Improve your prompts
-
-### Datasets
-- [Made with Creative Commons](https://creativecommons.org/share-your-work/made-with-cc/) - Dataset source for RAG examples
-
----
-
-## Acknowledgments
-
-This workshop was made possible by supporters via Kickstarter. Their feedback helped shape these materials to be more accessible and practical.
-
-Special thanks to:
-- The Ollama team for making local LLMs accessible
-- The open-source community for ChromaDB, Jinja2, and countless other tools
-- Creative Commons for the example dataset
-
----
-
-## License
-
-This repository is licensed under the **MIT License**.
-
-The dataset used in the examples (`made-with-cc.txt`) is sourced from **"Made with Creative Commons"** and is licensed under **Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)**.
-
----
-
-## Contributing
-
-Found an issue? Have a suggestion?
-
-- **Issues**: Please open an issue on GitHub
-- **Improvements**: Pull requests are welcome!
-- **Questions**: Feel free to start a discussion
-
----
+- [TROUBLESHOOTING.md](TROUBLESHOOTING.md): symptoms, causes and fixes
+- [CHEAT_SHEET.md](CHEAT_SHEET.md): commands and code patterns to keep open during the session
 
 ## Author
 
-**Nishad Thalhath**
-ORCID: [0000-0001-9845-9714](https://orcid.org/0000-0001-9845-9714)
-
----
-
-**Happy Learning! 🚀**
+Nishad Thalhath, ORCID [0000-0001-9845-9714](https://orcid.org/0000-0001-9845-9714).
