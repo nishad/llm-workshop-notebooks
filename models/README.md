@@ -14,7 +14,7 @@ All three set `temperature 0.8` and `top_p 0.9`. The 8B sets a short system prom
 
 ## Verification
 
-Verified with Ollama **0.35.1** on 2026-10-15. The workshop's readiness check requires Ollama 0.40 or newer, so the tags must be re-verified after the facilitator upgrades.
+Verified with Ollama **0.35.1** on 2026-10-15. The workshop's readiness check requires Ollama 0.40 or newer, so the tags must be re-verified after the facilitator upgrades. A re-verification passes when the tool prompts with structured `tool_calls` are at or above 16/20 for the 8B and 11/20 for the 4B, the rates measured on 15 October 2026.
 
 Template and capability checks:
 
@@ -28,11 +28,11 @@ Harness run (`scripts/tool_harness.py --only tools,controls,mt,so`, one run per 
 | `nishad/apertus:8b` | 16 of 20 (2 `leak_unparsed`, 2 `no_call`) | 10 of 10 | 5 of 5 ok | 5 of 6 requests return valid JSON; the empty-enum schema returns HTTP 400 (expected) |
 | `nishad/apertus:4b` | 11 of 20 (2 `leak_unparsed`, 7 `no_call`) | 10 of 10 | 3 of 5 ok (2 `answer_mismatch`) | 5 of 6 requests return valid JSON; the empty-enum schema returns HTTP 400 (expected) |
 
-Notes on the structured-output cases: the 8B returns `isbn: null` correctly for the biblio record; the 4B fills `isbn` with `"2 Bände"` (valid JSON, wrong value). The unsatisfiable `minimum 10 / maximum 5` schema yields a number from both models rather than an error. Raw per-request results are in the research results directory (`results/tags-2026-10-15/`).
+Notes on the structured-output cases: the 8B returns `isbn: null` correctly for the biblio record; the 4B fills `isbn` with `"2 Bände"` (valid JSON, wrong value). The unsatisfiable `minimum 10 / maximum 5` schema yields a number from both models rather than an error. Raw per-request results are in the research results directory (`results/tags-2026-10-15/`, in the planning folder of the workshop project, not in this repository).
 
 ### Final run 2026-10-15
 
-Repeat of the harness (`--only tools,controls,mt,so`, same endpoint, Ollama 0.35.1) after the notebooks and tags were final. The counts match the earlier table. Raw results: `results/final-2026-10-15/harness.jsonl`.
+Repeat of the harness (`--only tools,controls,mt,so`, same endpoint, Ollama 0.35.1) after the notebooks and tags were final. The counts match the earlier table. Raw results: `results/final-2026-10-15/harness.jsonl`, in the planning folder of the workshop project, not in this repository.
 
 | Tag | Tool prompts with structured `tool_calls` | Controls clean | Multi-turn loops | Structured output |
 | --- | --- | --- | --- | --- |
@@ -74,6 +74,8 @@ models/publish.sh                 # pull base GGUFs, build the four tags, print 
 NAMESPACE=myname models/publish.sh  # build under another namespace
 PUSH=1 models/publish.sh          # also push (facilitator only; needs the machine's key on ollama.com)
 ```
+
+Prebuilt index files, measured on 2026-10-15 (`ls -l`, `shasum -a 256`): `runs/stw-de-labels.sqlite` 85,745,664 bytes (85.7 MB), sha256 `5d89c6704268b0c0ae29656dcfc31ea3d1402469edbd76f80a043f1843b07e8c`; `runs/unesco-en-labels.sqlite` 34,385,920 bytes (34.4 MB), sha256 `c4755d17a9c00c742f9f2b601e82e51165f69d5380395adaa083a7ea43ae10c7`. The README and the cheat sheet quote these figures. Re-measure the sizes and checksums after the final re-execution, and update both documents and the download post if they change.
 
 ## Re-check one week before the workshop
 

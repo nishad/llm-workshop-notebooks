@@ -40,6 +40,15 @@ The workshop page is https://llm-workshop.thalhath.org/v3/. Questions and announ
 
    Open `00_check_setup.ipynb` and run all cells. Every line should show a check mark. If one does not, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
+5. Download the two prebuilt vocabulary index files for notebook 03 from the link in the download post on the forum topic (https://forum.swib.org/t/getting-started-with-local-llms/1732) into the `runs/` folder of the repository (create it if it does not exist):
+
+   | File | Size | sha256 |
+   | --- | --- | --- |
+   | `stw-de-labels.sqlite` | 85.7 MB | `5d89c6704268b0c0ae29656dcfc31ea3d1402469edbd76f80a043f1843b07e8c` |
+   | `unesco-en-labels.sqlite` | 34.4 MB | `c4755d17a9c00c742f9f2b601e82e51165f69d5380395adaa083a7ea43ae10c7` |
+
+   Check a file with `shasum -a 256 runs/stw-de-labels.sqlite` (macOS and Linux) or `Get-FileHash runs\stw-de-labels.sqlite` (Windows PowerShell). Building the two indexes takes about five minutes on an Apple Silicon Mac with 64 GB and far longer on a CPU-only laptop, so on the 8 GB tier downloading them is the way to follow notebook 03 live.
+
 If you prefer pip, with Python 3.12 or 3.13:
 
 ```bash
@@ -62,6 +71,8 @@ You need about 20 GB of free disk space and a stable connection for the download
 | `04_rag.ipynb` | 20 min | Chunk documents, retrieve, answer with numbered citations, hit the context limit on purpose |
 | `05_tool_use.ipynb` | 15 min | Let the model propose GND, Wikidata and SPARQL calls; approve, correct or refuse each one |
 
+The six notebooks are committed with outputs from the 16 GB tier (`nishad/apertus:8b`). `tier-8gb/` holds notebooks 04 and 05 as executed on the 8 GB tier (`nishad/apertus:4b`), so a reader on a smaller machine can see what to expect.
+
 Tiers. A machine with 8 GB runs the same notebooks with the 4B model: set `WORKSHOP_TIER=8gb` before starting JupyterLab. RAG then retrieves fewer chunks (the 4B window is 4,096 tokens), and tool use needs the `nishad/apertus:4b` tag, which carries a wrapper template for tools.
 
 ```bash
@@ -74,7 +85,7 @@ WORKSHOP_TIER=8gb uv run jupyter lab
 $env:WORKSHOP_TIER = "8gb"; uv run jupyter lab
 ```
 
-Prebuilt vocabulary indexes. Notebook 03 builds two label indexes (`runs/stw-de-labels.sqlite`, about 20,000 STW labels, and `runs/unesco-en-labels.sqlite`) and loads them instead when the files exist. Prebuilt index files will be offered on the workshop page shortly before the session; put them in `runs/`. Building them yourself takes a few minutes on Apple Silicon and much longer on a CPU-only laptop.
+Prebuilt vocabulary indexes. Notebook 03 builds two label indexes (`runs/stw-de-labels.sqlite`, about 20,000 STW labels, and `runs/unesco-en-labels.sqlite`) and loads them instead when the files exist. Step 5 under "Before the workshop" says where to download them.
 
 ## During the workshop
 

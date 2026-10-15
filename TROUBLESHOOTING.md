@@ -68,6 +68,10 @@ Causes: the wrong chat template, a German prompt, or a community tag instead of 
 ollama show nishad/apertus:8b --template | head -1
 ```
 
+```powershell
+ollama show nishad/apertus:8b --template | Select-Object -First 1
+```
+
 The first line must be `{# Unsloth template fixes #}`. For the 4B, `ollama show nishad/apertus:4b --template | grep -c "Tool Capabilities"` must print `1`. If not, pull the tag again. If the template is right, ask in English; the 8B misses tool calls in German prompts more often. Do not combine `tools` with `format` in one request.
 
 ## `exceeds the available context size` (HTTP 400)
@@ -91,7 +95,7 @@ Look at the PROCESSOR column. `100% GPU` is best; a CPU percentage means part of
 1. Close browsers and other large apps.
 2. On an 8 GB machine use `nishad/apertus:4b` and `WORKSHOP_TIER=8gb`.
 3. Stop other loaded models with `ollama stop <tag>`.
-4. Set `OLLAMA_KV_CACHE_TYPE=q8_0` before `ollama serve`; it roughly halves the memory the context needs. This is an environment variable of the server. On macOS and Windows the Ollama app reads it only if you quit the app and start `ollama serve` from a terminal where it is set; on Linux put it in the systemd unit. Do not use `q4_0` with Apertus.
+4. Set `OLLAMA_KV_CACHE_TYPE=q8_0` before `ollama serve`; it roughly halves the memory the context needs. This is an environment variable of the server: the macOS app reads variables set with `launchctl setenv`; the Windows app reads user environment variables after a restart; on Linux put it in the systemd unit. Quitting the app and starting `ollama serve` from a terminal where it is set also works. Do not use `q4_0` with Apertus.
 
 Windows machines with only an integrated GPU run on the CPU; that is expected and slower.
 
@@ -133,7 +137,7 @@ Symptom: `Expected 1024, got 768` (or similar numbers) when searching or loading
 
 Cause: the index was built with one embedding model and the query uses another. Vectors from different models cannot be compared.
 
-Fix: use one model for both. Check `WORKSHOP_EMBED_MODEL`, delete the stale file in `runs/` (for example `runs/stw-de-labels.sqlite`) and rebuild the index, or download the prebuilt one offered on the workshop page.
+Fix: use one model for both. Check `WORKSHOP_EMBED_MODEL`, delete the stale file in `runs/` (for example `runs/stw-de-labels.sqlite`) and rebuild the index, or download the prebuilt one linked from the download post on the SWIB26 forum topic (see the README, "Before the workshop").
 
 ## Embedding model missing
 

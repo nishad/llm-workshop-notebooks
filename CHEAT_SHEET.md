@@ -167,7 +167,7 @@ Index and query must use the same model. Prefixes by model (`workshop.embed.pref
 | nomic-embed-text | `search_query: ` | `search_document: ` |
 | embeddinggemma | `task: search result \| query: ` | `title: none \| text: ` |
 
-Prebuilt index files for notebook 03 (`runs/stw-de-labels.sqlite`, `runs/unesco-en-labels.sqlite`) will be offered on the workshop page shortly before the session; put them in `runs/`. Building them yourself takes a few minutes on Apple Silicon and much longer on a CPU-only laptop.
+Prebuilt index files for notebook 03 (`runs/stw-de-labels.sqlite`, 85.7 MB, and `runs/unesco-en-labels.sqlite`, 34.4 MB) are linked from the download post on the SWIB26 forum topic; put them in `runs/`. Building them yourself takes about five minutes on an Apple Silicon Mac with 64 GB and far longer on a CPU-only laptop.
 
 ## RAG
 
@@ -223,7 +223,7 @@ Measured in October 2026 on an Apple Silicon laptop with the research footprint 
 | Model not found | `ollama pull nishad/apertus:8b` (type the full tag) |
 | Very slow | `ollama ps`: if PROCESSOR shows CPU, close other apps or use the 4B |
 | `exceeds the available context size` | Lower `k` or chunk `size`; the 4B tops out at 4,096 tokens |
-| Tool call appears as text | `ollama show nishad/apertus:8b --template \| head -1` must print `{# Unsloth template fixes #}` |
+| Tool call appears as text | `ollama show nishad/apertus:8b --template \| head -1` (PowerShell: `\| Select-Object -First 1`) must print `{# Unsloth template fixes #}` |
 | `ModuleNotFoundError: workshop` | Start JupyterLab from the repository folder: `uv run jupyter lab` |
 | Embedding size mismatch | Rebuild the index with the model you query with |
 
