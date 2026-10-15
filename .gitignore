@@ -74,9 +74,6 @@ docs/_build/
 # PyBuilder
 target/
 
-# pyenv
-.python-version
-
 # celery beat schedule file
 celerybeat-schedule
 
@@ -142,3 +139,10 @@ notebook/templates/*.html
 
 # git worktrees
 .worktrees/
+
+# SWIB26 edition
+.venv/
+runs/
+*.gguf
+data/raw/
+emb_cache/

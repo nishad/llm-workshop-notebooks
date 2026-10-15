@@ -1,0 +1,36 @@
+[project]
+name = "swib-llm-workshop"
+version = "2026.0.0"
+description = "Notebooks and helpers for the SWIB26 workshop 'Getting started with local LLMs'"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+license = { text = "MIT" }
+dependencies = [
+  "ollama>=0.6.3",
+  "pydantic>=2.9",
+  "openai>=3.0",
+  "numpy>=2.0",
+  "sqlite-vec>=0.1.9",
+  "pypdf>=6.0",
+  "rdflib>=7.0",
+  "requests>=2.32",
+  "httpx<1",
+  "jupyterlab>=4.4",
+  "ipykernel>=6.29",
+  "nbformat>=5.10",
+  "nbclient>=0.10",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools]
+packages = ["workshop"]
+
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
