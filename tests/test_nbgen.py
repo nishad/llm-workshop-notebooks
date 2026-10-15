@@ -21,3 +21,8 @@ def test_rejects_empty_trailing_code_cell():
         assert "empty" in str(exc)
     else:
         raise AssertionError("expected ValueError")
+
+
+def test_output_name_strips_module_prefix_before_a_digit():
+    assert nbgen.output_name("n00_check_setup") == "00_check_setup.ipynb"
+    assert nbgen.output_name("other") == "other.ipynb"

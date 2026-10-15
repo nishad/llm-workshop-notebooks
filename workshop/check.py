@@ -142,7 +142,7 @@ def smoke_tool(model: str, client=None, host: str | None = None) -> Check:
 def run_all(settings: Settings | None = None) -> list[Check]:
     s = settings or load_settings()
     checks = [check_python(), check_memory(), check_disk(), check_ollama(s.host)]
-    if not checks[-1][1]:
+    if _server_version(s.host) is None:  # unreachable: every later check would fail for the same reason
         return checks
     checks += [check_model(s.model, host=s.host), check_template(s.model, host=s.host),
                check_embedding(s.embed_model, host=s.host), smoke_chat(s.model, host=s.host), smoke_tool(s.model, host=s.host)]

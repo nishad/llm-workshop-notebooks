@@ -40,3 +40,22 @@ def test_print_report_returns_overall(capsys):
     ok = check.print_report([("a", True, "fine"), ("b", False, "bad")])
     out = capsys.readouterr().out
     assert ok is False and "❌ b" in out and "✅ a" in out
+
+
+def test_run_all_stops_when_server_is_unreachable(monkeypatch):
+    from workshop.config import Settings
+
+    monkeypatch.setattr(check, "_server_version", lambda host: None)
+    checks = check.run_all(Settings(model="m", embed_model="e", host="http://localhost:1", tier="16gb"))
+    assert len(checks) == 4 and checks[-1][1] is False
+
+
+def test_run_all_continues_past_an_old_version(monkeypatch):
+    from workshop.config import Settings
+
+    monkeypatch.setattr(check, "_server_version", lambda host: "0.35.1")
+    for name in ("check_model", "check_template", "check_embedding", "smoke_chat", "smoke_tool"):
+        monkeypatch.setattr(check, name, lambda *a, _n=name, **k: (_n, True, "stub"))
+    checks = check.run_all(Settings(model="m", embed_model="e", host="http://localhost:1", tier="16gb"))
+    assert len(checks) == 9
+    assert checks[3][1] is False and all(ok for _, ok, _ in checks[4:])

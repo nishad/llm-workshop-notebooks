@@ -39,12 +39,17 @@ def write_notebook(nb: nbformat.NotebookNode, path: Path) -> None:
     nbformat.write(nb, str(path))
 
 
+def output_name(name: str) -> str:
+    """nbsrc modules start with `n` before a digit (a module name cannot start with one); the notebook does not."""
+    return f"{name[1:] if name[0] == 'n' and name[1].isdigit() else name}.ipynb"
+
+
 def main(argv: list[str]) -> None:
     names = argv or [m.name for m in pkgutil.iter_modules([str(ROOT / "nbsrc")]) if not m.name.startswith("_")]
     for name in names:
         module = importlib.import_module(f"nbsrc.{name}")
         nb = build_notebook(module.CELLS)
-        out = ROOT / f"{name}.ipynb"
+        out = ROOT / output_name(name)
         write_notebook(nb, out)
         print(f"wrote {out.name} ({len(nb.cells)} cells)")
 
