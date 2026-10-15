@@ -1,0 +1,12 @@
+[
+  {"question": "Which four entities make up the IFLA LRM's work, expression, manifestation, item chain, and what does each one stand for?",
+   "expected": "work, expression, manifestation, item (the WEMI entities): the intellectual content, its realization, its physical embodiment, and a single exemplar", "source": "ifla-lrm"},
+  {"question": "Which DCMI term expresses the date on which a resource was formally issued?",
+   "expected": "dcterms:issued", "source": "dcmi-terms"},
+  {"question": "In the IFLA LRM, what is the difference between a manifestation and an item?",
+   "expected": "a manifestation is the set of all carriers sharing the same characteristics; an item is a single exemplar", "source": "ifla-lrm"},
+  {"question": "What is the range of dcterms:language?",
+   "expected": "LinguisticSystem", "source": "dcmi-terms"},
+  {"question": "Who won the 2026 Nobel Prize in Literature?",
+   "expected": "not in the documents (the model must say so)", "source": "none"}
+]

@@ -146,3 +146,5 @@ runs/
 *.gguf
 data/raw/
 emb_cache/
+data/my/*
+!data/my/.gitkeep
