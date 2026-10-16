@@ -10,7 +10,7 @@ Apertus is a chat model and cannot do this; we use an open-weights embedding mod
 
 **What you'll learn**
 1. Turn SKOS labels into index entries and embed them in one batch
-2. Search by meaning: a free-text query, a cross-lingual query, a held-out synonym, a scope-note question
+2. Search by meaning: a free-text query, a cross-lingual query, an alternative label as the query, a scope-note question
 3. Decide with a threshold and a human: suggest three, pick one
 4. Persist the index with sqlite-vec, measure recall on a gold set, and see why index design matters as much as the model"""),
     ("md", "## 03.01 Configuration"),

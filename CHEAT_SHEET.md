@@ -55,7 +55,7 @@ for m in client.list().models:
     print(m.model, m.digest[:12])
 ```
 
-The workshop wrapper sets temperature 0 and the right `num_ctx` for your tier:
+The workshop helper sets temperature 0 and the right `num_ctx` for your tier (16 GB or 8 GB):
 
 ```python
 from workshop.llm import chat
@@ -64,7 +64,7 @@ response = chat(messages, model="nishad/apertus:8b")
 
 ## Structured output
 
-The `Record` model from notebook 02. Plain strings with `max_length`, an empty string when the card is silent, fields in imprint order:
+The `Record` model from notebook 02. It uses plain strings with a `max_length`, an empty string when the card gives no value, and fields in the order of the imprint:
 
 ```python
 from typing import Literal
@@ -92,9 +92,9 @@ except ValidationError as err:
     print(err.errors()[0]["msg"])
 ```
 
-Why plain strings and `num_predict`: with `Optional` fields and `null`, the 8B emits null for every optional field and runs away in the first free-text field. The ceiling of 300 tokens stops a runaway answer.
+Why plain strings and `num_predict`: with `Optional` fields and `null`, the 8B returns null for every optional field and then keeps writing without end in the first free-text field. The limit of 300 tokens stops such an answer.
 
-The grammar guarantees well-formed JSON with the right keys and types, not true values. Add validators for what you know about your data.
+The grammar (the rules Ollama builds from the schema and enforces while the model writes) guarantees well-formed JSON with the right keys and types. It does not guarantee that the values are correct. Add validators for what you know about your data.
 
 The same through the OpenAI client:
 
@@ -130,18 +130,18 @@ messages.append({"role": "tool", "tool_name": name, "content": result})
 
 Rules:
 
-- Never combine `tools` with `format` in one request. Ollama then returns the call as plain JSON.
+- Never combine `tools` with `format` in one request. If you do, Ollama returns the call as plain JSON.
 - Never send `think` to Apertus.
 - Ask for tool use in English; the 8B misses tool calls in German prompts more often.
 
-The workshop loop does the bookkeeping:
+The workshop loop takes care of these steps for you:
 
 ```python
 from workshop.tools import run_tool_loop, TOOLS
 out = run_tool_loop(messages, TOOLS, model="nishad/apertus:8b")
 ```
 
-`workshop.tools.run_tool_loop` runs one tool call per turn, marks identifiers no tool returned as `[UNVERIFIED ...]`, and reminds the model once when it announces a call or says nothing. `search_gnd` results carry a bare `gnd` field next to lobid's URL id.
+`workshop.tools.run_tool_loop` runs one tool call per turn. It marks any identifier that did not come from a tool result as `[UNVERIFIED ...]`. When the model only announces a call instead of making it, or says nothing, the loop reminds the model once. `search_gnd` results include a plain `gnd` field with the identifier alone, next to the URL identifier from lobid.
 
 ## Embeddings and search
 
@@ -158,7 +158,7 @@ for entry_id, text, score in search("Geld für Kinder", index, k=5):
     print(score, entry_id, text)
 ```
 
-Index and query must use the same model. Prefixes by model (`workshop.embed.prefix_for` adds them):
+The index and the query must use the same embedding model. Some models expect a short prefix before the text; `workshop.embed.prefix_for` adds the right one for each model:
 
 | Model | Query prefix | Document prefix |
 | --- | --- | --- |
@@ -167,7 +167,7 @@ Index and query must use the same model. Prefixes by model (`workshop.embed.pref
 | nomic-embed-text | `search_query: ` | `search_document: ` |
 | embeddinggemma | `task: search result \| query: ` | `title: none \| text: ` |
 
-Prebuilt index files for notebook 03 (`runs/stw-de-labels.sqlite`, 85.7 MB, and `runs/unesco-en-labels.sqlite`, 34.4 MB) are linked from the workshop's Before you start page (https://llm-workshop.thalhath.org/v3/before-you-start/); put them in `runs/`. Building them yourself takes about seven minutes for both (about five for STW, two for UNESCO) on an Apple Silicon Mac with 64 GB and far longer on a CPU-only laptop.
+The prebuilt index files for notebook 03 are `runs/stw-de-labels.sqlite` (85.7 MB) and `runs/unesco-en-labels.sqlite` (34.4 MB). The workshop's Before you start page (https://llm-workshop.thalhath.org/v3/before-you-start/) links to them; put them in `runs/`. Building them yourself takes about seven minutes for both (about five for STW, two for UNESCO) on an Apple Silicon Mac with 64 GB, and far longer on a CPU-only laptop.
 
 ## RAG
 
@@ -180,7 +180,7 @@ index = build_index([c.id for c in chunks], [c.text for c in chunks])
 text, used = answer("Which DCMI term expresses the date a resource was issued?", index, by_id, k=4)
 ```
 
-Budget rule: keep the prompt under 75% of `num_ctx`. `build_prompt` raises `PromptTooLong` otherwise. Look at the retrieved chunks before you read the answer.
+Budget rule: keep the prompt under 75% of `num_ctx`. If the prompt is longer, `build_prompt` raises `PromptTooLong`. Look at the retrieved chunks before you read the answer.
 
 ## OpenAI client against local servers
 
@@ -198,21 +198,21 @@ oa = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")    # the key
 
 ## Memory and speed
 
-Measured in October 2026 on an Apple Silicon laptop: `ollama ps` reports the 8B Q4_K_M build at 5.3 GB with a 4k context and 5.8 GB with 8k (the figures the workshop site quotes); the research footprint script, which measures the whole process, saw about 5.4 GB and 6.3 GB. The KV cache alone is 128 KiB per token (0.5 GiB per 4k tokens; `OLLAMA_KV_CACHE_TYPE=q8_0` halves it); the rest of the growth is compute buffers. The 4B takes about 2.8 GB. Tokens per second are community-reported ranges, not measurements made here: base Apple chips 14 to 24 for the 8B, Pro and Max chips 40 or more, CPU-only laptops 3 to 14.
+We measured the memory figures below in October 2026 on an Apple Silicon laptop. `ollama ps` reports the 8B Q4_K_M build at 5.3 GB with a 4k context and 5.8 GB with 8k; these are the figures the workshop site quotes. The research footprint script, which measures the whole process, reported about 5.4 GB and 6.3 GB. The KV cache alone (the memory the model keeps for each token in the context) takes 128 KiB per token, or 0.5 GiB per 4k tokens; `OLLAMA_KV_CACHE_TYPE=q8_0` halves it. The rest of the growth with a larger context comes from compute buffers. The 4B takes about 2.8 GB. The tokens-per-second figures are ranges reported by the community, not measurements made here: base Apple chips 14 to 24 for the 8B, Pro and Max chips 40 or more, CPU-only laptops 3 to 14.
 
 ## Glossary
 
-- **Token**: a piece of a word; models read and write tokens, not letters.
+- **Token**: a piece of text, often a word or part of a word; models read and write tokens, not letters.
 - **Context window (`num_ctx`)**: how many tokens the model sees at once, prompt plus answer.
-- **Temperature**: randomness of sampling; 0 is repeatable.
-- **Quantization (Q4_K_M)**: weights stored in about 4 bits to save memory.
+- **Temperature**: how random the output is; at 0 the same prompt gives the same answer.
+- **Quantization (Q4_K_M)**: the model's numbers (weights) stored at lower precision, about 4 bits each, to save memory.
 - **GGUF**: the file format Ollama and llama.cpp load.
 - **System prompt**: the instruction that sets the model's role.
-- **Embedding**: a vector that places a text in a space where similar meanings are close.
-- **Cosine similarity**: closeness of two vectors; a dot product for unit vectors.
+- **Embedding**: a list of numbers (a vector) that represents the meaning of a text; similar meanings give similar lists.
+- **Cosine similarity**: a score for how close two embeddings are; for unit vectors it equals the dot product.
 - **Chunk**: a piece of a document small enough to retrieve and fit in a prompt.
 - **RAG**: retrieve passages, put them in the prompt, answer from them with citations.
-- **Grammar-enforced output**: decoding constrained to a JSON schema.
+- **Grammar-enforced output**: the server allows the model to write only output that fits a JSON schema.
 - **Tool call**: the model asking your program to run a function; you decide whether it runs.
 
 ## Quick fixes
