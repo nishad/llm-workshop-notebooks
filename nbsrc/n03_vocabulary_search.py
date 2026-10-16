@@ -35,7 +35,7 @@ print("as one document:", concept_document(c, "de"))"""),
     ("md", """## 03.03 Embed the German STW labels in one batch
 
 About 20,000 short labels. Building the index takes about five minutes on an Apple Silicon Mac with 64 GB and far longer on a
-CPU-only laptop. The prebuilt file `runs/stw-de-labels.sqlite` is linked from the download post on the SWIB26 forum topic; put it
+CPU-only laptop. The prebuilt file `runs/stw-de-labels.sqlite` is linked from the workshop's [Before you start](https://llm-workshop.thalhath.org/v3/before-you-start/) page; put it
 in `runs/` and the cell loads it instead of building. On the 8 GB tier, downloading it is the way to follow this notebook live.
 The helper applies the embedding model's prefix convention (qwen3-embedding wants an instruction in front of every query and
 nothing in front of documents) and returns unit vectors."""),
@@ -106,7 +106,7 @@ print("chosen:", suggest("Streik der Lokführer"))"""),
 
 Build a second label index from the English preferred and alternative labels and query it in French and German. Cross-lingual retrieval is where embedding models differ most; some of these queries will miss, and 03.07 measures how often.
 
-`runs/unesco-en-labels.sqlite` is the second prebuilt file in the download post; with it in `runs/` the cell loads the index instead of building it."""),
+`runs/unesco-en-labels.sqlite` is the second prebuilt file on the Before you start page; with it in `runs/` the cell loads the index instead of building it."""),
     ("code", """u_entries = [(f'{c["id"]}#{n}', label) for c in unesco
              for n, label in enumerate([c["pref"].get("en")] + c["alt"].get("en", [])) if label]
 u_pref = {c["id"]: c["pref"].get("en", "") for c in unesco}

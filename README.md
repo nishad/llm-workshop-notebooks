@@ -2,11 +2,11 @@
 
 This repository holds the notebooks, helper code and data for the SWIB26 workshop "Getting started with local LLMs". You run an open model on your own laptop and use it for library tasks: structured extraction from catalogue cards, vocabulary search with embeddings, retrieval-augmented generation (RAG) and tool use with a human in the loop. Nothing leaves your machine.
 
-The workshop page is https://llm-workshop.thalhath.org/v3/. Questions and announcements go to the SWIB26 forum topic: https://forum.swib.org/t/getting-started-with-local-llms/1732.
+The workshop page is https://llm-workshop.thalhath.org/v3/. The setup steps, the times and the Zoom details are on https://llm-workshop.thalhath.org/v3/before-you-start/. Questions go to the SWIB26 forum topic: https://forum.swib.org/t/getting-started-with-local-llms/1732.
 
 ## Before the workshop (20-30 minutes)
 
-1. Install Ollama 0.40.1 or newer. The install page on the workshop site has the steps for macOS, Windows and Linux. The materials were built and verified on Ollama 0.40.4 on 15 October 2026.
+1. Install Ollama 0.40 or newer. The install page on the workshop site has the steps for macOS, Windows and Linux. The materials were built and verified on Ollama 0.40.4 on 15 October 2026.
 2. Pull the model for your machine:
 
    | Your laptop | Command | Download |
@@ -40,7 +40,7 @@ The workshop page is https://llm-workshop.thalhath.org/v3/. Questions and announ
 
    Open `00_check_setup.ipynb` and run all cells. Every line should show a check mark. If one does not, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
-5. Download the two prebuilt vocabulary index files for notebook 03 from the link in the download post on the forum topic (https://forum.swib.org/t/getting-started-with-local-llms/1732) into the `runs/` folder of the repository (create it if it does not exist):
+5. Download the two prebuilt vocabulary index files for notebook 03 from the link in step 4 of the workshop's Before you start page (https://llm-workshop.thalhath.org/v3/before-you-start/) into the `runs/` folder of the repository (create it if it does not exist):
 
    | File | Size | sha256 |
    | --- | --- | --- |
@@ -90,7 +90,7 @@ Prebuilt vocabulary indexes. Notebook 03 builds two label indexes (`runs/stw-de-
 ## During the workshop
 
 - The Zoom room opens at 03:30 UTC; the session runs 04:00-08:00 UTC on Monday 16 November 2026.
-- Questions go to the shared document linked from the workshop page.
+- Questions go to the shared document linked under "On the day" on https://llm-workshop.thalhath.org/v3/before-you-start/.
 - Run cells from top to bottom. The Checkpoint cell at the end of each notebook tells you where you should be.
 
 ## Afterwards
