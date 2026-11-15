@@ -31,7 +31,7 @@ print(json.loads(wikidata_lookup("Hannah Arendt", "en"))["results"][:1])
 print(json.loads(sparql("SELECT ?item WHERE { ?item wdt:P227 '11850391X' }", "wikidata")))"""),
     ("md", """## 05.03 One proposed call, one decision
 
-Ask in English. The model should propose `search_gnd`; the gate shows the call and waits for **y**, **n**, or corrected JSON arguments."""),
+Ask in English. The model should propose `search_gnd`; the gate shows the call and waits for **y**, **n**, or corrected JSON arguments. Type your answer in the box under the output and press Enter."""),
     ("code", """from workshop.tools import run_tool_loop
 from workshop.display import show_markdown
 messages = [{"role": "system", "content": "You are a cataloguing assistant. Use the tools to look things up; never state an identifier you did not retrieve."},

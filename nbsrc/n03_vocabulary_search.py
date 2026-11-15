@@ -91,7 +91,9 @@ show("Which concept covers the taxation of inheritances?")"""),
     ("md", """## 03.05 Suggest three, let a person choose
 
 A score is not a decision. Below a threshold we show nothing; above it we show three candidates and record the choice.
-This is the pattern for indexing support: the machine proposes, the cataloguer decides."""),
+This is the pattern for indexing support: the machine proposes, the cataloguer decides.
+
+The cell waits for you: type 1, 2, 3 or 0 in the box under the output and press Enter."""),
     ("code", """def suggest(text, k=3, threshold=0.55):
     hits = [h for h in search_concepts(text, index, pref, k) if h[3] >= threshold]
     if not hits:

@@ -101,7 +101,9 @@ for q in questions:
     ("md", """## 04.09 Bring your own document
 
 Drop a PDF, Markdown or text file into `data/my/` and run the cell. UTF-8 is assumed for text; two-column PDFs extract
-badly (compare the text before you trust the answers)."""),
+badly (compare the text before you trust the answers).
+
+The cell waits for you: type your question in the box under the output and press Enter."""),
     ("code", """my = sorted(p for p in Path("data/my").glob("*") if p.suffix.lower() in (".pdf", ".md", ".txt")) if Path("data/my").exists() else []
 if not my:
     print("Put a .pdf, .md or .txt file into data/my/ and run this cell again.")
