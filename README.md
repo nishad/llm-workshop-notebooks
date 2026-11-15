@@ -89,7 +89,7 @@ Prebuilt vocabulary indexes. Notebook 03 builds two label indexes: `runs/stw-de-
 
 ## Use of generative AI
 
-The text of these notebooks began as dictation, transcribed with Cohere Transcribe. Claude models cleaned up the transcripts, added the section headings, restructured the code blocks and improved some of the code; OpenAI models generated and translated some examples; Grammarly checked the grammar. The runs, outputs and measurements are real results from the facilitator's machine. Details: https://llm-workshop.thalhath.org/v3/resources/ai-use/
+The text of these notebooks began as dictation, transcribed with Cohere Transcribe. Claude models cleaned up the transcripts, added the section headings, restructured the code blocks and improved some of the code; OpenAI models generated and translated some examples; Grammarly checked the grammar. The runs, outputs and measurements are real results from my machine, and the responsibility for the content is mine. Details: https://llm-workshop.thalhath.org/v3/resources/ai-use/
 
 ## During the workshop
 
