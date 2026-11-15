@@ -1,6 +1,6 @@
 TITLE = "02 · Structured output you can validate"
 CELLS = [
-    ("md", """# 02 · Structured output you can validate ⏱️ 25 minutes
+    ("md", """# 02 · Structured output you can validate
 
 Free text is for people. Catalogues want fields. This notebook makes the model fill a schema, then checks every answer,
 because a small model will confidently invent a value when the card is silent.

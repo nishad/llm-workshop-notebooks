@@ -1,6 +1,6 @@
 TITLE = "03 · Semantic search over a controlled vocabulary"
 CELLS = [
-    ("md", """# 03 · Semantic search over a controlled vocabulary ⏱️ 25 minutes
+    ("md", """# 03 · Semantic search over a controlled vocabulary
 
 Keyword search finds the words you typed. Semantic search finds the concept you meant, in any language the embedding model
 knows. We index the STW Thesaurus for Economics (German and English, CC BY 4.0) and the UNESCO Thesaurus (English, French,

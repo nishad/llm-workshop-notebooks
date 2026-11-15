@@ -1,6 +1,6 @@
 TITLE = "01 · Talking to the model from Python"
 CELLS = [
-    ("md", """# 01 · Talking to the model from Python ⏱️ 20 minutes
+    ("md", """# 01 · Talking to the model from Python
 
 In Part 1 you typed into a chat window. Now the same model answers your code, which means you can send it a hundred records,
 keep every answer, and record exactly which model produced what.

@@ -1,6 +1,6 @@
 TITLE = "00 · Check your setup"
 CELLS = [
-    ("md", """# 00 · Check your setup ⏱️ 10 minutes
+    ("md", """# 00 · Check your setup
 
 Run this notebook first, before the other notebooks. It checks Python, memory, disk, the Ollama server,
 the workshop model tags and the embedding model, and makes one small chat call and one tool call.

@@ -1,6 +1,6 @@
 TITLE = "05 · Tool use with a human in the loop"
 CELLS = [
-    ("md", """# 05 · Tool use with a human in the loop ⏱️ 15 minutes
+    ("md", """# 05 · Tool use with a human in the loop
 
 A tool call is the model asking your program to do something: look up a name in the GND, query Wikidata, run a SPARQL query.
 The model only *proposes*. You approve, correct or refuse; Python executes; the result goes back to the model.

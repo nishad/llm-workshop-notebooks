@@ -1,6 +1,6 @@
 TITLE = "04 · Retrieval-augmented generation over your documents"
 CELLS = [
-    ("md", """# 04 · Retrieval-augmented generation over your documents ⏱️ 20 minutes
+    ("md", """# 04 · Retrieval-augmented generation over your documents
 
 The model knows nothing about your documents, and its context window is small. RAG retrieves the few passages that matter,
 puts them in the prompt, and asks for an answer with citations. You will see the retrieved passages **before** the answer,
