@@ -18,8 +18,8 @@ def problems(path: Path) -> list[str]:
     nb = nbformat.read(str(path), as_version=4)
     out = []
     cells = nb.cells
-    if not cells or cells[0].cell_type != "markdown" or "⏱️" not in cells[0].source:
-        out.append("first cell must be a markdown H1 with a ⏱️ time budget")
+    if not cells or cells[0].cell_type != "markdown" or not cells[0].source.lstrip().startswith("# "):
+        out.append("first cell must be a markdown H1")
     text = "\n".join(c.source for c in cells if c.cell_type == "markdown")
     for needle in ("What you'll learn", "Configuration", "✅ Checkpoint"):
         if needle not in text:

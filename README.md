@@ -62,14 +62,14 @@ You need about 20 GB of free disk space and a stable internet connection for the
 
 ## The notebooks
 
-| Notebook | Time | What you do |
-| --- | --- | --- |
-| `00_check_setup.ipynb` | 10 min | Check Python, memory, disk, Ollama, both models and one smoke call each |
-| `01_python_and_ollama.ipynb` | 20 min | Chat, system prompts, temperature, streaming, the OpenAI client, provenance logging |
-| `02_structured_output.ipynb` | 25 min | Extract catalogue card records into a Pydantic schema, validate them, measure against a gold file |
-| `03_vocabulary_search.ipynb` | 25 min | Embeddings, cross-lingual search over STW and UNESCO labels, a sqlite-vec index |
-| `04_rag.ipynb` | 20 min | Chunk documents, retrieve, answer with numbered citations, hit the context limit on purpose |
-| `05_tool_use.ipynb` | 15 min | Let the model propose GND, Wikidata and SPARQL calls; approve, correct or refuse each one |
+| Notebook | What you do |
+| --- | --- |
+| `00_check_setup.ipynb` | Check Python, memory, disk, Ollama, both models and one smoke call each |
+| `01_python_and_ollama.ipynb` | Chat, system prompts, temperature, streaming, the OpenAI client, provenance logging |
+| `02_structured_output.ipynb` | Extract catalogue card records into a Pydantic schema, validate them, measure against a gold file |
+| `03_vocabulary_search.ipynb` | Embeddings, cross-lingual search over STW and UNESCO labels, a sqlite-vec index |
+| `04_rag.ipynb` | Chunk documents, retrieve, answer with numbered citations, hit the context limit on purpose |
+| `05_tool_use.ipynb` | Let the model propose GND, Wikidata and SPARQL calls; approve, correct or refuse each one |
 
 The six notebooks are saved with their outputs from the 16 GB tier (`thalhath/apertus:8b` on a machine with 16 GB of memory or more). The folder `tier-8gb/` holds notebooks 04 and 05 as run on the 8 GB tier (`thalhath/apertus:4b`), so a reader with a smaller machine can see what to expect. In that run (15 October 2026, Ollama 0.40.4) the 4B behaved differently in three ways. In notebook 04 it answered every question in 04.05, 04.06 and 04.08 with only a citation, such as `[3]`, or only a term, such as "Date (http://purl.org/dc/terms/date)" for the `dcterms:issued` question. This includes the Nobel Prize question in 04.06, where the 8B said "The documents do not answer the question". In 04.07 the cell printed "Ollama accepted the long prompt" while the same cell with the 8B had returned an HTTP 400 error. Ollama's server log shows that the server cut the prompt silently from 5,076 to 2,051 tokens. In 05.06, when asked to answer from memory, it first declined and named the `search_gnd` tool, which triggered the tool loop's single reminder. It then invented "100000000000000000000000 Arendt, Hannah", which the loop marked `[UNVERIFIED: 100000000000000000000000 did not come from any tool result.]`.
 
