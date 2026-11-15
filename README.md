@@ -87,6 +87,10 @@ $env:WORKSHOP_TIER = "8gb"; uv run jupyter lab
 
 Prebuilt vocabulary indexes. Notebook 03 builds two label indexes: `runs/stw-de-labels.sqlite`, with about 20,000 STW labels, and `runs/unesco-en-labels.sqlite`. When the files already exist, the notebook loads them instead of building them. Step 5 under "Setup" says where to download them.
 
+## Use of generative AI
+
+The text of these notebooks began as dictation. Claude models cleaned up the transcripts, added the section headings, restructured the code blocks and improved some of the code; OpenAI models generated and translated some examples; Grammarly checked the grammar. The runs, outputs and measurements are real results from the facilitator's machine. Details: https://llm-workshop.thalhath.org/v3/resources/ai-use/
+
 ## During the workshop
 
 - The Zoom link is in the event block of the forum topic (https://forum.swib.org/t/getting-started-with-local-llms/1732). The room opens at 03:30 UTC; the session runs 04:00-08:00 UTC on Monday 16 November 2026.
