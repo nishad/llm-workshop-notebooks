@@ -43,9 +43,9 @@ show_markdown(out[-1]["content"])"""),
     ("md", """## 05.04 Correcting the model
 
 Names get misspelled, by people in questions and by models in tool arguments. This question spells the name *Schwartzenbach*;
-the GND has it as *Schwarzenbach*, and lobid finds nobody under the misspelling. In the live session the gate shows the proposed
+the GND has it as *Schwarzenbach*, and lobid finds nobody under the misspelling. When you run the cell yourself, the gate shows the proposed
 call and you paste the corrected JSON, `{"name": "Annemarie Schwarzenbach", "type": "Person"}` (or type **y** if the model already
-fixed the spelling). The committed run cannot type at the gate, so `gate` scripts the same correction and prints the proposed and
+fixed the spelling). The saved run cannot type at the gate, so `gate` scripts the same correction and prints the proposed and
 the corrected call, so you can see it."""),
     ("code", """from workshop.tools import approve
 

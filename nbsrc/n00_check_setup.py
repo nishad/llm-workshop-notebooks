@@ -2,7 +2,7 @@ TITLE = "00 · Check your setup"
 CELLS = [
     ("md", """# 00 · Check your setup ⏱️ 10 minutes
 
-Run this notebook before Part 2 (and again at the start of Part 2). It checks Python, memory, disk, the Ollama server,
+Run this notebook first, before the other notebooks. It checks Python, memory, disk, the Ollama server,
 the workshop model tags and the embedding model, and makes one small chat call and one tool call.
 
 **What you'll learn**
@@ -41,7 +41,7 @@ print(json.dumps(provenance(settings.model), indent=2))"""),
 - **Embedding model missing:** `ollama pull qwen3-embedding:0.6b`.
 - **Smoke tool call ❌ on the 4B:** expected to be slower; wait for it, and if it still fails re-pull `nishad/apertus:4b`.
 
-When asking for help in the shared document, paste the output of the next cell."""),
+When you ask for help, paste the output of the next cell into your message."""),
     ("code", """import platform, sys
 print("Python", sys.version.split()[0], "on", platform.platform())
 print("Tier", settings.tier, "model", settings.model)

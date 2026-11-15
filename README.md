@@ -4,7 +4,7 @@ This repository holds the notebooks, helper code and data for the SWIB26 worksho
 
 The workshop page is https://llm-workshop.thalhath.org/v3/. The setup steps, the times and the Zoom details are on https://llm-workshop.thalhath.org/v3/before-you-start/. Questions go to the SWIB26 forum topic: https://forum.swib.org/t/getting-started-with-local-llms/1732.
 
-## Before the workshop (20-30 minutes)
+## Setup (20-30 minutes)
 
 1. Install Ollama 0.40 or newer. The install page on the workshop site has the steps for macOS, Windows and Linux. We built and tested the materials with Ollama 0.40.4 on 15 October 2026.
 2. Download the models for your machine (Ollama calls this a pull):
@@ -40,14 +40,14 @@ The workshop page is https://llm-workshop.thalhath.org/v3/. The setup steps, the
 
    Open `00_check_setup.ipynb` and run all cells. Every line should show a check mark. If one does not, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
-5. Download the two prebuilt vocabulary index files for notebook 03. The link is in step 4 of the workshop's Before you start page (https://llm-workshop.thalhath.org/v3/before-you-start/). Put the files in the `runs/` folder of the repository; create the folder if it does not exist:
+5. Download the two prebuilt vocabulary index files for notebook 03 from the GitHub release https://github.com/nishad/llm-workshop-notebooks/releases/tag/swib26 (the same links are in step 4, sub-step 5 of the workshop's Before you start page, https://llm-workshop.thalhath.org/v3/before-you-start/). Put the files in the `runs/` folder of the repository; create the folder if it does not exist:
 
    | File | Size | sha256 |
    | --- | --- | --- |
    | `stw-de-labels.sqlite` | 85.7 MB | `d85108cd6d38b949ac6c80decbf405021a61a7db4670495b2dea4e63807559bf` |
    | `unesco-en-labels.sqlite` | 34.4 MB | `47728635aff8bd8fb9d19197c34d1f1e5e05efea039bd9429bbfa4448ddda537` |
 
-   Check a file with `shasum -a 256 runs/stw-de-labels.sqlite` (macOS and Linux) or `Get-FileHash runs\stw-de-labels.sqlite` (Windows PowerShell). Building the two indexes yourself takes about seven minutes for both (about five for STW, two for UNESCO) on an Apple Silicon Mac with 64 GB, and far longer on a CPU-only laptop. On an 8 GB machine, download the files so that you can follow notebook 03 during the session.
+   Check a file with `shasum -a 256 runs/stw-de-labels.sqlite` (macOS and Linux) or `Get-FileHash runs\stw-de-labels.sqlite` (Windows PowerShell). Building the two indexes yourself takes about seven minutes for both (about five for STW, two for UNESCO) on an Apple Silicon Mac with 64 GB, and far longer on a CPU-only laptop. On an 8 GB machine, download the files so that you can follow notebook 03 without waiting for the build.
 
 If you prefer pip to uv, use Python 3.12 or 3.13:
 
@@ -85,12 +85,12 @@ WORKSHOP_TIER=8gb uv run jupyter lab
 $env:WORKSHOP_TIER = "8gb"; uv run jupyter lab
 ```
 
-Prebuilt vocabulary indexes. Notebook 03 builds two label indexes: `runs/stw-de-labels.sqlite`, with about 20,000 STW labels, and `runs/unesco-en-labels.sqlite`. When the files already exist, the notebook loads them instead of building them. Step 5 under "Before the workshop" says where to download them.
+Prebuilt vocabulary indexes. Notebook 03 builds two label indexes: `runs/stw-de-labels.sqlite`, with about 20,000 STW labels, and `runs/unesco-en-labels.sqlite`. When the files already exist, the notebook loads them instead of building them. Step 5 under "Setup" says where to download them.
 
 ## During the workshop
 
 - The Zoom room opens at 03:30 UTC; the session runs 04:00-08:00 UTC on Monday 16 November 2026.
-- Questions go to the shared document linked under "On the day" on https://llm-workshop.thalhath.org/v3/before-you-start/.
+- Questions: ask in the Zoom chat during the session, or in the forum topic (https://forum.swib.org/t/getting-started-with-local-llms/1732) at any time.
 - Run cells from top to bottom. The Checkpoint cell at the end of each notebook tells you where you should be.
 
 ## Afterwards
@@ -126,7 +126,7 @@ We build the `nishad/apertus` tags from the Modelfiles in `models/` with `models
 ## Troubleshooting and cheat sheet
 
 - [TROUBLESHOOTING.md](TROUBLESHOOTING.md): symptoms, causes and fixes
-- [CHEAT_SHEET.md](CHEAT_SHEET.md): commands and code patterns to keep open during the session
+- [CHEAT_SHEET.md](CHEAT_SHEET.md): commands and code patterns to keep open while you work through the notebooks
 
 ## Author
 

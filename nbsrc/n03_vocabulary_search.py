@@ -35,8 +35,8 @@ print("as one document:", concept_document(c, "de"))"""),
     ("md", """## 03.03 Embed the German STW labels in one batch
 
 About 20,000 short labels. Building the index takes about five minutes on an Apple Silicon Mac with 64 GB and far longer on a
-CPU-only laptop. The prebuilt file `runs/stw-de-labels.sqlite` is linked from the workshop's [Before you start](https://llm-workshop.thalhath.org/v3/before-you-start/) page; put it
-in `runs/` and the cell loads it instead of building. On the 8 GB tier, downloading it is the way to follow this notebook live.
+CPU-only laptop. The prebuilt file `runs/stw-de-labels.sqlite` is on the repository's [swib26 release](https://github.com/nishad/llm-workshop-notebooks/releases/tag/swib26) and linked in step 4, sub-step 5 of the workshop's [Before you start](https://llm-workshop.thalhath.org/v3/before-you-start/) page; put it
+in `runs/` and the cell loads it instead of building. On the 8 GB tier, downloading it is the way to follow this notebook without a long wait.
 The helper applies the embedding model's prefix convention (qwen3-embedding wants an instruction in front of every query and
 nothing in front of documents) and returns unit vectors."""),
     ("code", """import time
@@ -106,7 +106,7 @@ print("chosen:", suggest("Streik der Lokführer"))"""),
 
 Build a second label index from the English preferred and alternative labels and query it in French and German. Cross-lingual retrieval is where embedding models differ most; some of these queries will miss, and 03.07 measures how often.
 
-`runs/unesco-en-labels.sqlite` is the second prebuilt file on the Before you start page; with it in `runs/` the cell loads the index instead of building it."""),
+`runs/unesco-en-labels.sqlite` is the second prebuilt file on the same release; with it in `runs/` the cell loads the index instead of building it."""),
     ("code", """u_entries = [(f'{c["id"]}#{n}', label) for c in unesco
              for n, label in enumerate([c["pref"].get("en")] + c["alt"].get("en", [])) if label]
 u_pref = {c["id"]: c["pref"].get("en", "") for c in unesco}
@@ -121,8 +121,8 @@ for q in ("Grossesse", "bibliothèque numérique", "Rechte der Frau", "changemen
 
 Fifty queries with known targets (held-out German synonyms, STW English→German, UNESCO French↔English, scope-note questions),
 scored against one document per concept with the synonym removed: the hard case, and the same corpus for every model, so models
-can be compared. recall@1 is the share of queries whose correct concept is the top hit. Last year's English-only model scored 0.17
-on English→German. This cell embeds 15,198 documents; if you are short on time, skip it and read the committed output."""),
+can be compared. recall@1 is the share of queries whose correct concept is the top hit. The English-only model of the 2025 edition scored 0.17
+on English→German. This cell embeds 15,198 documents; if you are short on time, skip it and read the saved output."""),
     ("code", """import json, numpy as np
 from workshop.embed import embed
 from workshop.search import top_k

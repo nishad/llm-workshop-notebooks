@@ -1,6 +1,6 @@
 # Workshop models: `nishad/apertus`
 
-The Modelfiles and publish script for the Ollama tags the workshop uses. Pushing to ollama.com is the facilitator's action: `PUSH=1 models/publish.sh`. A plain `models/publish.sh` is a dry run that only pulls and builds locally.
+The Modelfiles and publish script for the Ollama tags the workshop uses. Pushing to ollama.com needs the key of the account that owns the tags: `PUSH=1 models/publish.sh`. A plain `models/publish.sh` is a dry run that only pulls and builds locally.
 
 ## Tags
 
@@ -51,7 +51,7 @@ Default: `qwen3-embedding:0.6b` (Apache-2.0), chosen on 2026-10-15 by the gold-s
 | `qwen3-embedding:0.6b` (query instruction) | 0.62 | 0.82 | 0.72 | Apache-2.0, default |
 | `embeddinggemma` (prefixes) | 0.68 | 0.92 | 0.78 | Gemma Terms of Use, documented alternative |
 
-Raw results: `scripts/eval_embeddings.py`, run by the controller on 2026-10-15.
+Raw results: `scripts/eval_embeddings.py`, run on 2026-10-15.
 
 Per-kind recall@1 for the default, from `03_vocabulary_search.ipynb` (03.07, one document per concept):
 
@@ -75,14 +75,13 @@ NAMESPACE=myname models/publish.sh  # build under another namespace
 PUSH=1 models/publish.sh          # also push (facilitator only; needs the machine's key on ollama.com)
 ```
 
-Prebuilt index files, measured on 2026-10-15 after the final re-execution on Ollama 0.40.4 (`ls -l`, `shasum -a 256`): `runs/stw-de-labels.sqlite` 85,745,664 bytes (85.7 MB), sha256 `d85108cd6d38b949ac6c80decbf405021a61a7db4670495b2dea4e63807559bf`; `runs/unesco-en-labels.sqlite` 34,385,920 bytes (34.4 MB), sha256 `47728635aff8bd8fb9d19197c34d1f1e5e05efea039bd9429bbfa4448ddda537`. The README and the cheat sheet quote these figures. Re-measure the sizes and checksums after the final re-execution, and update both documents and the download post if they change.
+Prebuilt index files, measured on 2026-10-15 after the final re-execution on Ollama 0.40.4 (`ls -l`, `shasum -a 256`): `runs/stw-de-labels.sqlite` 85,745,664 bytes (85.7 MB), sha256 `d85108cd6d38b949ac6c80decbf405021a61a7db4670495b2dea4e63807559bf`; `runs/unesco-en-labels.sqlite` 34,385,920 bytes (34.4 MB), sha256 `47728635aff8bd8fb9d19197c34d1f1e5e05efea039bd9429bbfa4448ddda537`. The README and the cheat sheet quote these figures. After any rebuild of the index files, re-measure the sizes and checksums and update the README, the cheat sheet and the GitHub release.
 
-## Re-check one week before the workshop
+## Re-checked on 15 November 2026
 
-- Ollama PR #17555
-- llama.cpp PR #26226
-- transformers PR #47662
-- `ollama.com/library/apertus`
-- the swiss-ai Hugging Face collection
-
-Then upgrade Ollama to 0.40 or newer and repeat the verification above.
+- Ollama PR #17555 (Apertus 1.5 parser and renderer): still open.
+- llama.cpp PR #26226: still open.
+- transformers PR #47662 (Apertus 1.5 model): still open.
+- `ollama.com/library/apertus`: still no entry.
+- The swiss-ai collection on Hugging Face: Apertus-v1.5-8B and -70B with SFT, RL, DPO and base variants, MLX builds of v1.1; still no official GGUF.
+- Ollama's latest release is 0.40.16; the 0.40 floor stands. The harness run above was not repeated.

@@ -167,7 +167,7 @@ The index and the query must use the same embedding model. Some models expect a 
 | nomic-embed-text | `search_query: ` | `search_document: ` |
 | embeddinggemma | `task: search result \| query: ` | `title: none \| text: ` |
 
-The prebuilt index files for notebook 03 are `runs/stw-de-labels.sqlite` (85.7 MB) and `runs/unesco-en-labels.sqlite` (34.4 MB). The workshop's Before you start page (https://llm-workshop.thalhath.org/v3/before-you-start/) links to them; put them in `runs/`. Building them yourself takes about seven minutes for both (about five for STW, two for UNESCO) on an Apple Silicon Mac with 64 GB, and far longer on a CPU-only laptop.
+The prebuilt index files for notebook 03 are `runs/stw-de-labels.sqlite` (85.7 MB) and `runs/unesco-en-labels.sqlite` (34.4 MB). Download them from the swib26 release (https://github.com/nishad/llm-workshop-notebooks/releases/tag/swib26) and put them in `runs/`. Building them yourself takes about seven minutes for both (about five for STW, two for UNESCO) on an Apple Silicon Mac with 64 GB, and far longer on a CPU-only laptop.
 
 ## RAG
 

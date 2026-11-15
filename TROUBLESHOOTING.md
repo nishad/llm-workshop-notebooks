@@ -137,7 +137,7 @@ Symptom: `Expected 1024, got 768` (or similar numbers) when searching or loading
 
 Cause: the index was built with one embedding model and the query uses another. Vectors from different models cannot be compared.
 
-Fix: use one model for both. Check `WORKSHOP_EMBED_MODEL` and delete the old file in `runs/` (for example `runs/stw-de-labels.sqlite`). Then either rebuild the index or download the prebuilt one from the link on the workshop's Before you start page, https://llm-workshop.thalhath.org/v3/before-you-start/. The README section "Before the workshop" has the checksums.
+Fix: use one model for both. Check `WORKSHOP_EMBED_MODEL` and delete the old file in `runs/` (for example `runs/stw-de-labels.sqlite`). Then either rebuild the index or download the prebuilt one from the GitHub release, https://github.com/nishad/llm-workshop-notebooks/releases/tag/swib26 (also linked in step 4, sub-step 5 of the workshop's Before you start page, https://llm-workshop.thalhath.org/v3/before-you-start/). The README section "Setup" has the checksums.
 
 ## Embedding model missing
 
