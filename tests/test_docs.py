@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 def test_readme_mentions_current_facts():
     text = (ROOT / "README.md").read_text(encoding="utf-8")
-    for needle in ("Python 3.12", "nishad/apertus:8b", "nishad/apertus:4b", "qwen3-embedding:0.6b", "uv sync", "SWIB26"):
+    for needle in ("Python 3.12", "thalhath/apertus:8b", "thalhath/apertus:4b", "qwen3-embedding:0.6b", "uv sync", "SWIB26"):
         assert needle in text, needle
     for stale in ("Python 3.8", "Kickstarter", "llama3.2:7b", "ollama.ai", "made-with-cc"):
         assert stale not in text, stale

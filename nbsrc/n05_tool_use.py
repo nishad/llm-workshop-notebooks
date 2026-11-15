@@ -145,7 +145,7 @@ does Wikidata list as novels, in German labels).
 🚀 **Stretch:** fetch the HLS article found in 05.05 (CC BY-SA) with `requests`, chunk it with `workshop.rag.chunk_text`, index it and
 ask a question about Schwarzenbach's travels. That is the full chain: authority file → knowledge graph → text → grounded answer.
 
-🚀 **Stretch (8 GB tier):** run 05.03 with `nishad/apertus:4b`. It needs the wrapper tag and only simple tools; compare behaviour."""),
+🚀 **Stretch (8 GB tier):** run 05.03 with `thalhath/apertus:4b`. It needs the wrapper tag and only simple tools; compare behaviour."""),
     ("md", """## ✅ Checkpoint
 
 - Tools are functions; the model proposes calls; you decide; results flow back

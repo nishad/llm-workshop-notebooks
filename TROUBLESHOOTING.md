@@ -49,14 +49,14 @@ Every `ollama pull`, `ollama run` and notebook started from that terminal then t
 
 Symptom: `model "..." not found`, or notebook 00 reports a missing model.
 
-The valid tags are `nishad/apertus:8b`, `nishad/apertus:4b` and `qwen3-embedding:0.6b`.
+The valid tags are `thalhath/apertus:8b`, `thalhath/apertus:4b` and `qwen3-embedding:0.6b`.
 
 ```bash
 ollama list
-ollama pull nishad/apertus:8b
+ollama pull thalhath/apertus:8b
 ```
 
-If you type only `apertus` in the Ollama app's model picker, it says "No models found". Type the full tag `nishad/apertus:8b` and let it download.
+If you type only `apertus` in the Ollama app's model picker, it says "No models found". Type the full tag `thalhath/apertus:8b` and let it download.
 
 ## Tool calls come back as text or never appear
 
@@ -65,14 +65,14 @@ Symptom: the model prints something like `[search_gnd(...)]` instead of proposin
 Causes: the wrong chat template (the format the model expects around each message), a prompt written in German, or a tag someone else published instead of the workshop tag.
 
 ```bash
-ollama show nishad/apertus:8b --template | head -1
+ollama show thalhath/apertus:8b --template | head -1
 ```
 
 ```powershell
-ollama show nishad/apertus:8b --template | Select-Object -First 1
+ollama show thalhath/apertus:8b --template | Select-Object -First 1
 ```
 
-The first line must be `{# Unsloth template fixes #}`. For the 4B, `ollama show nishad/apertus:4b --template | grep -c "Tool Capabilities"` must print `1`. If either check fails, pull the tag again. If the template is right, write your prompt in English; the 8B misses tool calls more often in German prompts. Do not combine `tools` with `format` in one request.
+The first line must be `{# Unsloth template fixes #}`. For the 4B, `ollama show thalhath/apertus:4b --template | grep -c "Tool Capabilities"` must print `1`. If either check fails, pull the tag again. If the template is right, write your prompt in English; the 8B misses tool calls more often in German prompts. Do not combine `tools` with `format` in one request.
 
 ## `exceeds the available context size` (HTTP 400)
 
@@ -93,7 +93,7 @@ ollama ps
 Look at the PROCESSOR column. `100% GPU` is best. A CPU percentage means part of the model runs on the CPU, which is slower. Try these fixes in order:
 
 1. Close browsers and other large apps.
-2. On an 8 GB machine use `nishad/apertus:4b` and `WORKSHOP_TIER=8gb`.
+2. On an 8 GB machine use `thalhath/apertus:4b` and `WORKSHOP_TIER=8gb`.
 3. Stop other loaded models with `ollama stop <tag>`.
 4. Set `OLLAMA_KV_CACHE_TYPE=q8_0` before `ollama serve`; it roughly halves the memory the context needs. The Ollama server reads this environment variable, so you must set it where the server can see it. The macOS app reads variables set with `launchctl setenv`. The Windows app reads user environment variables after a restart. On Linux, put it in the systemd unit. You can also quit the app and start `ollama serve` from a terminal where the variable is set. Do not use `q4_0` with Apertus.
 
@@ -183,7 +183,7 @@ Post in the SWIB26 forum topic (https://forum.swib.org/t/getting-started-with-lo
 This is safe and removes no models:
 
 ```bash
-ollama stop nishad/apertus:8b
+ollama stop thalhath/apertus:8b
 ```
 
 Then restart the Ollama app, run `uv sync --reinstall` in the repository folder, and restart the notebook kernel.

@@ -12,7 +12,7 @@ class FakeClient:
         return type("R", (), {"message": type("M", (), {"content": "ok", "tool_calls": None})()})()
 
     def list(self):
-        m = type("Mo", (), {"model": "nishad/apertus:8b", "digest": "abc123"})()
+        m = type("Mo", (), {"model": "thalhath/apertus:8b", "digest": "abc123"})()
         return type("L", (), {"models": [m]})()
 
     def show(self, model):
@@ -30,7 +30,7 @@ class FakeClient:
 
 def test_chat_sets_temperature_zero_and_num_ctx_by_default():
     fake = FakeClient()
-    llm.chat([{"role": "user", "content": "hi"}], model="nishad/apertus:4b", client=fake)
+    llm.chat([{"role": "user", "content": "hi"}], model="thalhath/apertus:4b", client=fake)
     assert fake.last["options"]["num_ctx"] == 4096
     assert fake.last["options"]["temperature"] == 0
     assert "think" not in fake.last
@@ -48,7 +48,7 @@ def test_chat_refuses_tools_with_format():
 
 def test_provenance_fields(monkeypatch):
     monkeypatch.setattr(llm, "_server_version", lambda host: "0.40.1")
-    p = llm.provenance("nishad/apertus:8b", client=FakeClient())
+    p = llm.provenance("thalhath/apertus:8b", client=FakeClient())
     assert p["digest"] == "abc123"
     assert p["quantization"] == "Q4_K_M"
     assert p["template_header"].startswith("{# Unsloth")
@@ -78,7 +78,7 @@ LOG_KEYS = {"captured_at", "model", "digest", "options", "prompt", "answer", "to
 def test_chat_logs_one_line_per_call(tmp_path, monkeypatch):
     path = tmp_path / "log.jsonl"
     monkeypatch.setenv("WORKSHOP_LOG", str(path))
-    llm.chat([{"role": "user", "content": "x" * 100 + "y" * 300}], model="nishad/apertus:8b", format={"type": "object"}, client=FakeClient())
+    llm.chat([{"role": "user", "content": "x" * 100 + "y" * 300}], model="thalhath/apertus:8b", format={"type": "object"}, client=FakeClient())
     lines = path.read_text(encoding="utf-8").splitlines()
     assert len(lines) == 1
     record = json.loads(lines[0])
@@ -90,7 +90,7 @@ def test_chat_logs_one_line_per_call(tmp_path, monkeypatch):
 def test_chat_logs_streams_without_answer(tmp_path, monkeypatch):
     path = tmp_path / "log.jsonl"
     monkeypatch.setenv("WORKSHOP_LOG", str(path))
-    llm.chat([{"role": "user", "content": "hi"}], model="nishad/apertus:8b", stream=True, client=FakeClient())
+    llm.chat([{"role": "user", "content": "hi"}], model="thalhath/apertus:8b", stream=True, client=FakeClient())
     record = json.loads(path.read_text(encoding="utf-8"))
     assert record["answer"] is None and record["stream"] is True and record["format"] is None
 
@@ -98,7 +98,7 @@ def test_chat_logs_streams_without_answer(tmp_path, monkeypatch):
 def test_chat_with_log_false_writes_nothing(tmp_path, monkeypatch):
     path = tmp_path / "log.jsonl"
     monkeypatch.setenv("WORKSHOP_LOG", str(path))
-    llm.chat([{"role": "user", "content": "hi"}], model="nishad/apertus:8b", client=FakeClient(), log=False)
+    llm.chat([{"role": "user", "content": "hi"}], model="thalhath/apertus:8b", client=FakeClient(), log=False)
     assert not path.exists()
 
 
@@ -106,5 +106,5 @@ def test_chat_survives_an_unwritable_log(tmp_path, monkeypatch):
     blocker = tmp_path / "a-file"
     blocker.write_text("not a folder", encoding="utf-8")
     monkeypatch.setenv("WORKSHOP_LOG", str(blocker / "log.jsonl"))
-    response = llm.chat([{"role": "user", "content": "hi"}], model="nishad/apertus:8b", client=FakeClient())
+    response = llm.chat([{"role": "user", "content": "hi"}], model="thalhath/apertus:8b", client=FakeClient())
     assert response.message.content == "ok"

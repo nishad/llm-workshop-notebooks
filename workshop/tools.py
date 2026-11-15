@@ -300,7 +300,7 @@ def run_tool_loop(
             if tools and _LEAKED_CALL.match(content) and any(name in content for name in by_name):
                 raise ToolError(
                     "The model wrote a tool call as text instead of a structured call. "
-                    "Check the model tag: use nishad/apertus:8b (Unsloth template), not a community tag."
+                    "Check the model tag: use thalhath/apertus:8b (Unsloth template), not a community tag."
                 )
             if tools and not nudged and (not content.strip("` \n\t") or any(name in content for name in by_name)):
                 nudged = True

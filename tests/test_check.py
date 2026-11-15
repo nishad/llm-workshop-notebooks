@@ -25,7 +25,7 @@ def test_template_check_recognizes_unsloth_header():
         def show(self, model):
             return type("S", (), {"template": "{# Unsloth template fixes #}\nrest"})()
 
-    assert check.check_template("nishad/apertus:8b", client=Fake())[1] is True
+    assert check.check_template("thalhath/apertus:8b", client=Fake())[1] is True
 
 
 def test_template_check_accepts_4b_wrapper():
@@ -33,7 +33,7 @@ def test_template_check_accepts_4b_wrapper():
         def show(self, model):
             return type("S", (), {"template": "<s>\n{{- $hasSystem := false -}} <SPECIAL_63>Deliberation\n# Tool Capabilities\nYou may call tools."})()
 
-    assert check.check_template("nishad/apertus:4b", client=Fake())[1] is True
+    assert check.check_template("thalhath/apertus:4b", client=Fake())[1] is True
 
 
 def test_print_report_returns_overall(capsys):

@@ -8,9 +8,9 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 
-DEFAULT_MODEL = "nishad/apertus:8b"
-SMALL_MODEL = "nishad/apertus:4b"
-PREVIEW_MODEL = "nishad/apertus:8b-v1.5-preview"
+DEFAULT_MODEL = "thalhath/apertus:8b"
+SMALL_MODEL = "thalhath/apertus:4b"
+PREVIEW_MODEL = "thalhath/apertus:8b-v1.5-preview"
 DEFAULT_EMBED_MODEL = "qwen3-embedding:0.6b"
 DEFAULT_HOST = "http://localhost:11434"
 USER_AGENT = "swib26-llm-workshop/1.0 (https://llm-workshop.thalhath.org/)"

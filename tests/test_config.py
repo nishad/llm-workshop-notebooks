@@ -6,7 +6,7 @@ def test_defaults_when_env_unset(monkeypatch):
     for var in ("WORKSHOP_MODEL", "WORKSHOP_EMBED_MODEL", "OLLAMA_HOST", "WORKSHOP_TIER"):
         monkeypatch.delenv(var, raising=False)
     s = config.load_settings()
-    assert s.model == "nishad/apertus:8b"
+    assert s.model == "thalhath/apertus:8b"
     assert s.embed_model == "qwen3-embedding:0.6b"
     assert s.host == "http://localhost:11434"
     assert s.tier == "16gb"
@@ -32,17 +32,17 @@ def test_host_without_scheme_or_port_gets_the_default_port(monkeypatch):
 def test_tier_8gb_switches_model(monkeypatch):
     monkeypatch.delenv("WORKSHOP_MODEL", raising=False)
     monkeypatch.setenv("WORKSHOP_TIER", "8gb")
-    assert config.load_settings().model == "nishad/apertus:4b"
+    assert config.load_settings().model == "thalhath/apertus:4b"
 
 
 def test_explicit_model_wins_over_tier(monkeypatch):
     monkeypatch.setenv("WORKSHOP_TIER", "8gb")
-    monkeypatch.setenv("WORKSHOP_MODEL", "nishad/apertus:8b-v1.5-preview")
-    assert config.load_settings().model == "nishad/apertus:8b-v1.5-preview"
+    monkeypatch.setenv("WORKSHOP_MODEL", "thalhath/apertus:8b-v1.5-preview")
+    assert config.load_settings().model == "thalhath/apertus:8b-v1.5-preview"
 
 
 def test_context_limit_by_model():
-    assert config.context_limit("nishad/apertus:4b") == 4096
-    assert config.context_limit("nishad/apertus:8b") == 8192
-    assert config.context_limit("nishad/apertus:8b-v1.5-preview") == 8192
+    assert config.context_limit("thalhath/apertus:4b") == 4096
+    assert config.context_limit("thalhath/apertus:8b") == 8192
+    assert config.context_limit("thalhath/apertus:8b-v1.5-preview") == 8192
     assert config.context_limit("llama3.2:3b") == 8192

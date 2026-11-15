@@ -1,6 +1,6 @@
 """Capture a model answer for the website with a provenance line.
 
-Usage: uv run python scripts/capture.py "Prompt text" [--model nishad/apertus:8b] [--system "..."] [--temperature 0.8] [--runs 1]
+Usage: uv run python scripts/capture.py "Prompt text" [--model thalhath/apertus:8b] [--system "..."] [--temperature 0.8] [--runs 1]
 Prints a Markdown block ready to paste into a page.
 """
 

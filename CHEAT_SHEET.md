@@ -6,12 +6,12 @@ Commands and code patterns from the notebooks. For errors see [TROUBLESHOOTING.m
 
 ```bash
 ollama list                                  # installed models, with sizes
-ollama pull nishad/apertus:8b                # download (4b for 8 GB machines)
-ollama run nishad/apertus:8b --verbose       # chat; read "eval rate" for tokens per second
+ollama pull thalhath/apertus:8b                # download (4b for 8 GB machines)
+ollama run thalhath/apertus:8b --verbose       # chat; read "eval rate" for tokens per second
 ollama ps                                    # loaded models: SIZE, PROCESSOR, CONTEXT
-ollama show nishad/apertus:8b                # parameters, quantization, context length, capabilities
-ollama rm nishad/apertus:8b                  # remove a model
-ollama stop nishad/apertus:8b                # unload from memory
+ollama show thalhath/apertus:8b                # parameters, quantization, context length, capabilities
+ollama rm thalhath/apertus:8b                  # remove a model
+ollama stop thalhath/apertus:8b                # unload from memory
 ```
 
 Inside `ollama run`:
@@ -31,7 +31,7 @@ import ollama
 client = ollama.Client(host="http://localhost:11434")
 
 response = client.chat(
-    model="nishad/apertus:8b",
+    model="thalhath/apertus:8b",
     messages=[{"role": "user", "content": "What is an authority file?"}],
     options={"temperature": 0, "num_ctx": 8192},
 )
@@ -41,7 +41,7 @@ print(response.message.content)          # dict access also works: response["mes
 Streaming:
 
 ```python
-for part in client.chat(model="nishad/apertus:8b", messages=messages, stream=True):
+for part in client.chat(model="thalhath/apertus:8b", messages=messages, stream=True):
     print(part.message.content, end="", flush=True)
 ```
 
@@ -49,7 +49,7 @@ Embeddings, model details and the list of installed models:
 
 ```python
 vectors = client.embed(model="qwen3-embedding:0.6b", input=["Kinderzulage", "family allowance"]).embeddings
-info = client.show("nishad/apertus:8b")
+info = client.show("thalhath/apertus:8b")
 print(info.details.parameter_size, info.details.quantization_level, info.modelinfo)
 for m in client.list().models:
     print(m.model, m.digest[:12])
@@ -59,7 +59,7 @@ The workshop helper sets temperature 0 and the right `num_ctx` for your tier (16
 
 ```python
 from workshop.llm import chat
-response = chat(messages, model="nishad/apertus:8b")
+response = chat(messages, model="thalhath/apertus:8b")
 ```
 
 ## Structured output
@@ -84,7 +84,7 @@ class Record(BaseModel):
 
 response = chat(
     [{"role": "user", "content": f"{INSTRUCTIONS}\n\nCard:\n{card_text}"}],
-    model="nishad/apertus:8b", format=Record.model_json_schema(), options={"num_predict": 300},
+    model="thalhath/apertus:8b", format=Record.model_json_schema(), options={"num_predict": 300},
 )
 try:
     record = Record.model_validate_json(response.message.content)
@@ -101,7 +101,7 @@ The same through the OpenAI client:
 ```python
 from openai import OpenAI
 oa = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
-completion = oa.chat.completions.parse(model="nishad/apertus:8b", messages=messages, response_format=Record)
+completion = oa.chat.completions.parse(model="thalhath/apertus:8b", messages=messages, response_format=Record)
 record = completion.choices[0].message.parsed
 ```
 
@@ -120,7 +120,7 @@ def search_gnd(name: str, type: str = "Person") -> str:
 ```
 
 ```python
-response = client.chat(model="nishad/apertus:8b", messages=messages, tools=[search_gnd])
+response = client.chat(model="thalhath/apertus:8b", messages=messages, tools=[search_gnd])
 call = response.message.tool_calls[0]
 name, arguments = call.function.name, call.function.arguments
 result = search_gnd(**arguments)           # after you have approved the call
@@ -138,7 +138,7 @@ The workshop loop takes care of these steps for you:
 
 ```python
 from workshop.tools import run_tool_loop, TOOLS
-out = run_tool_loop(messages, TOOLS, model="nishad/apertus:8b")
+out = run_tool_loop(messages, TOOLS, model="thalhath/apertus:8b")
 ```
 
 `workshop.tools.run_tool_loop` runs one tool call per turn. It marks any identifier that did not come from a tool result as `[UNVERIFIED ...]`. When the model only announces a call instead of making it, or says nothing, the loop reminds the model once. `search_gnd` results include a plain `gnd` field with the identifier alone, next to the URL identifier from lobid.
@@ -220,10 +220,10 @@ We measured the memory figures below in October 2026 on an Apple Silicon laptop.
 | Symptom | Try |
 | --- | --- |
 | Connection refused | Start the Ollama app; `curl http://localhost:11434/api/version` |
-| Model not found | `ollama pull nishad/apertus:8b` (type the full tag) |
+| Model not found | `ollama pull thalhath/apertus:8b` (type the full tag) |
 | Very slow | `ollama ps`: if PROCESSOR shows CPU, close other apps or use the 4B |
 | `exceeds the available context size` | Lower `k` or chunk `size`; the 4B tops out at 4,096 tokens |
-| Tool call appears as text | `ollama show nishad/apertus:8b --template \| head -1` (PowerShell: `\| Select-Object -First 1`) must print `{# Unsloth template fixes #}` |
+| Tool call appears as text | `ollama show thalhath/apertus:8b --template \| head -1` (PowerShell: `\| Select-Object -First 1`) must print `{# Unsloth template fixes #}` |
 | `ModuleNotFoundError: workshop` | Start JupyterLab from the repository folder: `uv run jupyter lab` |
 | Embedding size mismatch | Rebuild the index with the model you query with |
 

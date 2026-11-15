@@ -53,7 +53,7 @@ def check_memory(total_bytes: int | None = None) -> Check:
     gb = round(total / GB)
     if gb < 7:
         return ("Memory", False, f"{gb} GB is below the 8 GB minimum")
-    tier = "nishad/apertus:4b (8 GB tier)" if gb < 15 else "nishad/apertus:8b (16 GB tier)"
+    tier = "thalhath/apertus:4b (8 GB tier)" if gb < 15 else "thalhath/apertus:8b (16 GB tier)"
     return ("Memory", True, f"{gb} GB, use {tier}")
 
 
@@ -95,7 +95,7 @@ def check_template(model: str, client=None, host: str | None = None) -> Check:
         return ("Chat template", False, str(exc))
     if ":4b" in model:
         ok = "<SPECIAL_63>" in template and "Tool Capabilities" in template
-        return ("Chat template (4B tool wrapper)", ok, "wrapper present" if ok else "wrong template; pull nishad/apertus:4b again")
+        return ("Chat template (4B tool wrapper)", ok, "wrapper present" if ok else "wrong template; pull thalhath/apertus:4b again")
     ok = template.lstrip().startswith("{# Unsloth template fixes #}")
     return ("Chat template (Unsloth fixes)", ok, "present" if ok else "unexpected template; tool calls will fail")
 

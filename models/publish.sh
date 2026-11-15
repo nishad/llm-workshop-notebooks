@@ -3,7 +3,7 @@
 # Pushing needs this machine's key (~/.ollama/id_ed25519.pub) added at https://ollama.com/settings/keys.
 set -euo pipefail
 cd "$(dirname "$0")"
-NS="${NAMESPACE:-nishad}"
+NS="${NAMESPACE:-thalhath}"
 
 ollama pull hf.co/unsloth/Apertus-8B-Instruct-2509-GGUF:Q4_K_M
 ollama pull hf.co/jondale/Apertus-v1.1-4B-Instruct-GGUF:Q4_K_M

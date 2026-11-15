@@ -105,7 +105,7 @@ What changed, what did not?
 🔧 **Run and change:** ask the model to translate this STW scope note into French and English:
 *"Herstellung von Kino-, TV- oder Werbefilmen."* Check the French against a dictionary: small models mistranslate specifics.
 
-🚀 **Stretch:** pull `nishad/apertus:8b-v1.5-preview` (16 GB machines) and run 01.04 against it. Same prompt, different model:
+🚀 **Stretch:** pull `thalhath/apertus:8b-v1.5-preview` (16 GB machines) and run 01.04 against it. Same prompt, different model:
 compare the answers and the digests. This is why the digest is in the log."""),
     ("md", """## ✅ Checkpoint
 

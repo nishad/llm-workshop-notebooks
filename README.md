@@ -11,8 +11,8 @@ The workshop page is https://llm-workshop.thalhath.org/v3/. The setup steps, the
 
    | Your laptop | Command | Download |
    | --- | --- | --- |
-   | 16 GB of memory or more | `ollama pull nishad/apertus:8b` | 5.1 GB |
-   | 8 GB of memory | `ollama pull nishad/apertus:4b` | 2.4 GB |
+   | 16 GB of memory or more | `ollama pull thalhath/apertus:8b` | 5.1 GB |
+   | 8 GB of memory | `ollama pull thalhath/apertus:4b` | 2.4 GB |
    | everyone | `ollama pull qwen3-embedding:0.6b` | 639 MB |
 
 3. Install [uv](https://docs.astral.sh/uv/).
@@ -71,9 +71,9 @@ You need about 20 GB of free disk space and a stable internet connection for the
 | `04_rag.ipynb` | 20 min | Chunk documents, retrieve, answer with numbered citations, hit the context limit on purpose |
 | `05_tool_use.ipynb` | 15 min | Let the model propose GND, Wikidata and SPARQL calls; approve, correct or refuse each one |
 
-The six notebooks are saved with their outputs from the 16 GB tier (`nishad/apertus:8b` on a machine with 16 GB of memory or more). The folder `tier-8gb/` holds notebooks 04 and 05 as run on the 8 GB tier (`nishad/apertus:4b`), so a reader with a smaller machine can see what to expect. In that run (15 October 2026, Ollama 0.40.4) the 4B behaved differently in three ways. In notebook 04 it answered every question in 04.05, 04.06 and 04.08 with only a citation, such as `[3]`, or only a term, such as "Date (http://purl.org/dc/terms/date)" for the `dcterms:issued` question. This includes the Nobel Prize question in 04.06, where the 8B said "The documents do not answer the question". In 04.07 the cell printed "Ollama accepted the long prompt" while the same cell with the 8B had returned an HTTP 400 error. Ollama's server log shows that the server cut the prompt silently from 5,076 to 2,051 tokens. In 05.06, when asked to answer from memory, it first declined and named the `search_gnd` tool, which triggered the tool loop's single reminder. It then invented "100000000000000000000000 Arendt, Hannah", which the loop marked `[UNVERIFIED: 100000000000000000000000 did not come from any tool result.]`.
+The six notebooks are saved with their outputs from the 16 GB tier (`thalhath/apertus:8b` on a machine with 16 GB of memory or more). The folder `tier-8gb/` holds notebooks 04 and 05 as run on the 8 GB tier (`thalhath/apertus:4b`), so a reader with a smaller machine can see what to expect. In that run (15 October 2026, Ollama 0.40.4) the 4B behaved differently in three ways. In notebook 04 it answered every question in 04.05, 04.06 and 04.08 with only a citation, such as `[3]`, or only a term, such as "Date (http://purl.org/dc/terms/date)" for the `dcterms:issued` question. This includes the Nobel Prize question in 04.06, where the 8B said "The documents do not answer the question". In 04.07 the cell printed "Ollama accepted the long prompt" while the same cell with the 8B had returned an HTTP 400 error. Ollama's server log shows that the server cut the prompt silently from 5,076 to 2,051 tokens. In 05.06, when asked to answer from memory, it first declined and named the `search_gnd` tool, which triggered the tool loop's single reminder. It then invented "100000000000000000000000 Arendt, Hannah", which the loop marked `[UNVERIFIED: 100000000000000000000000 did not come from any tool result.]`.
 
-Tiers. A machine with 8 GB runs the same notebooks with the 4B model: set `WORKSHOP_TIER=8gb` before you start JupyterLab. RAG then retrieves fewer chunks, because the 4B's context window is 4,096 tokens. Tool use needs the `nishad/apertus:4b` tag, which carries the wrapper template that tool calls need.
+Tiers. A machine with 8 GB runs the same notebooks with the 4B model: set `WORKSHOP_TIER=8gb` before you start JupyterLab. RAG then retrieves fewer chunks, because the 4B's context window is 4,096 tokens. Tool use needs the `thalhath/apertus:4b` tag, which carries the wrapper template that tool calls need.
 
 ```bash
 # macOS / Linux
@@ -121,7 +121,7 @@ Sources, licences and retrieval dates for every data file are in [data/ATTRIBUTI
 
 ## Rebuilding the model tags
 
-We build the `nishad/apertus` tags from the Modelfiles in `models/` with `models/publish.sh`. See [models/README.md](models/README.md) for the base files, templates and verification results.
+We build the `thalhath/apertus` tags from the Modelfiles in `models/` with `models/publish.sh`. See [models/README.md](models/README.md) for the base files, templates and verification results.
 
 ## Troubleshooting and cheat sheet
 
