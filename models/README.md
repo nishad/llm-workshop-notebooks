@@ -10,6 +10,8 @@ The Modelfiles and publish script for the Ollama tags the workshop uses. Pushing
 | `thalhath/apertus:4b` | `hf.co/jondale/Apertus-v1.1-4B-Instruct-GGUF:Q4_K_M` | not recorded in the Modelfile | Workshop wrapper template that renders tools in Apertus's TypeScript-style format so Ollama parses tool calls | 4096 | `87ca69a79aed` |
 | `thalhath/apertus:8b-v1.5-preview` | `hf.co/Colby/apertus-v1.5-8b-text-Q4_K_M-GGUF:Q4_K_M` | `a037df8d87ff6caacee794ee85f55342f2152e0d359b7389033300c3bee5f299` | GGUF's own template | 8192 | `6f25f6ba0b62` |
 
+The digest column is what `ollama list` showed on the build machine; the executed notebooks name these digests. After `ollama pull` from ollama.com, `ollama list` shows a different digest for the same model, because Ollama writes the tag's manifest differently after a pull: `61041b337fa9` for `8b` and `latest`, `0782f56ea89a` for `4b` (checked on Ollama 0.40.16, 15 November 2026). The GGUF sha256 identifies the model file itself.
+
 All three set `temperature 0.8` and `top_p 0.9`. The 8B sets a short system prompt; the 4B wrapper template supplies its own default system prompt. The v1.5 tag is an unofficial community text-only conversion, offered as a preview only.
 
 ## Verification
