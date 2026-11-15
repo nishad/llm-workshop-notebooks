@@ -89,7 +89,7 @@ Prebuilt vocabulary indexes. Notebook 03 builds two label indexes: `runs/stw-de-
 
 ## During the workshop
 
-- The Zoom room opens at 03:30 UTC; the session runs 04:00-08:00 UTC on Monday 16 November 2026.
+- The Zoom link is in the event block of the forum topic (https://forum.swib.org/t/getting-started-with-local-llms/1732). The room opens at 03:30 UTC; the session runs 04:00-08:00 UTC on Monday 16 November 2026.
 - Questions: ask in the Zoom chat during the session, or in the forum topic (https://forum.swib.org/t/getting-started-with-local-llms/1732) at any time.
 - Run cells from top to bottom. The Checkpoint cell at the end of each notebook tells you where you should be.
 
